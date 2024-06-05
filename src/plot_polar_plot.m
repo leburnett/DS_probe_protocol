@@ -1,6 +1,10 @@
 function plot_polar_plot(n_reps)
 %% Generate polar plot
 
+% Load results file
+res_files = dir('RES_all_reps*');
+load(res_files(1).name, 'data_all_reps')
+
 rad_vals_reps= ones(n_reps,8);
 
 angls = 0:45:315;
