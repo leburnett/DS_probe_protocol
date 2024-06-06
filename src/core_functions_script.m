@@ -1,8 +1,8 @@
 % Core script for running functions from
 
 %% Run preprocessing
-project_folder = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09';
-date_folder = '06_05_2024';
+project_folder = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/TmY13';
+date_folder = '06_06_2024';
 
 process_ds_probe_protocol_data(project_folder, date_folder)
 
