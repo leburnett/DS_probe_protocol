@@ -104,7 +104,7 @@ for subplot_n = 1:4
     % PLOT AVERAGE 
     mean_rad_values = mean(rad_vals_reps2);
     polarplot(angls, mean_rad_values, 'Color', 'k', 'LineWidth', 3)
-    rlim([0 20])
+    rlim([0 40])
     thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
 
     if subplot_n == 1

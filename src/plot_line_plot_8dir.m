@@ -30,9 +30,10 @@ function plot_line_plot_8dir(n_reps)
         % all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
         % all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
         % exp_baseline = median(all_voltage_data);
-        
+        subplot_values = [15, 9, 3, 7, 11, 17, 23, 19];
+
         for j = 1:8
-            subplot(4, 2, j)
+            subplot(5, 5, subplot_values(j))
     
             idx = values(j);
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
