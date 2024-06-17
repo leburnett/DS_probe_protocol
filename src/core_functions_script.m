@@ -1,44 +1,145 @@
-% Core script for running functions from
+% Core script for running functions for Jinyong's patching data 
+clear 
+close all
+clc
+
+cell_type = 'TmY3';
+
+% If saving
+save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Figures_for_Michael';
+fig_save_path = strcat(save_path, '/', cell_type);
 
 %% Run preprocessing
-project_folder = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/TmY13';
-date_folder = '06_07_2024';
+project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
+% date_folder = '05_28_2024/05_28_2024_2';
+date_folder = '05_23_2024';
 
-process_ds_probe_protocol_data(project_folder, date_folder)
+date_save_path = fullfile(fig_save_path, date_folder);
+if ~isfolder(date_save_path)
+    mkdir(date_save_path)
+end 
+
+cd(fullfile(project_folder, date_folder))
+
+% process_ds_probe_protocol_data(project_folder, date_folder)
 
 % Number of runs of the protocol:
 n_reps = 5;
 
+colour_reps = false;
+
 %% Polar plot 
-plot_polar_plot(n_reps)
+% plot_polar_plot(n_reps, colour_reps)
+% 
+% % Save the figure
+% f = gcf;
+% % save as MATLAB fig
+% savefig(fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.fig')))
+% % save as PDF
+% print(f, fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+% % saveas(f, fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.pdf')), 'pdf')
 
 
 %% Line plots
-plot_line_plot_8dir(n_reps)
+% plot_line_plot_8dir(n_reps, colour_reps)
+% 
+% 
+% % Save the figure
+% f = gcf;
+% bar_cond = 'ON_100dps';
+% % save as MATLAB fig
+% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% % save as PDF
+% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+% saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), 'pdf')
+% close
+% 
+% f = gcf;
+% bar_cond = 'ON_20dps';
+% % save as MATLAB fig
+% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% % save as PDF
+% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+% close
+% 
+% f = gcf;
+% bar_cond = 'OFF_100dps';
+% % save as MATLAB fig
+% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% % save as PDF
+% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+% close
+% 
+% f = gcf;
+% bar_cond = 'OFF_20dps';
+% % save as MATLAB fig
+% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% % save as PDF
+% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+% close
+
 
 
 %% CHECK TIMING
-figure; plot(Log.ADC.Time(1,:), ((Log.ADC.Volts(1,:)/10)-50))
-hold on;
-plot(Log.ADC.Time(2,:), Log.ADC.Volts(2,:)*10)
-
-for jj = 1:127
-    plot([cond_start_times(jj), cond_start_times(jj)], [-70, -30], 'k');
-    hold on
-end 
-
+% figure; plot(Log.ADC.Time(1,:), ((Log.ADC.Volts(1,:)/10)-50))
+% hold on;
+% plot(Log.ADC.Time(2,:), Log.ADC.Volts(2,:)*10)
+% 
+% for jj = 1:127
+%     plot([cond_start_times(jj), cond_start_times(jj)], [-70, -30], 'k');
+%     hold on
+% end 
 
 %% 
-cell_type = 'TmY13';
+% 
+% concat_processed_bars_line(cell_type)
+% 
+% %% Plot polar plots for each cell and the average across all cells. 
+% for cond_val = 1:4
+%     make_av_polar_plot_bars(cell_type, cond_val)
+% end 
+% 
+% %% Plot line plots for each cell, and average over all cells. 
+% for cond_val = 1:4 
+%     make_av_line_plot_bars(cell_type, cond_val)
+% end 
 
-concat_processed_bars_line(cell_type)
 
-%% Plot polar plots for each cell and the average across all cells. 
-for cond_val = 1:4
-    make_av_polar_plot_bars(cell_type, cond_val)
-end 
 
-%% Plot line plots for each cell, and average over all cells. 
-for cond_val = 1:4 
-    make_av_line_plot_bars(cell_type, cond_val)
-end 
+%% ON - OFF combined
+
+% SLOW 
+n_reps = 5;
+slow_or_fast = "slow";
+speed_str = '20dps'; 
+fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
+
+plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
+savefig(gcf, fullfile(date_save_path, fig_str));
+saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+close 
+
+%% FAST 
+
+n_reps = 5;
+slow_or_fast = "fast";
+speed_str = '100dps';
+fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
+
+plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
+savefig(gcf, fullfile(date_save_path, fig_str));
+saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+close
+
+
+
+
+
+
+
+
+
+
+
+
+

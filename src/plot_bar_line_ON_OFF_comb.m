@@ -1,4 +1,5 @@
-function plot_line_plot_8dir(n_reps, colour_reps)
+function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
+
 %% Generate polar plot
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
@@ -7,44 +8,41 @@ function plot_line_plot_8dir(n_reps, colour_reps)
     angls(9) = angls(1);
     angls_rad = deg2rad(angls); 
     
-    for plot_n = 1:4
-        figure
+    if slow_or_fast == "slow"
+        idx_values = [1,3];
+    elseif slow_or_fast == "fast"
+        idx_values = [2,4];
+    end 
+
+    figure
+
+    for plot_n = idx_values
+
         if plot_n == 1
             % % % OFF
             % 20 dps
             values = [13, 21, 6, 17, 14, 22, 5, 18];
             av_col = [0.19, 0.19, 0.19];
             % av_col = [0.1, 0, 0.5]; 
-            xlim_val = 120000;
-            xticks_vals = 0:20000:114000;
-            xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
         elseif plot_n == 2
             % 100 dps
             values = [15, 23, 8, 19, 16, 24, 7, 20];
             av_col = [0.65, 0.65, 0.65];
             % av_col = [0.1, 0, 0.5]; 
-            xlim_val = 30000;
-            xticks_vals = 0:10000:30000;
-            xticklabel_vals = {'0', '0.5', '1', '1.5'};
         elseif plot_n == 3
             % % % ON
             % 20 dps
             values = [108, 116, 101, 112, 109, 117, 100, 113];
             av_col = [0.32, 0.62, 0.36];
             % av_col = [0.905, 0.697, 0.175];
-            xlim_val = 120000;
-            xticks_vals = 0:20000:114000;
-            xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
         elseif plot_n == 4
             % 100 dps
             values = [110, 118,103, 114, 111, 119, 102, 115];
             av_col = [0.70, 0.86, 0.58];
             % av_col = [0.905, 0.697, 0.175];
-            xlim_val = 30000;
-            xticks_vals = 0:10000:30000;
-            xticklabel_vals = {'0', '0.5', '1', '1.5'};
         end 
     
+
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
@@ -52,7 +50,6 @@ function plot_line_plot_8dir(n_reps, colour_reps)
         exp_baseline = median(all_voltage_data);
 
         subplot_values = [15, 9, 3, 7, 11, 17, 23, 19];
-        % subplot_values = [28, 13, 4, 9, 22, 37, 46, 41];
 
         for j = 1:8
             subplot(5, 5, subplot_values(j))
@@ -68,7 +65,7 @@ function plot_line_plot_8dir(n_reps, colour_reps)
                     min_len = len_dd;
                 end 
             end 
-
+    
             % Collect voltage data from across the repetitions. 
             data_comb = zeros(n_reps, min_len);
             % For each rep, extract the relevant voltage data.
@@ -79,8 +76,8 @@ function plot_line_plot_8dir(n_reps, colour_reps)
                 % Find the maximum voltage value during the direction
                 max_val_rep = max(da(1:min_len));
                 rad_vals_reps(k, j) = max_val_rep;
-
             end 
+
             av_resp = mean(data_comb);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
@@ -91,89 +88,73 @@ function plot_line_plot_8dir(n_reps, colour_reps)
             % PLOT REPS
             for ii = 1:n_reps
 
-                if colour_reps == true 
-                    if ii == 1
-                        col = 'r';
-                    elseif ii == 2
-                        col = [1, 0.71, 0.76];
-                    elseif ii == 3
-                        col = [0.68, 0.85, 0.9];
-                    elseif ii == 4
-                        col = 'b';
-                    elseif ii == 5
-                        col = [0.6 0.6 0.6];
-                    end 
-                elseif colour_reps == false
-                    col = [0.8 0.8 0.8];
-                end 
-                    
-                plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
+                % col = [0.8, 0.8, 0.8];
+                % plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.6); hold on
                 ylim([-65 -27])
+                if slow_or_fast == "slow"
+                    xlim([0 114000])
+                    xticks(0:20000:114000);
+                    xticklabels({'0', '1', '2', '3', '4', '5'})
+                elseif slow_or_fast == "fast"
+                    xlim([0 30000])
+                    xticks(0:10000:30000);
+                    xticklabels({'0', '0.5', '1', '1.5'})
+                end 
                 box off 
                 ax = gca;
-                ax.TickDir = 'out';    
-                ax.TickLength = [0.03, 0.03];
+                ax.TickDir = 'out';  
+                ax.TickLength = [0.02, 0.02];
                 ax.LineWidth = 1;
                 ax.FontSize = 8;
+                yticks([-60, -50, -40, -30])
             end 
-
+    
             % PLOT AVERAGE 
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2)
-            xlim([0 xlim_val])
-            xticks(xticks_vals)
-            xticklabels(xticklabel_vals)
-            title(angls(j))
+            % if plot_n == 1 || plot_n == 2
+            %     av_col = 'b';
+            % elseif plot_n == 3 || plot_n == 4
+            %     av_col = 'r';
+            % end 
 
+            plot(av_resp, 'Color', av_col, 'LineWidth', 2); hold on
+            title(angls(j))
         end
+
+        % Add polar plot in the middle: 
 
         subplot(5, 5, 13)
         % subplot(7,7,[17, 18, 19, 24, 25, 26, 31, 32, 33])
         % plot polar plot in the centre of the subplot: 
-        for ii = 1:n_reps
-            if colour_reps == true 
-                if ii == 1
-                    col = 'r';
-                elseif ii == 2
-                    col = [1, 0.71, 0.76];
-                elseif ii == 3
-                    col = [0.68, 0.85, 0.9];
-                elseif ii == 4
-                    col = 'b';
-                elseif ii == 5
-                    col = [0.6 0.6 0.6];
-                end 
-            elseif colour_reps == false
-                col = [0.8 0.8 0.8];
-            end 
-            polarplot(angls_rad, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
-        end 
+        % for ii = 1:n_reps
+            % col = [0.8 0.8 0.8];
+            % polarplot(angls_rad, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
+        % end 
 
         % PLOT AVERAGE 
         mean_rad_values = mean(rad_vals_reps2);
-        polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2)
+        polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2); hold on
         rlim([0 35])
         rticks([0 10, 20, 30])
-        rticklabels({'0', '', '', '30'})
+        rticklabels({'', '', '', '30'})
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
         % thetaticks([])
     
-        if plot_n == 1
-            sgtitle('OFF - 20 dps') 
-        elseif plot_n == 2
-            sgtitle('OFF - 100 dps') 
-        elseif plot_n == 3
-            sgtitle('ON - 20 dps') 
-        elseif plot_n == 4
-            sgtitle('ON - 100 dps') 
-        end 
-
         f = gcf;
-        f.Position = [236   477   694   570]; %[236   493   612   554]; %small for pdfs
         % f.Position = [236 74 1124 973];
-        % f.Position = [563   428   468   619];
-        % tightfig;
+        f.Position = [236   477   694   570]; %small for PDFs
     end 
 
 end
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,4 +1,4 @@
-function plot_polar_plot(n_reps)
+function plot_polar_plot(n_reps, colour_reps)
 %% Generate polar plot
 
 % Load results file
@@ -21,16 +21,20 @@ for subplot_n = 1:4
         % % % OFF
         % 20 dps
         values = [13, 21, 6, 17, 14, 22, 5, 18];
+        av_col = [0.2, 0, 0.5]; 
     elseif subplot_n == 2
         % 100 dps
         values = [15, 23, 8, 19, 16, 24, 7, 20];
+        av_col = [0.2, 0, 0.5]; 
     elseif subplot_n == 3
         % % % ON
         % 20 dps
         values = [108, 116, 101, 112, 109, 117, 100, 113];
+        av_col = [0.905, 0.697, 0.175];
     elseif subplot_n == 4
         % 100 dps
-        values = [110, 118,103, 114, 111, 119, 101, 115];
+        values = [110, 118,103, 114, 111, 119, 102, 115];
+        av_col = [0.905, 0.697, 0.175];
     end 
 
     % Find baseline voltage across all reps and all conditions of the bar
@@ -87,24 +91,29 @@ for subplot_n = 1:4
     rad_vals_reps2(:, 9) = rad_vals_reps2(:, 1);
     
     for ii = 1:n_reps
-        if ii == 1
-            col = 'r';
-        elseif ii == 2
-            col = 'm';
-        elseif ii == 3
-            col = 'c';
-        elseif ii == 4
-            col = 'b';
-        elseif ii == 5
-            col = [0.6 0.6 0.6];
+
+        if colour_reps == true
+            if ii == 1
+                col = 'r';
+            elseif ii == 2
+                col = 'm';
+            elseif ii == 3
+                col = 'c';
+            elseif ii == 4
+                col = 'b';
+            elseif ii == 5
+                col = [0.6 0.6 0.6];
+            end 
+        elseif colour_reps == false
+            col = [0.7 0.7 0.7];
         end 
         polarplot(angls, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.75); hold on
     end 
     
     % PLOT AVERAGE 
     mean_rad_values = mean(rad_vals_reps2);
-    polarplot(angls, mean_rad_values, 'Color', 'k', 'LineWidth', 3)
-    rlim([0 40])
+    polarplot(angls, mean_rad_values, 'Color', av_col, 'LineWidth', 3)
+    rlim([0 30])
     thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
 
     if subplot_n == 1
