@@ -1,5 +1,5 @@
-function plot_line_plot_8dir(n_reps, colour_reps)
-%% Generate polar plot
+function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
+
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
 
@@ -108,7 +108,7 @@ function plot_line_plot_8dir(n_reps, colour_reps)
                 end 
                     
                 plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
-                ylim([-65 -27])
+                ylim(ylim_vals)
                 box off 
                 ax = gca;
                 ax.TickDir = 'out';    
@@ -151,7 +151,7 @@ function plot_line_plot_8dir(n_reps, colour_reps)
         % PLOT AVERAGE 
         mean_rad_values = mean(rad_vals_reps2);
         polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2)
-        rlim([0 35])
+        rlim(rlim_vals)
         rticks([0 10, 20, 30])
         rticklabels({'0', '', '', '30'})
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
