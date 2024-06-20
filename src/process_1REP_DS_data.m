@@ -1,4 +1,4 @@
-function process_1REP_DS_data(project_folder, date_folder)
+function process_1REP_DS_data(project_folder, date_folder, date_str)
 % Process the data from the 1REP protocol, where each saved file is one
 % repetition of the DS Probe Protocol. 
 % Created by Burnett - 24 May 2024
@@ -69,7 +69,7 @@ function process_1REP_DS_data(project_folder, date_folder)
 
     end 
 
-    save(fullfile(date_folder_path, strcat('RES_all_reps_', date_folder, '.mat')), 'data_all_reps');
+    save(fullfile(date_folder_path, strcat('RES_all_reps_', date_str, '.mat')), 'data_all_reps');
     cd(date_folder_path)
 end 
 

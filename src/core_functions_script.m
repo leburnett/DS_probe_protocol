@@ -1,145 +1,88 @@
-% Core script for running functions for Jinyong's patching data 
+
 clear 
 close all
 clc
 
-cell_type = 'TmY3';
+%% Initialise parameters that will changes
 
-% If saving
-save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Figures_for_Michael';
-fig_save_path = strcat(save_path, '/', cell_type);
+save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures';
+date_to_process = '06_17_2024';
+cell_type = 'TmY18';
 
-%% Run preprocessing
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+%% Path to cell type folder
 project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
-% date_folder = '05_28_2024/05_28_2024_2';
-date_folder = '05_23_2024';
+cd(project_folder)
 
-date_save_path = fullfile(fig_save_path, date_folder);
-if ~isfolder(date_save_path)
-    mkdir(date_save_path)
+%% Path to date folder
+
+% List all of the date folders
+date_folder_dir = dir(); 
+% remove 'DS_Store, '.' and '..'. 
+% If you are not using a Mac then you won't have DS_Store and this should
+% be: 'date_folder_dir(1:2, :) = [];'
+date_folder_dir(1:3, :) = []; 
+n_days = length(date_folder_dir);
+
+if isempty(date_to_process)
+    % update this so that if this argument is empty it will run through the
+    % entire folder. 
+    % dates_to_process = 
+else
+    date_str = date_to_process;
 end 
 
-cd(fullfile(project_folder, date_folder))
+cd(fullfile(project_folder, date_str))
 
-% process_ds_probe_protocol_data(project_folder, date_folder)
+n_subfolders = 0; % set as 0 to begin with. 
 
-% Number of runs of the protocol:
-n_reps = 5;
+experiment_folder_dir = dir('SS*');
 
-colour_reps = false;
+if isempty(experiment_folder_dir)
+    % means that there is a subfolder structure where there is >1 cell or
+    % 2 recording sessions in one day. 
+    sub_folder_dir = dir();
+    sub_folder_dir(1:3, :) = []; 
 
-%% Polar plot 
-% plot_polar_plot(n_reps, colour_reps)
-% 
-% % Save the figure
-% f = gcf;
-% % save as MATLAB fig
-% savefig(fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.fig')))
-% % save as PDF
-% print(f, fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-% % saveas(f, fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.pdf')), 'pdf')
+    n_subfolders = length(sub_folder_dir);
+    subfolder_names = '';
+    for idx = 1:n_subfolders
+        subfolder_names{idx} = string(sub_folder_dir(idx).name);
+    end 
+end 
 
+%% Initialise path to save figures 
+cell_type_fig_save_path = strcat(save_path, '/', cell_type);
+date_fig_save_path = fullfile(cell_type_fig_save_path, date_str);
 
-%% Line plots
-% plot_line_plot_8dir(n_reps, colour_reps)
-% 
-% 
-% % Save the figure
-% f = gcf;
-% bar_cond = 'ON_100dps';
-% % save as MATLAB fig
-% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-% % save as PDF
-% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-% saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), 'pdf')
-% close
-% 
-% f = gcf;
-% bar_cond = 'ON_20dps';
-% % save as MATLAB fig
-% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-% % save as PDF
-% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-% close
-% 
-% f = gcf;
-% bar_cond = 'OFF_100dps';
-% % save as MATLAB fig
-% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-% % save as PDF
-% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-% close
-% 
-% f = gcf;
-% bar_cond = 'OFF_20dps';
-% % save as MATLAB fig
-% savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-% % save as PDF
-% print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-% close
+% If this folder doesn't exist yet, make it. 
+if ~isfolder(date_fig_save_path)
+    mkdir(date_fig_save_path)
+end 
 
+%% Process the data and create 'RES_all_reps...' .mat file in the date folder. 
 
+if n_subfolders ==0 
+    date_folder = date_str;
+    process_ds_probe_protocol_data(project_folder, date_folder, date_str)
+elseif n_subfolders > 0 
 
-%% CHECK TIMING
-% figure; plot(Log.ADC.Time(1,:), ((Log.ADC.Volts(1,:)/10)-50))
-% hold on;
-% plot(Log.ADC.Time(2,:), Log.ADC.Volts(2,:)*10)
-% 
-% for jj = 1:127
-%     plot([cond_start_times(jj), cond_start_times(jj)], [-70, -30], 'k');
-%     hold on
-% end 
+    for idx = 1:n_subfolders
+        
+        subfolder_str = subfolder_names{idx};
 
-%% 
-% 
-% concat_processed_bars_line(cell_type)
-% 
-% %% Plot polar plots for each cell and the average across all cells. 
-% for cond_val = 1:4
-%     make_av_polar_plot_bars(cell_type, cond_val)
-% end 
-% 
-% %% Plot line plots for each cell, and average over all cells. 
-% for cond_val = 1:4 
-%     make_av_line_plot_bars(cell_type, cond_val)
-% end 
+        % Make subfolder for saving:
+        subfolder_fig_save_path = fullfile(date_fig_save_path, subfolder_str);
+        
+        % If this folder doesn't exist yet, make it. 
+        if ~isfolder(subfolder_fig_save_path)
+            mkdir(subfolder_fig_save_path)
+        end 
 
-
-
-%% ON - OFF combined
-
-% SLOW 
-n_reps = 5;
-slow_or_fast = "slow";
-speed_str = '20dps'; 
-fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
-
-plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
-savefig(gcf, fullfile(date_save_path, fig_str));
-saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
-close 
-
-%% FAST 
-
-n_reps = 5;
-slow_or_fast = "fast";
-speed_str = '100dps';
-fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
-
-plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
-savefig(gcf, fullfile(date_save_path, fig_str));
-saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
-close
-
-
-
-
-
-
-
-
-
-
-
+        subfolder = strcat(date_str, '/', subfolder_str);
+        process_ds_probe_protocol_data(project_folder, subfolder, subfolder_str)
+    end 
+end 
 
 
