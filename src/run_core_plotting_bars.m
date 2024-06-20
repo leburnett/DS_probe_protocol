@@ -1,4 +1,4 @@
-%% Plot data from DS_probe_protocol
+%% Plot data from DS_probe_protocol - BAR stimuli
 % Created by Burnett
 % June 20th 2024
 
