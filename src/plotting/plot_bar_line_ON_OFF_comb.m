@@ -1,4 +1,4 @@
-function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
+function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
 
 %% Generate polar plot
     res_files = dir('RES_all_reps*');
@@ -90,7 +90,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
 
                 % col = [0.8, 0.8, 0.8];
                 % plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.6); hold on
-                ylim([-65 -27])
+                ylim(ylim_vals)
                 if slow_or_fast == "slow"
                     xlim([0 114000])
                     xticks(0:20000:114000);
@@ -133,7 +133,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
         % PLOT AVERAGE 
         mean_rad_values = mean(rad_vals_reps2);
         polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2); hold on
-        rlim([0 35])
+        rlim(rlim_vals)
         rticks([0 10, 20, 30])
         rticklabels({'', '', '', '30'})
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])

@@ -5,7 +5,6 @@ clc
 
 %% Initialise parameters that will changes
 
-save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures';
 date_to_process = '06_17_2024';
 cell_type = 'TmY18';
 
@@ -52,14 +51,6 @@ if isempty(experiment_folder_dir)
     end 
 end 
 
-%% Initialise path to save figures 
-cell_type_fig_save_path = strcat(save_path, '/', cell_type);
-date_fig_save_path = fullfile(cell_type_fig_save_path, date_str);
-
-% If this folder doesn't exist yet, make it. 
-if ~isfolder(date_fig_save_path)
-    mkdir(date_fig_save_path)
-end 
 
 %% Process the data and create 'RES_all_reps...' .mat file in the date folder. 
 

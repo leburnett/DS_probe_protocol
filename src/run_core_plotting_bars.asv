@@ -1,9 +1,6 @@
 %% Plot data from DS_probe_protocol - BAR stimuli
 % Created by Burnett
 % June 20th 2024
-clear 
-close all
-clc
 
 %% Initialise parameters that will changes
 date_str = '06_18_2024';
@@ -26,6 +23,10 @@ save_figs = false;
 
 %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
+exp_folders = dir('SS*');
+% Number of runs of the protocol:
+n_reps = length(exp_folders);
+
 if save_figs == true
     save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures';
 
@@ -37,9 +38,8 @@ if save_figs == true
     if ~isfolder(date_fig_save_path)
         mkdir(date_fig_save_path)
     end 
-    
-    % Set the save path as the date save path
-    fig_save_path = date_fig_save_path;
+
+    fig_save_path = 
 
     % If subfolders exist
     if numel(date_to_process) > 10 
@@ -51,20 +51,6 @@ if save_figs == true
         if ~isfolder(subfolder_fig_save_path)
             mkdir(subfolder_fig_save_path)
         end 
-
-        % Move into the subfolder
-        subfolder = fullfile(date_folder, date_to_process);
-        cd(subfolder)
-
-        % Set the save path as the subfolder save path
-        fig_save_path = subfolder_fig_save_path;
-    end 
-
-else
-    % If subfolders exist
-    if numel(date_to_process) > 10 
-
-        % Move into the subfolder
         subfolder = fullfile(date_folder, date_to_process);
         cd(subfolder)
 
@@ -72,89 +58,75 @@ else
 
 end 
 
-exp_folders = dir('SS*');
-% Number of runs of the protocol:
-n_reps = length(exp_folders);
+
+
+
 
 %% Line plot + polar plot in the middle
 plot_line_plot_8dir(n_reps, colour_reps)
 % 
+% 
 
-if save_figs == true
-
-    % Save the figures:
-
-    f = gcf;
-    bar_cond = 'ON_100dps';
-    % save as MATLAB fig
-    savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-    % save as PDF
-    print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-    saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), 'pdf')
-    close
-
-    % 
-    f = gcf;
-    bar_cond = 'ON_20dps';
-    % save as MATLAB fig
-    savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-    % save as PDF
-    print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-    close
-
-    % 
-    f = gcf;
-    bar_cond = 'OFF_100dps';
-    % save as MATLAB fig
-    savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-    % save as PDF
-    print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-    close
-
-    % 
-    f = gcf;
-    bar_cond = 'OFF_20dps';
-    % save as MATLAB fig
-    savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
-    % save as PDF
-    print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-    close
-end 
+% % Save the figure
+f = gcf;
+bar_cond = 'ON_100dps';
+% save as MATLAB fig
+savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% save as PDF
+print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), 'pdf')
+close
+% 
+f = gcf;
+bar_cond = 'ON_20dps';
+% save as MATLAB fig
+savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% save as PDF
+print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+close
+% 
+f = gcf;
+bar_cond = 'OFF_100dps';
+% save as MATLAB fig
+savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% save as PDF
+print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+close
+% 
+f = gcf;
+bar_cond = 'OFF_20dps';
+% save as MATLAB fig
+savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+% save as PDF
+print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+close
 
 
 %% ON - OFF combined
 
-ylim_vals = [-62 -40]; %[-65 -27];
-rlim_vals = [0 20]; %[0 35];
-
 % SLOW 
-% n_reps = 5;
+n_reps = 5;
 slow_or_fast = "slow";
 speed_str = '20dps'; 
 fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
 
-plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
-
-if save_figs == true
-    savefig(gcf, fullfile(date_save_path, fig_str));
-    saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
-    close 
-end 
+plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
+savefig(gcf, fullfile(date_save_path, fig_str));
+saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+close 
 
 %% FAST 
 
-% n_reps = 5;
+n_reps = 5;
 slow_or_fast = "fast";
 speed_str = '100dps';
 fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
 
-plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
+plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast)
+savefig(gcf, fullfile(date_save_path, fig_str));
+saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+close
 
-if save_figs == true
-    savefig(gcf, fullfile(date_save_path, fig_str));
-    saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
-    close
-end 
 
 
 %% Polar plot 
