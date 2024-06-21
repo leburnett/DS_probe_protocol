@@ -10,16 +10,6 @@
 % % saveas(f, fullfile(fig_save_path, strcat('Polar_plot_4BarCond_', cell_type, '_', date_folder, '.pdf')), 'pdf')
 
 
-%% CHECK TIMING
-% figure; plot(Log.ADC.Time(1,:), ((Log.ADC.Volts(1,:)/10)-50))
-% hold on;
-% plot(Log.ADC.Time(2,:), Log.ADC.Volts(2,:)*10)
-% 
-% for jj = 1:127
-%     plot([cond_start_times(jj), cond_start_times(jj)], [-70, -30], 'k');
-%     hold on
-% end 
-
 %% 
 % 
 % concat_processed_bars_line(cell_type)

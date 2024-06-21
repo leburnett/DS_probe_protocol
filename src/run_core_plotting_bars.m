@@ -6,8 +6,8 @@ close all
 clc
 
 %% Initialise parameters that will changes
-date_str = '06_18_2024';
-date_to_process = '06_18_2024_2'; % when there are subfolders set this to '06_18_2024_1' etc.
+date_str = '06_21_2024';
+date_to_process = '06_21_2024'; % when there are subfolders set this to '06_18_2024_1' etc.
 cell_type = 'TmY18';
 project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
 
