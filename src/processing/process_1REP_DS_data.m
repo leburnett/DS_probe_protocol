@@ -1,4 +1,4 @@
-function process_1REP_DS_data(project_folder, date_folder, date_str)
+function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
 % Process the data from the 1REP protocol, where each saved file is one
 % repetition of the DS Probe Protocol. 
 % Created by Burnett - 24 May 2024
@@ -6,6 +6,13 @@ function process_1REP_DS_data(project_folder, date_folder, date_str)
     %% Run through experiment folders
     date_folder_path = fullfile(project_folder, date_folder); 
     cd(date_folder_path)
+
+    processed_data_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/ProcessedData';
+    cell_type_processed_folder = fullfile(processed_data_path, cell_type);
+    % If this folder doesn't exist yet, make it. 
+    if ~isfolder(cell_type_processed_folder)
+        mkdir(cell_type_processed_folder)
+    end 
 
     n_conditions = 127; % This is fixed for this protocol. FIXME - to be updated in the future. 
 
@@ -69,7 +76,11 @@ function process_1REP_DS_data(project_folder, date_folder, date_str)
 
     end 
 
+    % save local copy within experiment folder
     save(fullfile(date_folder_path, strcat('RES_all_reps_', date_str, '.mat')), 'data_all_reps');
+    % save copy in 'processed_data' folder
+    save(fullfile(cell_type_processed_folder, strcat('RES_all_reps_', date_str, '.mat')), 'data_all_reps');
+
     cd(date_folder_path)
 end 
 

@@ -7,7 +7,7 @@ clc
 
 %% Initialise parameters that will changes
 date_str = '06_18_2024';
-date_to_process = '06_18_2024_2';
+date_to_process = '06_18_2024_2'; % when there are subfolders set this to '06_18_2024_1' etc.
 cell_type = 'TmY18';
 project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
 
@@ -81,7 +81,7 @@ ylim_vals = [-62 -40]; %[-65 -27];
 rlim_vals = [0 20]; %[0 35];
 
 %% Line plot + polar plot in the middle
-plot_line_plot_8dir(n_reps, colour_reps)
+plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
 % 
 
 if save_figs == true

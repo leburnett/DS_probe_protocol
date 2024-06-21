@@ -5,7 +5,7 @@ clc
 
 %% Initialise parameters that will changes
 
-date_to_process = '06_17_2024';
+date_to_process = '06_20_2024';
 cell_type = 'TmY18';
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
@@ -56,7 +56,7 @@ end
 
 if n_subfolders ==0 
     date_folder = date_str;
-    process_ds_probe_protocol_data(project_folder, date_folder, date_str)
+    process_ds_probe_protocol_data(project_folder, date_folder, date_str, cell_type)
 elseif n_subfolders > 0 
 
     for idx = 1:n_subfolders
@@ -72,7 +72,7 @@ elseif n_subfolders > 0
         end 
 
         subfolder = strcat(date_str, '/', subfolder_str);
-        process_ds_probe_protocol_data(project_folder, subfolder, subfolder_str)
+        process_ds_probe_protocol_data(project_folder, subfolder, subfolder_str, cell_type)
     end 
 end 
 
