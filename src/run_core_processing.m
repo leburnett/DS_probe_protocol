@@ -18,6 +18,7 @@ cd(project_folder)
 
 % List all of the date folders
 date_folder_dir = dir(); 
+
 % remove 'DS_Store, '.' and '..'. 
 % If you are not using a Mac then you won't have DS_Store and this should
 % be: 'date_folder_dir(1:2, :) = [];'

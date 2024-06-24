@@ -35,7 +35,7 @@ function concat_processed_bars_line(cell_type)
                 values = [108, 116, 101, 112, 109, 117, 100, 113];
             elseif cond_n == 4
                 % ON - 100 dps
-                values = [110, 118,103, 114, 111, 119, 101, 115];
+                values = [110, 118,103, 114, 111, 119, 102, 115];
             end 
     
             for j = 1:8
