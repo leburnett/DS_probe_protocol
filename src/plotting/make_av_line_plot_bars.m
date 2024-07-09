@@ -1,10 +1,10 @@
 function make_av_line_plot_bars(cell_type, cond_val)
     
-% Generate a polar plot from the average responses of all the cells
+% Generate a line plot from the average responses of all the cells
 % recorded. 
 
 % Inputs
-% 'cond_val' - whcih condition to plot for. 
+% 'cond_val' - which condition to plot for. 
 % 1 - OFF 20 dps
 % 2 - OFF - 100 dps
 % 3 - ON 20 dps
