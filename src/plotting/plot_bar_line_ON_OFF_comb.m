@@ -37,7 +37,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
             % av_col = [0.905, 0.697, 0.175];
         elseif plot_n == 4
             % 100 dps
-            values = [110, 118,103, 114, 111, 119, 102, 115];
+            values = [110, 118, 103, 114, 111, 119, 102, 115];
             av_col = [0.70, 0.86, 0.58];
             % av_col = [0.905, 0.697, 0.175];
         end 
