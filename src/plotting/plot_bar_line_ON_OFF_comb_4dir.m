@@ -1,4 +1,4 @@
-function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
+function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_str, edge_or_bar)
 % Used to create 2 x line plots of responses to thin bar stimuli or moving
 % edges. One plot for 20 dps stimuli and the other for 100 dps stimuli. 
 
@@ -11,7 +11,7 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
 %% Generate polar plot
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
-    date_str = strrep(res_files(1).name(end-13:end-4), '_', '-');
+    % date_str = strrep(res_files(1).name(end-13:end-4), '_', '-');
 
     angls = 0:90:315;
     angls(5) = angls(1);
@@ -203,7 +203,8 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
 
         f = gcf;
         % f.Position = [236 74 1124 973];
-        f.Position = [236   477   694   570]; %small for PDFs
+        f.Position = [236   548   577   499]; 
+        % f.Position = [236   477   694   570]; %small for PDFs
 
 
     end 

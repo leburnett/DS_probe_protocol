@@ -1,4 +1,4 @@
-function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_bar)
+function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str, edge_or_bar)
 % Used to create 4 x line plots of responses to thin bar stimuli or moving
 % edges.
 
@@ -11,7 +11,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
 
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
-    date_str = strrep(res_files(1).name(end-13:end-4), '_', '-');
+    date_str = strrep(date_str, '_', '-');
 
     % Only 4 angles
     angls = 0:90:315;
@@ -223,12 +223,12 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
         % end 
         str_to_add = strcat(speed_str, edge_or_bar);
         % Add text:
-        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', str_to_add, 'EdgeColor', 'none', 'FontSize', 20);
-        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 20);
+        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', str_to_add, 'EdgeColor', 'none', 'FontSize', 18);
+        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 18);
 
 
         f = gcf;
-        f.Position = [236   477   694   570]; %[236   493   612   554]; %small for pdfs
+        f.Position = [236   548   577   499]; %[236   477   694   570]; %[236   493   612   554]; %small for pdfs
         % f.Position = [236 74 1124 973];
         % f.Position = [563   428   468   619];
         % tightfig;
