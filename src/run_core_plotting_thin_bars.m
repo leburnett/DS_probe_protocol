@@ -23,7 +23,7 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = false; 
+save_figs = true; 
 
 %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
@@ -61,15 +61,15 @@ if save_figs == true
         fig_save_path = subfolder_fig_save_path;
     end 
 
-else
-    % If subfolders exist
-    if numel(date_to_process) > 10 
-
-        % Move into the subfolder
-        subfolder = fullfile(date_folder, date_to_process);
-        cd(subfolder)
-
-    end 
+% else
+%     % If subfolders exist
+%     if numel(date_to_process) > 10 
+% 
+%         % Move into the subfolder
+%         subfolder = fullfile(date_folder, date_to_process);
+%         cd(subfolder)
+% 
+%     end 
 
 end 
 
@@ -96,37 +96,37 @@ for edge_or_bar = "edge"
         f = gcf;
         bar_cond = 'ON_100dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), 'pdf')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), 'pdf')
         close
     
         % 
         f = gcf;
         bar_cond = 'ON_20dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
         close
     
         % 
         f = gcf;
         bar_cond = 'OFF_100dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
         close
     
         % 
         f = gcf;
         bar_cond = 'OFF_20dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
         close
     end 
     
@@ -137,13 +137,13 @@ for edge_or_bar = "edge"
     % n_reps = 5;
     slow_or_fast = "slow";
     speed_str = '20dps'; 
-    fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
+    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
     plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
     
     if save_figs == true
-        savefig(gcf, fullfile(date_save_path, fig_str));
-        saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
         close 
     end 
     
@@ -152,13 +152,13 @@ for edge_or_bar = "edge"
     % n_reps = 5;
     slow_or_fast = "fast";
     speed_str = '100dps';
-    fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
+    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
     plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
     
     if save_figs == true
-        savefig(gcf, fullfile(date_save_path, fig_str));
-        saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
         close
     end 
 
@@ -179,37 +179,37 @@ for edge_or_bar = "bar"
         f = gcf;
         bar_cond = 'ON_100dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
-        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), 'pdf')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), 'pdf')
         close
     
         % 
         f = gcf;
         bar_cond = 'ON_20dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
         close
     
         % 
         f = gcf;
         bar_cond = 'OFF_100dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
         close
     
         % 
         f = gcf;
         bar_cond = 'OFF_20dps';
         % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.fig')))
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_folder, '.pdf')), '-dpdf', '-bestfit')
+        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
         close
     end 
     
@@ -220,13 +220,13 @@ for edge_or_bar = "bar"
     % n_reps = 5;
     slow_or_fast = "slow";
     speed_str = '20dps'; 
-    fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
+    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
     plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
     
     if save_figs == true
-        savefig(gcf, fullfile(date_save_path, fig_str));
-        saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
         close 
     end 
     
@@ -235,13 +235,13 @@ for edge_or_bar = "bar"
     % n_reps = 5;
     slow_or_fast = "fast";
     speed_str = '100dps';
-    fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
+    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
     plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
     
     if save_figs == true
-        savefig(gcf, fullfile(date_save_path, fig_str));
-        saveas(gcf, fullfile(date_save_path, fig_str(1:end-4)), 'pdf')
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
         close
     end 
 
