@@ -1,14 +1,14 @@
-%% Plot data from DS_probe_protocol - BAR stimuli
+%% Plot data from DS_probe_protocol - THIN BAR stimuli (2 pixel width - 3.75 VA)
 % Created by Burnett
-% June 20th 2024
+% July 10th 2024
 clear 
 close all
 clc
 
 %% Initialise parameters that will change
-date_str = '06_21_2024';
-date_to_process = '06_21_2024'; % when there are subfolders set this to '06_18_2024_1' etc.
-cell_type = 'TmY18';
+date_str = '05_23_2024';
+date_to_process = '05_23_2024'; % when there are subfolders set this to '06_18_2024_1' etc.
+cell_type = 'TmY3';
 project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
 
 % RUN THIS SCRIPT WITHIN THE DATE FOLDER. 
@@ -80,8 +80,10 @@ n_reps = length(exp_folders);
 ylim_vals = [-62 -40]; %[-65 -27];
 rlim_vals = [0 20]; %[0 35];
 
+edge_or_bar = "bar";
+
 %% Line plot + polar plot in the middle
-plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
+plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_bar)
 % 
 
 if save_figs == true
@@ -134,7 +136,7 @@ slow_or_fast = "slow";
 speed_str = '20dps'; 
 fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
 
-plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
+plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
 
 if save_figs == true
     savefig(gcf, fullfile(date_save_path, fig_str));
