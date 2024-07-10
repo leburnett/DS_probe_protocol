@@ -11,6 +11,7 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
 %% Generate polar plot
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
+    date_str = strrep(res_files(1).name(end-13:end-4), '_', '-');
 
     angls = 0:90:315;
     angls(5) = angls(1);
@@ -86,10 +87,10 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
         pos_bottom = [0.37, 0.07, 0.25, 0.25];
         
         % Left subplot (larger)
-        pos_left = [0.1, 0.37, 0.25, 0.25];
+        pos_left = [0.1, 0.39, 0.25, 0.25];
         
         % Right subplot (larger)
-        pos_right = [0.67, 0.37, 0.25, 0.25];
+        pos_right = [0.67, 0.39, 0.25, 0.25];
 
         subplot_values = {pos_right, pos_top, pos_left, pos_bottom};
 
@@ -188,9 +189,23 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
         % thetaticks([])
     
+
+        if slow_or_fast == "slow"
+            speed_str = '20dps-';
+        elseif slow_or_fast == "fast"
+            speed_str = '100dps-';
+        end 
+
+        str_to_add = strcat(speed_str, edge_or_bar);
+        % Add text:
+        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', str_to_add, 'EdgeColor', 'none', 'FontSize', 25);
+        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 25);
+
         f = gcf;
         % f.Position = [236 74 1124 973];
         f.Position = [236   477   694   570]; %small for PDFs
+
+
     end 
 
 end

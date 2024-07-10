@@ -26,6 +26,8 @@ save_figs = false;
 
 %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
+edge_or_bar = "edge";
+
 if save_figs == true
     save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures';
 
@@ -80,10 +82,8 @@ n_reps = length(exp_folders);
 ylim_vals = [-62 -40]; %[-65 -27];
 rlim_vals = [0 20]; %[0 35];
 
-edge_or_bar = "bar";
-
 %% Line plot + polar plot in the middle
-plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_bar)
+plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_bar)
 % 
 
 if save_figs == true
@@ -151,7 +151,7 @@ slow_or_fast = "fast";
 speed_str = '100dps';
 fig_str = strcat('ON-OFF-comb_', date_folder,'_', speed_str, '_noREPS.fig');
 
-plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
+plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
 
 if save_figs == true
     savefig(gcf, fullfile(date_save_path, fig_str));

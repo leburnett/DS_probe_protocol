@@ -11,6 +11,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
 
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
+    date_str = strrep(res_files(1).name(end-13:end-4), '_', '-');
 
     % Only 4 angles
     angls = 0:90:315;
@@ -32,6 +33,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
             xlim_val = 120000;
             xticks_vals = 0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
+            speed_str = '20dps-Dark-';
         elseif plot_n == 2
             % 100 dps
             if edge_or_bar == "bar"
@@ -44,6 +46,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
             xlim_val = 30000;
             xticks_vals = 0:10000:30000;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
+            speed_str = '100dps-Dark-';
         elseif plot_n == 3
             % % % ON
             % 20 dps
@@ -57,6 +60,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
             xlim_val = 120000;
             xticks_vals = 0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
+            speed_str = '20dps-Bright-';
         elseif plot_n == 4
             % 100 dps
             if edge_or_bar == "bar"
@@ -69,6 +73,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
             xlim_val = 30000;
             xticks_vals = 0:10000:30000;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
+            speed_str = '100dps-Bright-';
         end 
     
         % Find baseline voltage across all reps and all conditions of the bar
@@ -77,10 +82,28 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
         all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
         exp_baseline = median(all_voltage_data);
 
-        subplot_values = [15, 3, 11, 23];
+        % subplot_values = [15, 3, 11, 23];
+
+        % Central subplot (smaller)
+        pos_center = [0.4, 0.4, 0.2, 0.2];
+        
+        % Top subplot (larger)
+        pos_top = [0.37, 0.7, 0.25, 0.25];
+        
+        % Bottom subplot (larger)
+        pos_bottom = [0.37, 0.07, 0.25, 0.25];
+        
+        % Left subplot (larger)
+        pos_left = [0.1, 0.39, 0.25, 0.25];
+        
+        % Right subplot (larger)
+        pos_right = [0.67, 0.39, 0.25, 0.25];
+
+        subplot_values = {pos_right, pos_top, pos_left, pos_bottom};
 
         for j = 1:4
-            subplot(5, 5, subplot_values(j))
+            % subplot(5, 5, subplot_values(j))
+            subplot('Position', subplot_values{j});
     
             idx = values(j);
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
@@ -147,11 +170,18 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
             xlim([0 xlim_val])
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
-            title(angls(j))
+            % title(angls(j))
+
+            if angls(j)==270
+                xlabel('Time (s)');
+            elseif angls(j)==180
+                ylabel('Voltage (mV)');
+            end 
 
         end
 
-        subplot(5, 5, 13)
+        % subplot(5, 5, 13)
+        subplot('Position', pos_center);
         % subplot(7,7,[17, 18, 19, 24, 25, 26, 31, 32, 33])
         % plot polar plot in the centre of the subplot: 
         for ii = 1:n_reps
@@ -182,15 +212,20 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
         % thetaticks([])
     
-        if plot_n == 1
-            sgtitle('OFF - 20 dps') 
-        elseif plot_n == 2
-            sgtitle('OFF - 100 dps') 
-        elseif plot_n == 3
-            sgtitle('ON - 20 dps') 
-        elseif plot_n == 4
-            sgtitle('ON - 100 dps') 
-        end 
+        % if plot_n == 1
+        %     sgtitle('OFF - 20 dps') 
+        % elseif plot_n == 2
+        %     sgtitle('OFF - 100 dps') 
+        % elseif plot_n == 3
+        %     sgtitle('ON - 20 dps') 
+        % elseif plot_n == 4
+        %     sgtitle('ON - 100 dps') 
+        % end 
+        str_to_add = strcat(speed_str, edge_or_bar);
+        % Add text:
+        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', str_to_add, 'EdgeColor', 'none', 'FontSize', 20);
+        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 20);
+
 
         f = gcf;
         f.Position = [236   477   694   570]; %[236   493   612   554]; %small for pdfs
