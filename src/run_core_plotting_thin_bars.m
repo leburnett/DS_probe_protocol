@@ -7,9 +7,9 @@ close all
 clc
 
 %% Initialise parameters that will change
-date_str = '05_28_2024';
-date_to_process = '05_28_2024_1'; % when there are subfolders set this to '06_18_2024_1' etc.
-cell_type = 'TmY3';
+date_str = '06_21_2024';
+date_to_process = '06_21_2024'; % when there are subfolders set this to '06_18_2024_1' etc.
+cell_type = 'TmY18';
 project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
 
 % RUN THIS SCRIPT WITHIN THE DATE FOLDER. 
@@ -154,7 +154,7 @@ for edge_or_bar = "edge"
     speed_str = '100dps';
     fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
-    plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
+    plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
     
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
@@ -169,7 +169,7 @@ end
 for edge_or_bar = "bar"
     
     % Line plot + polar plot in the middle
-    plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, edge_or_bar)
+    plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
     % 
     
     if save_figs == true
@@ -222,7 +222,7 @@ for edge_or_bar = "bar"
     speed_str = '20dps'; 
     fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
-    plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
+    plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
     
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
@@ -237,7 +237,7 @@ for edge_or_bar = "bar"
     speed_str = '100dps';
     fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
     
-    plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, edge_or_bar)
+    plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
     
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
@@ -247,4 +247,5 @@ for edge_or_bar = "bar"
 
 end 
 
-
+cd('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');
+clear
