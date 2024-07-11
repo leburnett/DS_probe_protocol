@@ -1,11 +1,8 @@
 from abc import ABC
 from pathlib import Path
 import re
-
 from dotenv import find_dotenv
-
 import fitz
-
 
 class PDFMaker(ABC):
 

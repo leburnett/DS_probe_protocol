@@ -4,9 +4,10 @@ Functions to generate the combined results pdfs from the generated individual pl
 from pathlib import Path
 import os
 import glob
-import warnings 
-from PIL import Image, ImageDraw
+import warnings
+# from PIL import Image, ImageDraw
 from utils.pdf_maker import PDFMaker
+from utils.helper_functions import find_pdfs
 
 from dotenv import find_dotenv, load_dotenv
 
@@ -16,7 +17,6 @@ load_dotenv()
 def generate_combined_pdf(
     plot_info: dict,
     pdf_specs: dict,
-    page_idx: int,
     rows_cols: tuple = None,
     offset: int = 45,
 ):
@@ -41,8 +41,6 @@ def generate_combined_pdf(
             pdf resolution in dpi
         pdf_margin : tuple
             paper margin in mm. [margin_x, margin_y]
-    page_idx : int
-        page number
     rows_cols : tuple, default=None
         tuple of the number of rows and columns to use in the pdf i.e. [4, 6] - 4 rows, 6 columns
         If None, then rows_cols is set as [len(instances), 1].
@@ -56,10 +54,12 @@ def generate_combined_pdf(
     stim_type = plot_info["stim_type"]
     cell_type = plot_info["cell_type"]
     date_str = plot_info["date_str"]
+    
     # paths to find the files
-    figure_folder = results_folder / cell_type / date_str
+    path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
+
     # output folder to save the PDFs
-    output_folder = results_folder / 'output_pdfs' / cell_type
+    output_folder = os.path.join(results_folder, 'output_pdfs', cell_type)
     output_folder.mkdir(parents=True, exist_ok=True)
 
     # generate the empty page
@@ -70,92 +70,33 @@ def generate_combined_pdf(
         margin=pdf_specs["pdf_margin"],
     )
 
-    if rows_cols is None:
-        rows_cols = [len(instances), 1]
+    if stim_type == 'bar2' | stim_type == 'edge': # update with more stimulus types when I have them
+        rows_cols = [3, 4]
 
     # get the position of each of the individual figs on the page
-    coords, img_width, img_height = doc.get_page_layout_rows_cols(
+    coords, _, _ = doc.get_page_layout_rows_cols(
         rows=rows_cols[0], cols=rows_cols[1], aspect_ratio=1
     )
-    # save_name = f"Gallery_{main_group}_{rows_cols[0]}R_{rows_cols[1]}C_{pdf_specs['pdf_w']}mm_{pdf_specs['pdf_h']}mm_{pdf_specs['pdf_res']}dpi_{str(page_idx).zfill(2)}.pdf"
-    save_name = f"Gallery_Group-{page_idx:02d}.pdf"
+
+    save_name = f"{cell_type}_{date_str}_{stim_type}.pdf"
+
+    # Get list of the pdfs in the directory. sort to ensure they're in the correct order.
+    pdf_files = find_pdfs(path_to_pdfs).sort()
+
     idx = 0
 
-    for idx, instance in enumerate(instances):
+    for idx, pdf_name in enumerate(pdf_files):
+
         # get text and position
-        config = PlotConfig(config_filename=json_path / f"Optic-Lobe_Gallery_{instance}.json")
         x_top, y_top = coords[idx][0] + offset, coords[idx][1]
-
-        png_path = PROJECT_ROOT / "results" / "gallery" / config.directory / f"{config.basename}.png"
-        png_crop_path = crop_path/ f"{config.basename}_crop.png"
-
-        # if cropped image doesn't exist then make it
-        if not os.path.exists(png_crop_path):
-            img_raw = Image.open(png_path)
-            img_crop = img_raw.crop((350, 200, 2350, 2500))
-            # add white rect with gradient to edge
-            rect_w = int(img_crop.size[0] / 10)
-            rect_h = img_crop.size[1]
-            rectangle_size = (rect_w, rect_h)
-            pos_rect_x = img_crop.size[0] - rect_w
-            pos_rect_y = 0
-            rectangle_position = (pos_rect_x, pos_rect_y)
-            overlay = Image.new("RGBA", img_crop.size, (0, 0, 0, 0))
-            draw = ImageDraw.Draw(overlay)
-            for i in range(256):
-                color = (255, 255, 255, i)
-                new_rectangle_size = (
-                    int(rectangle_size[0] * (1 - i / 255)),
-                    rectangle_size[1],
-                )
-                new_rectangle_position = (
-                    rectangle_position[0]
-                    + int((rectangle_size[0] - new_rectangle_size[0])),
-                    rectangle_position[1],
-                )
-                draw.rectangle(
-                    [
-                        new_rectangle_position,
-                        (
-                            new_rectangle_position[0] + new_rectangle_size[0],
-                            new_rectangle_position[1] + new_rectangle_size[1],
-                        ),
-                    ],
-                    fill=color,
-                )
-            result = Image.alpha_composite(img_crop.convert("RGBA"), overlay)
-            result.save(png_crop_path)
 
         # add image to pdf
         img_coords = list(coords[idx])
         img_coords[0] += offset
         img_coords[2] += offset
-        doc.add_image(png_crop_path, img_coords)
+        doc.add_image(pdf_name, img_coords)
 
-        text_dict = config.text_dict
-
-        if f"{instance}" in nudge_dict.keys():
-            nudge_str = f"{instance}"
-            nudge_val = nudge_dict[nudge_str]
-        else:
-            nudge_val = 0
-
-        # add text
-        for key, t in text_dict.items():
-            align = t["align"]
-            plot_pos_x, plot_pos_y = t["pos"]
-            paper_pos_x = (plot_pos_x * img_width) + x_top
-            paper_pos_y = (((1 - plot_pos_y) * img_height) + y_top) - nudge_val
-
-            doc.add_text(
-                text=t["text"],
-                position=[paper_pos_x, paper_pos_y],
-                color=t["color"],
-                align=align,
-                font_size=pdf_specs["font_size"],
-            )
-
-    doc.save(filename=save_name, directory=output_path)
+    doc.save(filename=save_name, directory=output_folder)
 
 
 def check_for_imgs(plot_type: str):

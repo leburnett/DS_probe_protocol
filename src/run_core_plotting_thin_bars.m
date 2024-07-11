@@ -13,9 +13,9 @@ for stim_idx = 1:2
     edge_or_bar = stim(stim_idx);
     
     %% Initialise parameters that will change
-    date_str = '05_24_2024';
-    date_to_process = '05_24_2024'; % when there are subfolders set this to '06_18_2024_1' etc.
-    cell_type = 'TmY13';
+    date_str = '05_23_2024';
+    date_to_process = '05_23_2024'; % when there are subfolders set this to '06_18_2024_1' etc.
+    cell_type = 'TmY3';
     project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
     
     % RUN THIS SCRIPT WITHIN THE DATE FOLDER. 
