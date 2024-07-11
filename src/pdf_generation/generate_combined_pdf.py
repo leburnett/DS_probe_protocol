@@ -1,21 +1,22 @@
 """
-Functions to generate the combined pdfs from optic lobe group or gallery png files. 
+Functions to generate the combined results pdfs from the generated individual plots for individual stimuli. 
 """
 from pathlib import Path
 import os
 import glob
 import warnings 
-
-from dotenv import find_dotenv
 from PIL import Image, ImageDraw
-
 from utils.pdf_maker import PDFMaker
 
+from dotenv import find_dotenv, load_dotenv
+
+# Load variables from .env file
+load_dotenv()
+
 def generate_combined_pdf(
+    plot_info: dict,
     pdf_specs: dict,
     page_idx: int,
-    instances: list,
-    nudge_dict : dict,
     rows_cols: tuple = None,
     offset: int = 45,
 ):
@@ -24,6 +25,13 @@ def generate_combined_pdf(
 
     Parameters
     ----------
+    plot_info : dict
+        stim_type : str
+            stimulus type to plot for
+        cell_type : str
+            cell type for which to generate the pdf of.
+        date_str : str
+            string of the date for which a pdf should be generated.
     pdf_specs : dict
         pdf_w : int
             pdf width in mm
@@ -35,25 +43,24 @@ def generate_combined_pdf(
             paper margin in mm. [margin_x, margin_y]
     page_idx : int
         page number
-    instances : list
-        list of neuron type instances used to generate combined pdf
-    main_groups : str
-        main group the neurons plotted belong to.
-    nudge_dict : dict
-        dict with int values of how much to move the text in the y direction for the gallery
-        images of the keys (neuron types). Positive values in the dict move the text up.
     rows_cols : tuple, default=None
         tuple of the number of rows and columns to use in the pdf i.e. [4, 6] - 4 rows, 6 columns
         If None, then rows_cols is set as [len(instances), 1].
     offset : int, default=45
         value to move all images by for centring. positive values shift all images to the right.
     """
-    # paths to find and save the files
-    PROJECT_ROOT = Path(find_dotenv()).parent
-    output_path = PROJECT_ROOT / "results" / "fig_summary"
-    json_path = PROJECT_ROOT / "results" / "gallery-descriptions"
-    crop_path = PROJECT_ROOT / "cache" / "gallery" / "crop"
-    crop_path.mkdir(parents=True, exist_ok=True)
+
+    
+    # Access the variables
+    results_folder = os.getenv('RESULTS_FOLDER')
+    stim_type = plot_info["stim_type"]
+    cell_type = plot_info["cell_type"]
+    date_str = plot_info["date_str"]
+    # paths to find the files
+    figure_folder = results_folder / cell_type / date_str
+    # output folder to save the PDFs
+    output_folder = results_folder / 'output_pdfs' / cell_type
+    output_folder.mkdir(parents=True, exist_ok=True)
 
     # generate the empty page
     doc = PDFMaker(
