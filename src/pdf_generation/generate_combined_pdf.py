@@ -32,6 +32,10 @@ def generate_combined_pdf(
             cell type for which to generate the pdf of.
         date_str : str
             string of the date for which a pdf should be generated.
+        date_to_process : str
+            string of the date / exp to process. If multiple experiments 
+            were conducted on the same day then the data will be found within
+            a subfolder '{date_str}_1' or '{date_str}_2' etc.     
     pdf_specs : dict
         pdf_w : int
             pdf width in mm
@@ -52,9 +56,13 @@ def generate_combined_pdf(
     stim_type = plot_info["stim_type"]
     cell_type = plot_info["cell_type"]
     date_str = plot_info["date_str"]
-    
-    # paths to find the files
-    path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
+    date_to_process = plot_info["date_to_process"]
+
+    if len(date_to_process)>10:
+        # paths to find the files
+        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str, date_to_process)
+    else:
+        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
 
     # output folder to save the PDFs
     output_folder = Path(results_folder) / 'output_pdfs' / cell_type
@@ -76,7 +84,7 @@ def generate_combined_pdf(
         rows=rows_cols[0], cols=rows_cols[1], aspect_ratio=1
     )
 
-    save_name = f"{cell_type}_{date_str}_{stim_type}.pdf"
+    save_name = f"{cell_type}_{date_to_process}_{stim_type}.pdf"
 
     # Get list of the images in the directory.
     file_type = 'png'
@@ -93,7 +101,7 @@ def generate_combined_pdf(
         doc.add_image(pdf_name, img_coords)
 
     title_position = [0.33, 0.97]
-    title_str = f"{cell_type} - {date_str} - {stim_type}"
+    title_str = f"{cell_type} - {date_to_process} - {stim_type}"
     doc.add_text(
             text=title_str,
             position=[title_position[0], title_position[1]],

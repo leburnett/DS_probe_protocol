@@ -155,7 +155,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
                     col = [0.8 0.8 0.8];
                 end 
                     
-                plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
+                plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.75); hold on
                 ylim(ylim_vals)
                 box off 
                 ax = gca;
@@ -200,7 +200,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             elseif colour_reps == false
                 col = [0.8 0.8 0.8];
             end 
-            polarplot(angls_rad, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
+            polarplot(angls_rad, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.75); hold on
         end 
 
         % PLOT AVERAGE 
