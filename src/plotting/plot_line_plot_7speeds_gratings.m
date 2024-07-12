@@ -6,62 +6,66 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_va
     load(res_files(1).name, 'data_all_reps')
     date_str = strrep(date_str, '_', '-');
 
-    angls = 0:45:315;
-    angls(9) = angls(1);
-    angls_rad = deg2rad(angls);
-    
-    for plot_n = 1:7
+    speeds = {'0.5Hz', '1Hz', '4Hz', '8Hz', '16Hz', '32Hz', '64Hz'};
+   
+    for plot_n = 1:8 % 8 directions 
+
         figure
+
         if plot_n == 1
-            % 0.5Hz
-            values = [33, 76, 48, 62, 34, 75, 47, 61];
-            speed_str = '0.5Hz - gratings';
-            av_col = [0.6, 0.0, 0.5];
+            values = [33, 35, 37, 39, 41, 43, 45];
+            title_str = '0 deg - gratings';
         elseif plot_n == 2
-            % 1Hz
-            values = [35, 78, 50, 64, 36, 77, 49, 63];
-            speed_str = '1Hz - gratings';
-            av_col = [0, 0, 0.5];
+            values = [76, 78, 80, 82, 84, 86, 88];
+            title_str = '45 deg - gratings';
         elseif plot_n == 3
-            % 4Hz
-            values = [37, 80, 52, 66, 38, 79, 51, 65];
-            speed_str = '4Hz - gratings';
-            av_col = [0.58, 0.75, 0.8];
+            values = [48, 50, 52, 54, 56, 58, 60];
+            title_str = '90 deg - gratings';
         elseif plot_n == 4
-            % 8Hz
-            values = [39, 82, 54, 68, 40, 81, 53, 67];
-            speed_str = '8Hz - gratings';
-            av_col = [0.13, 0.55, 0.13];
+            values = [62, 64, 66, 68, 70, 72, 74];
+            title_str = '135 deg - gratings';
         elseif plot_n == 5
-            % 16Hz
-            values = [41, 84, 56, 70, 42, 83, 55, 69];
-            speed_str = '16Hz - gratings';
-            av_col = [1, 0.65, 0.7];
+            values = [34, 36, 38, 40, 42, 44, 46];
+            title_str = '180 deg - gratings';
         elseif plot_n == 6
-            % 32Hz
-            values = [43, 86, 58, 72, 44, 85, 57, 71];
-            speed_str = '32Hz - gratings';
-            av_col = [1, 0.65, 0];
+            values = [75, 77, 79, 81, 83, 85, 87];
+            title_str = '225 deg - gratings';
         elseif plot_n == 7
-            % 64Hz
-            values = [45, 88, 60, 74, 46, 87, 59, 73];
-            speed_str = '64Hz - gratings';
-            av_col = [1, 0, 0];
+            values = [47, 49, 51, 53, 55, 57, 59];
+            title_str = '270 deg - gratings';
+        elseif plot_n == 8 
+            values = [61, 63, 65, 67, 69, 71, 73];
+            title_str = '315 deg - gratings';
         end 
     
         xticks_vals = 0:10000:70000;
         xticklabel_vals = {'0', '0.5', '1', '1.5','2', '2.5', '3', '3.5'};
+
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
         all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
         exp_baseline = median(all_voltage_data);
 
-        subplot_values = [15, 9, 3, 7, 11, 17, 23, 19];
+        for j = 1:7 % 7 speeds 
 
-        for j = 1:8
+             if j == 1
+                av_col = [0.6, 0.0, 0.5];
+            elseif j == 2
+                av_col = [0, 0, 0.5];
+            elseif j == 3
+                av_col = [0.58, 0.75, 0.8];
+            elseif j == 4
+                av_col = [0.13, 0.55, 0.13];
+            elseif j == 5
+                av_col = [1, 0.65, 0.7];
+            elseif j == 6
+                av_col = [1, 0.65, 0];
+            elseif j == 7
+                av_col = [1, 0, 0];
+            end 
 
-            subplot(5, 5, subplot_values(j))
+            subplot(7, 1, j)
            
             idx = values(j);
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
@@ -81,18 +85,8 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_va
             for k = 1:n_reps
                 da = voltage_data{k};
                 data_comb(k, :) = da(1:min_len);
-
-                % Find the maximum voltage value during the direction
-                max_val_rep = max(da(1:min_len));
-                rad_vals_reps(k, j) = max_val_rep;
-
             end 
             av_resp = mean(data_comb);
-
-            rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
-            % repeat the first value as the 9th value to form a complete circle
-            % when plotting. 
-            rad_vals_reps2(:, 9) = rad_vals_reps2(:, 1);
         
             % PLOT REPS
             for ii = 1:n_reps
@@ -128,51 +122,19 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_va
             plot(av_resp, 'Color', av_col, 'LineWidth', 2)
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
-            title(angls(j))
+            title(speeds{j})
+            ylabel('Voltage (mV)');
 
-            if angls(j)==270
+            if j == 7
                 xlabel('Time (s)');
-            elseif angls(j)==180
-                ylabel('Voltage (mV)');
             end 
 
         end
-   
-        subplot(5, 5, 13)
 
-        % plot polar plot in the centre of the subplot: 
-        for ii = 1:n_reps
-            if colour_reps == true 
-                if ii == 1
-                    col = 'r';
-                elseif ii == 2
-                    col = [1, 0.71, 0.76];
-                elseif ii == 3
-                    col = [0.68, 0.85, 0.9];
-                elseif ii == 4
-                    col = 'b';
-                elseif ii == 5
-                    col = [0.6 0.6 0.6];
-                end 
-            elseif colour_reps == false
-                col = [0.8 0.8 0.8];
-            end 
-            polarplot(angls_rad, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
-        end 
-
-        % PLOT AVERAGE 
-        mean_rad_values = mean(rad_vals_reps2);
-        polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2)
-        rlim(rlim_vals)
-        rticks([0 10, 20, 30])
-        rticklabels({'0', '', '', '30'})
-        thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
-
-        annotation('textbox', [0.03, 0.88, 0.25, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 18);
-        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 14);
+        sgtitle(strcat(title_str, ' - ', date_str))
 
         f = gcf;
-        f.Position = [236   548   577   499];
+        f.Position = [1468 101 315 946];
 
     end 
 
