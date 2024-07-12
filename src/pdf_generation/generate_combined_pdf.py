@@ -65,7 +65,7 @@ def generate_combined_pdf(
         path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
 
     # output folder to save the PDFs
-    output_folder = Path(results_folder) / 'output_pdfs' / cell_type
+    output_folder = Path(results_folder) / 'output_pdfs' / cell_type / stim_type
     output_folder.mkdir(parents=True, exist_ok=True)
 
     # generate the empty page
@@ -76,7 +76,7 @@ def generate_combined_pdf(
         margin=pdf_specs["pdf_margin"],
     )
 
-    if stim_type in ("bar2", "edge"): # update with more stimulus types when I have them
+    if stim_type in ("bar6", "bar2", "edge"): # update with more stimulus types when I have them
         rows_cols = [3, 4]
 
     # get the position of each of the individual figs on the page

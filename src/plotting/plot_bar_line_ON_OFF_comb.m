@@ -1,8 +1,10 @@
-function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
+function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_str)
+% Used to create 2 x line plots of responses to thick bar stimuli. 
+% One plot for 20 dps stimuli and the other for 100 dps stimuli. 
 
-%% Generate polar plot
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
+    date_str = strrep(date_str, '_', '-');
 
     angls = 0:45:315;
     angls(9) = angls(1);
@@ -19,29 +21,22 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
     for plot_n = idx_values
 
         if plot_n == 1
-            % % % OFF
-            % 20 dps
+            % % % OFF 20 dps
             values = [13, 21, 6, 17, 14, 22, 5, 18];
             av_col = [0.19, 0.19, 0.19];
-            % av_col = [0.1, 0, 0.5]; 
         elseif plot_n == 2
             % 100 dps
             values = [15, 23, 8, 19, 16, 24, 7, 20];
             av_col = [0.65, 0.65, 0.65];
-            % av_col = [0.1, 0, 0.5]; 
         elseif plot_n == 3
-            % % % ON
-            % 20 dps
+            % % % ON 20 dps
             values = [108, 116, 101, 112, 109, 117, 100, 113];
             av_col = [0.32, 0.62, 0.36];
-            % av_col = [0.905, 0.697, 0.175];
         elseif plot_n == 4
             % 100 dps
             values = [110, 118, 103, 114, 111, 119, 102, 115];
             av_col = [0.70, 0.86, 0.58];
-            % av_col = [0.905, 0.697, 0.175];
         end 
-    
 
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
@@ -138,10 +133,20 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals)
         rticklabels({'', '', '', '30'})
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
         % thetaticks([])
+
+        if slow_or_fast == "slow"
+            speed_str = '20dps-bar6';
+        elseif slow_or_fast == "fast"
+            speed_str = '100dps-bar6';
+        end 
+
+        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 15);
+        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 12);
+
     
         f = gcf;
         % f.Position = [236 74 1124 973];
-        f.Position = [236   477   694   570]; %small for PDFs
+        f.Position = [236   548   577   499]; %[236   477   694   570]; %small for PDFs
     end 
 
 end

@@ -1,7 +1,10 @@
-function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
+function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str)
+% Used to create 8 x line plots of responses to thick bar stimuli with a
+% polar plot in the middle.
 
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
+    date_str = strrep(date_str, '_', '-');
 
     angls = 0:45:315;
     angls(9) = angls(1);
@@ -18,6 +21,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
             xlim_val = 120000;
             xticks_vals = 0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
+            speed_str = '20dps-Dark-bar6';
         elseif plot_n == 2
             % 100 dps
             values = [15, 23, 8, 19, 16, 24, 7, 20];
@@ -26,6 +30,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
             xlim_val = 30000;
             xticks_vals = 0:10000:30000;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
+            speed_str = '100dps-Dark-bar6';
         elseif plot_n == 3
             % % % ON
             % 20 dps
@@ -35,6 +40,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
             xlim_val = 120000;
             xticks_vals = 0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
+            speed_str = '20dps-Light-bar6';
         elseif plot_n == 4
             % 100 dps
             values = [110, 118,103, 114, 111, 119, 102, 115];
@@ -43,6 +49,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
             xlim_val = 30000;
             xticks_vals = 0:10000:30000;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
+            speed_str = '100dps-Light-bar6';
         end 
     
         % Find baseline voltage across all reps and all conditions of the bar
@@ -124,6 +131,12 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
             xticklabels(xticklabel_vals)
             title(angls(j))
 
+            if angls(j)==270
+                xlabel('Time (s)');
+            elseif angls(j)==180
+                ylabel('Voltage (mV)');
+            end 
+
         end
 
         subplot(5, 5, 13)
@@ -157,18 +170,21 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals)
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
         % thetaticks([])
     
-        if plot_n == 1
-            sgtitle('OFF - 20 dps') 
-        elseif plot_n == 2
-            sgtitle('OFF - 100 dps') 
-        elseif plot_n == 3
-            sgtitle('ON - 20 dps') 
-        elseif plot_n == 4
-            sgtitle('ON - 100 dps') 
-        end 
+        % if plot_n == 1
+        %     sgtitle('OFF - 20 dps') 
+        % elseif plot_n == 2
+        %     sgtitle('OFF - 100 dps') 
+        % elseif plot_n == 3
+        %     sgtitle('ON - 20 dps') 
+        % elseif plot_n == 4
+        %     sgtitle('ON - 100 dps') 
+        % end 
+
+        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 18);
+        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 14);
 
         f = gcf;
-        f.Position = [236   477   694   570]; %[236   493   612   554]; %small for pdfs
+        f.Position = [236   548   577   499]; % [236   477   694   570]; %[236   493   612   554]; %small for pdfs
         % f.Position = [236 74 1124 973];
         % f.Position = [563   428   468   619];
         % tightfig;

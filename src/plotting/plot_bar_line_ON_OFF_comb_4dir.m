@@ -8,10 +8,8 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
 % type must be specified by setting "edge__or_bars" to either "edge" or
 % "bar"
 
-%% Generate polar plot
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
-    % date_str = strrep(res_files(1).name(end-13:end-4), '_', '-');
     date_str = strrep(date_str, '_', '-');
 
     angls = 0:90:315;

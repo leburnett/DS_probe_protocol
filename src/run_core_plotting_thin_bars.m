@@ -8,6 +8,14 @@ clc
 
 cd('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');
 
+% Set this as true if you would like each repetition to be coloured in a
+% different colour, or false if you would like them to all be grey. 
+colour_reps = false;
+
+% set save_figs to true if you would like to save the figures, or true if
+% you just want to visualise them. 
+save_figs = true;
+
 %% Read in log table with details of all of the experiments conducted. 
 
 log_table = readtable('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/exp_recording_log.xlsx');
@@ -32,14 +40,6 @@ for exp = 1:n_exps
         % Where the 'RES_all_reps...' file is found. 
         date_folder = fullfile(project_folder, date_str);
         cd(date_folder)
-        
-        % Set this as true if you would like each repetition to be coloured in a
-        % different colour, or false if you would like them to all be grey. 
-        colour_reps = false;
-        
-        % set save_figs to true if you would like to save the figures, or true if
-        % you just want to visualise them. 
-        save_figs = true; 
         
         %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
         
@@ -109,46 +109,25 @@ for exp = 1:n_exps
         
         if save_figs == true
         
-            % Save the figures:
-        
+            for ii = 1:4
+
+                if ii == 1
+                    bar_cond = 'ON_100dps';
+                elseif ii == 2
+                    bar_cond = 'ON_20dps';
+                elseif ii == 3
+                    bar_cond = 'OFF_100dps';
+                elseif ii == 4
+                    bar_cond = 'OFF_20dps';
+                end 
+    
             f = gcf;
-            bar_cond = 'ON_100dps';
             % save as MATLAB fig
             savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-            % save as PDF
-            % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+            % save as PNG
             saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
             close
-        
-            % 
-            f = gcf;
-            bar_cond = 'ON_20dps';
-            % save as MATLAB fig
-            savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-            % save as PDF
-            % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
-            saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-            close
-        
-            % 
-            f = gcf;
-            bar_cond = 'OFF_100dps';
-            % save as MATLAB fig
-            savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-            % save as PDF
-            % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
-            saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-            close
-        
-            % 
-            f = gcf;
-            bar_cond = 'OFF_20dps';
-            % save as MATLAB fig
-            savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-            % save as PDF
-            % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
-            saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-            close
+            end 
         end 
         
         
@@ -164,7 +143,6 @@ for exp = 1:n_exps
         
         if save_figs == true
             savefig(gcf, fullfile(fig_save_path, fig_str));
-            % saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
             saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
             close 
         end 
@@ -180,7 +158,6 @@ for exp = 1:n_exps
         
         if save_figs == true
             savefig(gcf, fullfile(fig_save_path, fig_str));
-            % saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
             saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
             close
         end 

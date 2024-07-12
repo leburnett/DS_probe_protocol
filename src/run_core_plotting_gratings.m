@@ -1,4 +1,4 @@
-%% Plot data from DS_probe_protocol - THICK BAR (6 pix) stimuli
+%% Plot data from DS_probe_protocol - GRATINGS 
 % Created by Burnett
 
 clear 
