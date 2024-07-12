@@ -10,7 +10,7 @@ import warnings
 from dotenv import find_dotenv, load_dotenv
 
 from utils.pdf_maker import PDFMaker
-from utils.helper_functions import find_pdfs, find_coords
+from utils.helper_functions import find_images, find_coords
 
 # Load variables from .env file
 load_dotenv()
@@ -68,31 +68,38 @@ def generate_combined_pdf(
         margin=pdf_specs["pdf_margin"],
     )
 
-    if stim_type == "bar2" or stim_type == "edge": # update with more stimulus types when I have them
+    if stim_type in ("bar2", "edge"): # update with more stimulus types when I have them
         rows_cols = [3, 4]
 
     # get the position of each of the individual figs on the page
-    coords =  find_coords(pdf_specs["pdf_w"], pdf_specs["pdf_h"], rows_cols[0], rows_cols[1])
-    
-    for idx in range(6):
-        coords[idx] = [int(x) for x in coords[idx]]
+    coords, _, _ = doc.get_page_layout_rows_cols(
+        rows=rows_cols[0], cols=rows_cols[1], aspect_ratio=1
+    )
 
     save_name = f"{cell_type}_{date_str}_{stim_type}.pdf"
 
-    # Get list of the pdfs in the directory. sort to ensure they're in the correct order.
-    pdf_files = find_pdfs(path_to_pdfs)
+    # Get list of the images in the directory.
+    file_type = 'png'
+    pdf_files = find_images(path_to_pdfs, file_type)
+    # Sort the list to ensure they're in the correct order.
     pdf_files.sort()
-    print(pdf_files)
+
     idx = 0
 
     for idx, pdf_name in enumerate(pdf_files):
-        print(pdf_name)
+        print(idx)
         # add image to pdf
         img_coords = list(coords[idx])
-        print(img_coords)
-        # img_coords[0] += offset
-        # img_coords[2] += offset
         doc.add_image(pdf_name, img_coords)
+
+    title_position = [0.33, 0.97]
+    title_str = f"{cell_type} - {date_str} - {stim_type}"
+    doc.add_text(
+            text=title_str,
+            position=[title_position[0], title_position[1]],
+            color= [0,0,0,1],
+            font_size=pdf_specs["font_size"],
+            )
 
     doc.save(filename=save_name, directory=output_folder)
 

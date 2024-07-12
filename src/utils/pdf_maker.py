@@ -55,7 +55,7 @@ class PDFMaker(ABC):
         self
       , rows:int
       , cols:int
-      , aspect_ratio:float=None
+      , aspect_ratio:float=1
     ):
         """
         Given the number of rows / columns to arrange plots into, determine the
@@ -84,12 +84,8 @@ class PDFMaker(ABC):
         paper_width = self.__rect.x1 - (2*margin_x)
         paper_height = self.__rect.y1 - (2*margin_y)
 
-        if aspect_ratio is None:
-            img_width = paper_width / cols
-            img_height = paper_height / rows
-        else:
-            img_width = (paper_height * aspect_ratio) / cols
-            img_height = img_width / aspect_ratio
+        img_width = (paper_height * aspect_ratio) / cols
+        img_height = img_width / aspect_ratio
 
         if img_width * cols > paper_width:
             img_width = paper_width / cols
@@ -98,21 +94,59 @@ class PDFMaker(ABC):
             img_height = paper_height / rows
             img_width = img_height * aspect_ratio
 
-        # Initialize lists to store coordinates
-        coords = []
+        # Coordinates for each image (x0, y0, x1, y1)
+        coords = [
+            [0 + margin_x
+             , 2 * img_height + margin_y
+             , img_width + margin_x
+             , 3 * img_height + margin_y
+             ],      # Third image
+            [img_width + margin_x
+             , 2 * img_height + margin_y
+             , 2 * img_width + margin_x
+             , 3 * img_height + margin_y
+             ],  # Fourth image
+            [2 * img_width + margin_x
+             , 2 * img_height + margin_y
+             , 3 * img_width + margin_x
+             , 3 * img_height + margin_y
+             ],  # Fifth image
+            [3 * img_width + margin_x
+             , 2 * img_height + margin_y
+             , 4 * img_width + margin_x
+             , 3 * img_height + margin_y
+             ],   # Sixth image
+            [0 + margin_x
+             , 0 + margin_y
+             , 2 * img_width + margin_x
+             , 2 * img_height + margin_y
+             ],               # First image
+            [2 * img_width + margin_x
+             , 0 + margin_y
+             , 4 * img_width + margin_x
+             , 2 * img_height + margin_y
+             ],  # Second image
+        ]
 
-        # Iterate over each row
-        for i in range(rows):
-            # Iterate over each column
-            for j in range(cols):
-                # Calculate the top-left and bottom-right coordinates of the image
-                top_left_x = (j * img_width) + margin_x
-                top_left_y = (i * img_height) + margin_y
-                bottom_right_x = ((j + 1) * img_width) + margin_x
-                bottom_right_y = ((i + 1) * img_height) + margin_y
+        # Make sure that the coordinates are integer values.
+        for idx in range(6):
+            coords[idx] = [int(x) for x in coords[idx]]
 
-                # Append coordinates to the list
-                coords.append((top_left_x, top_left_y, bottom_right_x, bottom_right_y))
+        # # Initialize lists to store coordinates
+        # coords = []
+
+        # # Iterate over each row
+        # for i in range(rows):
+        #     # Iterate over each column
+        #     for j in range(cols):
+        #         # Calculate the top-left and bottom-right coordinates of the image
+        #         top_left_x = (j * img_width) + margin_x
+        #         top_left_y = (i * img_height) + margin_y
+        #         bottom_right_x = ((j + 1) * img_width) + margin_x
+        #         bottom_right_y = ((i + 1) * img_height) + margin_y
+
+        #         # Append coordinates to the list
+        #         coords.append((top_left_x, top_left_y, bottom_right_x, bottom_right_y))
 
         return coords, img_width, img_height
 
@@ -155,7 +189,6 @@ class PDFMaker(ABC):
       , text:str
       , position:list
       , color:list
-      , align:str="l"
       , font_size:int=5
     ) -> None:
         """
@@ -169,13 +202,9 @@ class PDFMaker(ABC):
             [x, y] position of the text.
         color : list
             [r, g, b] color of the text (0 <= values <= 1)
-        align : str
-            alignment of text to the left ('l'), right ('r') or centre ('c')
         font_size : int
             font size of title text in pt
         """
-        assert align in ['l', 'c', 'r'], \
-            f"can only align 'l'eft, 'c'enter, or 'r'ight, not {align}"
         if 0<=position[0]<=1 and 0<=position[1]<=1:
             posx = self.__rect.x1 * position[0]
             posy = self.__rect.y1 * (1-position[1])
@@ -186,10 +215,10 @@ class PDFMaker(ABC):
         font = fitz.Font(fontfile=fontfile)
 
         tw = fitz.TextWriter(self.__page.rect, color=col)
-        _, tw_r = tw.append(
+        tw.append(
             pos=(posx, posy)
           , text=text
-          , font=font
+        #   , font=font
           , fontsize=font_size
         )
         tw.write_text(self.__page)
@@ -207,11 +236,7 @@ class PDFMaker(ABC):
         dirctory : str, default=None
             If another directory than `PROJECT_ROOT / results / gallery` is requried
         """
-        if directory is None:
-            project_root = Path(find_dotenv()).parent
-            directory = project_root / "results" / "gallery"
-        else:
-            directory = Path(directory)
+        directory = Path(directory)
 
         self.__pdf.save(
             directory / filename

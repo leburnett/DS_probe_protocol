@@ -107,8 +107,8 @@ for stim_idx = 1:2
         % save as MATLAB fig
         savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
-        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), 'pdf')
+        % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
         close
     
         % 
@@ -117,7 +117,8 @@ for stim_idx = 1:2
         % save as MATLAB fig
         savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
         close
     
         % 
@@ -126,7 +127,8 @@ for stim_idx = 1:2
         % save as MATLAB fig
         savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
         close
     
         % 
@@ -135,7 +137,8 @@ for stim_idx = 1:2
         % save as MATLAB fig
         savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
         % save as PDF
-        print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        % print(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.pdf')), '-dpdf', '-bestfit')
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
         close
     end 
     
@@ -152,7 +155,8 @@ for stim_idx = 1:2
     
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
+        % saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
         close 
     end 
     
@@ -167,7 +171,8 @@ for stim_idx = 1:2
     
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
+        % saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'pdf')
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
         close
     end 
 
