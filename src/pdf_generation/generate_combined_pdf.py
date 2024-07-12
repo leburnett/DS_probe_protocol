@@ -95,7 +95,6 @@ def generate_combined_pdf(
     idx = 0
 
     for idx, pdf_name in enumerate(pdf_files):
-        print(idx)
         # add image to pdf
         img_coords = list(coords[idx])
         doc.add_image(pdf_name, img_coords)
@@ -108,7 +107,8 @@ def generate_combined_pdf(
             color= [0,0,0,1],
             font_size=pdf_specs["font_size"],
             )
-
+    
+    print(f"{stim_type} - {cell_type} - {date_to_process}")
     doc.save(filename=save_name, directory=output_folder)
 
 
