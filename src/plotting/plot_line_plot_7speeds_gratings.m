@@ -1,7 +1,6 @@
-function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals, date_str)
-% Used to create 7 x plots of responses to grating stimuli at
-% different speeds. Will contain 8 subplots - 1 per direction, with a polar
-% plot in the middle.
+function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_vals, date_str)
+% Used to create 8 x plots of responses to grating stimuli moving in the 8 different directions.
+% Will contain 7 subplots - 1 per speed. 
 
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')

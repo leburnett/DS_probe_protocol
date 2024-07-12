@@ -36,7 +36,7 @@ for exp = 1:n_exps
     %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     
     if save_figs == true
-        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/bar6';
+        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/gratings';
     
         % Initialise path to save figures 
         cell_type_fig_save_path = strcat(save_path, '/', cell_type);
@@ -86,25 +86,32 @@ for exp = 1:n_exps
     n_reps = length(exp_folders);
     
     %% 
-    ylim_vals = [-65 -30]; %[-65 -27];
-    rlim_vals = [0 30]; %[0 35];
+    ylim_vals = [-65 -30]; 
+    rlim_vals = [0 30];
     
-    %% Line plot + polar plot in the middle
-    plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
-    % 
+    %% Plot per speed
+    % Line plot + polar plot in the middle
+
+    plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
     
     if save_figs == true
     
-        for ii = 1:4
+        for ii = 1:7
 
             if ii == 1
-                bar_cond = 'ON_100dps';
+                bar_cond = 'gratings-64Hz';
             elseif ii == 2
-                bar_cond = 'ON_20dps';
+                bar_cond = 'gratings-32Hz';
             elseif ii == 3
-                bar_cond = 'OFF_100dps';
+                bar_cond = 'gratings-16Hz';
             elseif ii == 4
-                bar_cond = 'OFF_20dps';
+                bar_cond = 'gratings-8Hz';
+            elseif ii == 5
+                bar_cond = 'gratings-4Hz';
+            elseif ii == 6
+                bar_cond = 'gratings-1Hz';
+            elseif ii == 7
+                bar_cond = 'gratings-0.5Hz';
             end 
 
         f = gcf;
@@ -118,36 +125,10 @@ for exp = 1:n_exps
     end 
     
     
-    %% ON - OFF combined
-    
-    % SLOW 
-    % n_reps = 5;
-    slow_or_fast = "slow";
-    speed_str = '20dps'; 
-    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-    
-    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    
-    if save_figs == true
-        savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-        close 
-    end 
-    
-    %% FAST 
-    
-    % n_reps = 5;
-    slow_or_fast = "fast";
-    speed_str = '100dps';
-    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-    
-    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    
-    if save_figs == true
-        savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-        close
-    end 
+    %% Plot per direction 
+
+    plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
+
 
 end 
 
