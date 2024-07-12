@@ -6,10 +6,11 @@ import os
 import glob
 import warnings
 # from PIL import Image, ImageDraw
-from utils.pdf_maker import PDFMaker
-from utils.helper_functions import find_pdfs
 
 from dotenv import find_dotenv, load_dotenv
+
+from utils.pdf_maker import PDFMaker
+from utils.helper_functions import find_pdfs, find_coords
 
 # Load variables from .env file
 load_dotenv()
@@ -17,8 +18,7 @@ load_dotenv()
 def generate_combined_pdf(
     plot_info: dict,
     pdf_specs: dict,
-    rows_cols: tuple = None,
-    offset: int = 45,
+    rows_cols: tuple = None
 ):
     """
     Function to generate PDF plot of premade gallery pngs.
@@ -47,8 +47,6 @@ def generate_combined_pdf(
     offset : int, default=45
         value to move all images by for centring. positive values shift all images to the right.
     """
-
-    
     # Access the variables
     results_folder = os.getenv('RESULTS_FOLDER')
     stim_type = plot_info["stim_type"]
@@ -59,7 +57,7 @@ def generate_combined_pdf(
     path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
 
     # output folder to save the PDFs
-    output_folder = os.path.join(results_folder, 'output_pdfs', cell_type)
+    output_folder = Path(results_folder) / 'output_pdfs' / cell_type
     output_folder.mkdir(parents=True, exist_ok=True)
 
     # generate the empty page
@@ -70,30 +68,30 @@ def generate_combined_pdf(
         margin=pdf_specs["pdf_margin"],
     )
 
-    if stim_type == 'bar2' | stim_type == 'edge': # update with more stimulus types when I have them
+    if stim_type == "bar2" or stim_type == "edge": # update with more stimulus types when I have them
         rows_cols = [3, 4]
 
     # get the position of each of the individual figs on the page
-    coords, _, _ = doc.get_page_layout_rows_cols(
-        rows=rows_cols[0], cols=rows_cols[1], aspect_ratio=1
-    )
+    coords =  find_coords(pdf_specs["pdf_w"], pdf_specs["pdf_h"], rows_cols[0], rows_cols[1])
+    
+    for idx in range(6):
+        coords[idx] = [int(x) for x in coords[idx]]
 
     save_name = f"{cell_type}_{date_str}_{stim_type}.pdf"
 
     # Get list of the pdfs in the directory. sort to ensure they're in the correct order.
-    pdf_files = find_pdfs(path_to_pdfs).sort()
-
+    pdf_files = find_pdfs(path_to_pdfs)
+    pdf_files.sort()
+    print(pdf_files)
     idx = 0
 
     for idx, pdf_name in enumerate(pdf_files):
-
-        # get text and position
-        x_top, y_top = coords[idx][0] + offset, coords[idx][1]
-
+        print(pdf_name)
         # add image to pdf
         img_coords = list(coords[idx])
-        img_coords[0] += offset
-        img_coords[2] += offset
+        print(img_coords)
+        # img_coords[0] += offset
+        # img_coords[2] += offset
         doc.add_image(pdf_name, img_coords)
 
     doc.save(filename=save_name, directory=output_folder)
