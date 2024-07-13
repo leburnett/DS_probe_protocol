@@ -56,6 +56,7 @@ class PDFMaker(ABC):
       , rows:int
       , cols:int
       , aspect_ratio:float=1
+      , stim_type:str=None
     ):
         """
         Given the number of rows / columns to arrange plots into, determine the
@@ -84,8 +85,12 @@ class PDFMaker(ABC):
         paper_width = self.__rect.x1 - (2*margin_x)
         paper_height = self.__rect.y1 - (2*margin_y)
 
-        img_width = (paper_height * aspect_ratio) / cols
-        img_height = img_width / aspect_ratio
+        if paper_height > paper_width: # portrait
+            img_width = (paper_height * aspect_ratio) / cols
+            img_height = img_width / aspect_ratio
+        elif paper_width >= paper_height: # landscape
+            img_height = (paper_width * aspect_ratio) / rows
+            img_width = img_height / aspect_ratio
 
         if img_width * cols > paper_width:
             img_width = paper_width / cols
@@ -95,58 +100,61 @@ class PDFMaker(ABC):
             img_width = img_height * aspect_ratio
 
         # Coordinates for each image (x0, y0, x1, y1)
-        coords = [
-            [0 + margin_x
-             , 2 * img_height + margin_y
-             , img_width + margin_x
-             , 3 * img_height + margin_y
-             ],      # Third image
-            [img_width + margin_x
-             , 2 * img_height + margin_y
-             , 2 * img_width + margin_x
-             , 3 * img_height + margin_y
-             ],  # Fourth image
-            [2 * img_width + margin_x
-             , 2 * img_height + margin_y
-             , 3 * img_width + margin_x
-             , 3 * img_height + margin_y
-             ],  # Fifth image
-            [3 * img_width + margin_x
-             , 2 * img_height + margin_y
-             , 4 * img_width + margin_x
-             , 3 * img_height + margin_y
-             ],   # Sixth image
-            [0 + margin_x
-             , 0 + margin_y
-             , 2 * img_width + margin_x
-             , 2 * img_height + margin_y
-             ],               # First image
-            [2 * img_width + margin_x
-             , 0 + margin_y
-             , 4 * img_width + margin_x
-             , 2 * img_height + margin_y
-             ],  # Second image
-        ]
 
-        # Make sure that the coordinates are integer values.
-        for idx in range(6):
-            coords[idx] = [int(x) for x in coords[idx]]
+        if stim_type in ['bar2', 'bar6', 'edge']:
+            coords = [
+                [0 + margin_x
+                , 2 * img_height + margin_y
+                , img_width + margin_x
+                , 3 * img_height + margin_y
+                ],      # Third image
+                [img_width + margin_x
+                , 2 * img_height + margin_y
+                , 2 * img_width + margin_x
+                , 3 * img_height + margin_y
+                ],  # Fourth image
+                [2 * img_width + margin_x
+                , 2 * img_height + margin_y
+                , 3 * img_width + margin_x
+                , 3 * img_height + margin_y
+                ],  # Fifth image
+                [3 * img_width + margin_x
+                , 2 * img_height + margin_y
+                , 4 * img_width + margin_x
+                , 3 * img_height + margin_y
+                ],   # Sixth image
+                [0 + margin_x
+                , 0 + margin_y
+                , 2 * img_width + margin_x
+                , 2 * img_height + margin_y
+                ],               # First image
+                [2 * img_width + margin_x
+                , 0 + margin_y
+                , 4 * img_width + margin_x
+                , 2 * img_height + margin_y
+                ],  # Second image
+            ]
 
-        # # Initialize lists to store coordinates
-        # coords = []
+            # Convert coordinates to integers
+            for idx, coord in enumerate(coords):
+                coords[idx] = [int(x) for x in coord]
 
-        # # Iterate over each row
-        # for i in range(rows):
-        #     # Iterate over each column
-        #     for j in range(cols):
-        #         # Calculate the top-left and bottom-right coordinates of the image
-        #         top_left_x = (j * img_width) + margin_x
-        #         top_left_y = (i * img_height) + margin_y
-        #         bottom_right_x = ((j + 1) * img_width) + margin_x
-        #         bottom_right_y = ((i + 1) * img_height) + margin_y
+        elif stim_type in ['gratings1', 'gratings2']:
 
-        #         # Append coordinates to the list
-        #         coords.append((top_left_x, top_left_y, bottom_right_x, bottom_right_y))
+            # Initialize lists to store coordinates
+            coords = []
+
+            # Iterate over each row
+            for row in range(rows):
+                # Iterate over each column
+                for col in range(cols):
+                    # Calculate the top-left and bottom-right coordinates of the image
+                    top_left_x = (col * img_width) + margin_x
+                    top_left_y = (row * img_height) + margin_y
+                    bottom_right_x = ((col + 1) * img_width) + margin_x
+                    bottom_right_y = ((row + 1) * img_height) + margin_y
+                    # Append coordinates to the list
+                    coords.append((int(top_left_x), int(top_left_y), int(bottom_right_x), int(bottom_right_y)))
 
         return coords, img_width, img_height
 

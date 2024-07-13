@@ -10,7 +10,7 @@ import warnings
 from dotenv import find_dotenv, load_dotenv
 
 from utils.pdf_maker import PDFMaker
-from utils.helper_functions import find_images, find_coords
+from utils.helper_functions import find_images
 
 # Load variables from .env file
 load_dotenv()
@@ -60,9 +60,9 @@ def generate_combined_pdf(
 
     if len(date_to_process)>10:
         # paths to find the files
-        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str, date_to_process)
+        path_to_pdfs = os.path.join(results_folder, stim_type[:-1], cell_type, date_str, date_to_process)
     else:
-        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
+        path_to_pdfs = os.path.join(results_folder, stim_type[:-1], cell_type, date_str)
 
     # output folder to save the PDFs
     output_folder = Path(results_folder) / 'output_pdfs' / cell_type / stim_type
@@ -78,17 +78,33 @@ def generate_combined_pdf(
 
     if stim_type in ("bar6", "bar2", "edge"): # update with more stimulus types when I have them
         rows_cols = [3, 4]
+        aspect_ratio = 1
+    elif stim_type == "gratings1":
+        rows_cols = [2, 4]
+        aspect_ratio = 1
+    elif stim_type == "gratings2":
+        aspect_ratio = 0.3
+        rows_cols = [1, 8]
 
     # get the position of each of the individual figs on the page
     coords, _, _ = doc.get_page_layout_rows_cols(
-        rows=rows_cols[0], cols=rows_cols[1], aspect_ratio=1
+        rows=rows_cols[0], cols=rows_cols[1], aspect_ratio=aspect_ratio, stim_type=stim_type,
     )
 
     save_name = f"{cell_type}_{date_to_process}_{stim_type}.pdf"
 
     # Get list of the images in the directory.
     file_type = 'png'
-    pdf_files = find_images(path_to_pdfs, file_type)
+
+    if stim_type == "gratings1":
+        str2find = 'per_speed'
+    elif stim_type == "gratings2":
+        str2find = 'per_orient'
+    else:
+        str2find = None
+        
+    pdf_files = find_images(path_to_pdfs, file_type, str2find) 
+
     # Sort the list to ensure they're in the correct order.
     pdf_files.sort()
 
