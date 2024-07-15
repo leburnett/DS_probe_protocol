@@ -16,37 +16,44 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
         if plot_n == 1
             % 0.5Hz
             values = [33, 76, 48, 62, 34, 75, 47, 61];
-            speed_str = '0.5Hz - gratings';
+            % speed_str = '0.5Hz - gratings';
+            speed_str = '0.5Hz';
             av_col = [0.6, 0.0, 0.5];
         elseif plot_n == 2
             % 1Hz
             values = [35, 78, 50, 64, 36, 77, 49, 63];
-            speed_str = '1Hz - gratings';
+            % speed_str = '1Hz - gratings';
+            speed_str = '1Hz';
             av_col = [0, 0, 0.5];
         elseif plot_n == 3
             % 4Hz
             values = [37, 80, 52, 66, 38, 79, 51, 65];
-            speed_str = '4Hz - gratings';
+            % speed_str = '4Hz - gratings';
+            speed_str = '4Hz';
             av_col = [0.58, 0.75, 0.8];
         elseif plot_n == 4
             % 8Hz
             values = [39, 82, 54, 68, 40, 81, 53, 67];
-            speed_str = '8Hz - gratings';
+            % speed_str = '8Hz - gratings';
+            speed_str = '8Hz';
             av_col = [0.13, 0.55, 0.13];
         elseif plot_n == 5
             % 16Hz
             values = [41, 84, 56, 70, 42, 83, 55, 69];
-            speed_str = '16Hz - gratings';
+            % speed_str = '16Hz - gratings';
+            speed_str = '16Hz';
             av_col = [1, 0.65, 0.7];
         elseif plot_n == 6
             % 32Hz
             values = [43, 86, 58, 72, 44, 85, 57, 71];
-            speed_str = '32Hz - gratings';
+            % speed_str = '32Hz - gratings';
+            speed_str = '32Hz';
             av_col = [1, 0.65, 0];
         elseif plot_n == 7
             % 64Hz
             values = [45, 88, 60, 74, 46, 87, 59, 73];
-            speed_str = '64Hz - gratings';
+            % speed_str = '64Hz - gratings';
+            speed_str = '64Hz';
             av_col = [1, 0, 0];
         end 
     
@@ -170,7 +177,7 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
         thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
 
         annotation('textbox', [0.03, 0.88, 0.25, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 18);
-        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 14);
+        % annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 14);
 
         f = gcf;
         f.Position = [236   548   577   499];

@@ -19,7 +19,7 @@ def find_images(directory, file_type, str2find=None):
     """
     files = glob.glob(os.path.join(directory, f"*.{file_type}"))
 
-    if str2find:
+    if str2find is not None:
         files = [item for item in files if str2find in item]
 
     return files

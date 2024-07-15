@@ -127,7 +127,7 @@ for exp = 1:n_exps
     
     %% Plot per direction 
 
-    plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
+    plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_to_process)
 
     if save_figs == true
     

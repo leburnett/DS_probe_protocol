@@ -1,4 +1,4 @@
-function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_vals, date_str)
+function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_str)
 % Used to create 8 x plots of responses to grating stimuli moving in the 8 different directions.
 % Will contain 7 subplots - 1 per speed. 
 
@@ -14,28 +14,36 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_va
 
         if plot_n == 1
             values = [33, 35, 37, 39, 41, 43, 45];
-            title_str = '0 deg - gratings';
+            % title_str = '0 deg - gratings';
+            title_str = '0 deg';
         elseif plot_n == 2
             values = [76, 78, 80, 82, 84, 86, 88];
-            title_str = '45 deg - gratings';
+            % title_str = '45 deg - gratings';
+            title_str = '45 deg';
         elseif plot_n == 3
             values = [48, 50, 52, 54, 56, 58, 60];
-            title_str = '90 deg - gratings';
+            % title_str = '90 deg - gratings';
+            title_str = '90 deg';
         elseif plot_n == 4
             values = [62, 64, 66, 68, 70, 72, 74];
-            title_str = '135 deg - gratings';
+            % title_str = '135 deg - gratings';
+            title_str = '135 deg';
         elseif plot_n == 5
             values = [34, 36, 38, 40, 42, 44, 46];
-            title_str = '180 deg - gratings';
+            % title_str = '180 deg - gratings';
+            title_str = '180 deg';
         elseif plot_n == 6
             values = [75, 77, 79, 81, 83, 85, 87];
-            title_str = '225 deg - gratings';
+            % title_str = '225 deg - gratings';
+            title_str = '225 deg';
         elseif plot_n == 7
             values = [47, 49, 51, 53, 55, 57, 59];
-            title_str = '270 deg - gratings';
+            % title_str = '270 deg - gratings';
+            title_str = '270 deg';
         elseif plot_n == 8 
             values = [61, 63, 65, 67, 69, 71, 73];
-            title_str = '315 deg - gratings';
+            % title_str = '315 deg - gratings';
+            title_str = '315 deg';
         end 
     
         xticks_vals = 0:10000:70000;
@@ -131,7 +139,8 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, rlim_va
 
         end
 
-        sgtitle(strcat(title_str, ' - ', date_str))
+        % sgtitle(strcat(title_str, ' - ', date_str))
+        sgtitle(title_str)
 
         f = gcf;
         f.Position = [1468 101 315 946];

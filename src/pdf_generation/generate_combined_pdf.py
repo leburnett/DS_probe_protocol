@@ -17,8 +17,7 @@ load_dotenv()
 
 def generate_combined_pdf(
     plot_info: dict,
-    pdf_specs: dict,
-    rows_cols: tuple = None
+    pdf_specs: dict
 ):
     """
     Function to generate PDF plot of premade gallery pngs.
@@ -45,11 +44,6 @@ def generate_combined_pdf(
             pdf resolution in dpi
         pdf_margin : tuple
             paper margin in mm. [margin_x, margin_y]
-    rows_cols : tuple, default=None
-        tuple of the number of rows and columns to use in the pdf i.e. [4, 6] - 4 rows, 6 columns
-        If None, then rows_cols is set as [len(instances), 1].
-    offset : int, default=45
-        value to move all images by for centring. positive values shift all images to the right.
     """
     # Access the variables
     results_folder = os.getenv('RESULTS_FOLDER')
@@ -60,9 +54,9 @@ def generate_combined_pdf(
 
     if len(date_to_process)>10:
         # paths to find the files
-        path_to_pdfs = os.path.join(results_folder, stim_type[:-1], cell_type, date_str, date_to_process)
+        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str, date_to_process) # had it like this : stim_type[:-1] - for gratings? 
     else:
-        path_to_pdfs = os.path.join(results_folder, stim_type[:-1], cell_type, date_str)
+        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
 
     # output folder to save the PDFs
     output_folder = Path(results_folder) / 'output_pdfs' / cell_type / stim_type
@@ -102,8 +96,8 @@ def generate_combined_pdf(
         str2find = 'per_orient'
     else:
         str2find = None
-        
-    pdf_files = find_images(path_to_pdfs, file_type, str2find) 
+
+    pdf_files = find_images(path_to_pdfs, file_type, str2find)
 
     # Sort the list to ensure they're in the correct order.
     pdf_files.sort()
