@@ -57,7 +57,7 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
             av_col = [1, 0, 0];
         end 
     
-        xticks_vals = 0:10000:70000;
+        xticks_vals = 0:1:3; %0:10000:70000;
         xticklabel_vals = {'0', '0.5', '1', '1.5','2', '2.5', '3', '3.5'};
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
@@ -150,8 +150,8 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
     
             % PLOT AVERAGE 
             plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
-            % xticks(xticks_vals)
-            % xticklabels(xticklabel_vals)
+            xticks(xticks_vals)
+            xticklabels(xticklabel_vals)
             title(angls(j))
 
             yyaxis right
