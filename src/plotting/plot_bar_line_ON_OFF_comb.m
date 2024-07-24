@@ -50,7 +50,11 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
             subplot(5, 5, subplot_values(j))
     
             idx = values(j);
+
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
+            frame_data = squeeze(data_all_reps(idx, 2, 1:n_reps));
+            time_data = squeeze(data_all_reps(idx, 1, 1:n_reps));
+
             % Find the shortest length of a rep. 
             min_len = 1000000; % use 1000000 as a baseline. 
             for k = 1:n_reps
@@ -63,10 +67,19 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
     
             % Collect voltage data from across the repetitions. 
             data_comb = zeros(n_reps, min_len);
+            frame_comb = zeros(n_reps, min_len);
+            time_comb = zeros(n_reps, min_len);
+
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
                 da = voltage_data{k};
+                fa = frame_data{k};
+                ta = (time_data{k});
+                ta = ta-ta(1); % start time from zero for each rep. 
+
                 data_comb(k, :) = da(1:min_len);
+                frame_comb(k, :) = fa(1:min_len);
+                time_comb(k, :) = ta(1:min_len);
 
                 % Find the maximum voltage value during the direction
                 max_val_rep = max(da(1:min_len));
@@ -74,6 +87,9 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
             end 
 
             av_resp = mean(data_comb);
+            v_frame = mean(frame_comb);
+            time_comb = time_comb./1000000; % convert to seconds
+            av_time = mean(time_comb);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
@@ -87,7 +103,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
                 % plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.6); hold on
                 ylim(ylim_vals)
                 if slow_or_fast == "slow"
-                    xlim([0 114000])
+                    % xlim([0 114000])
                     xticks(0:20000:114000);
                     xticklabels({'0', '1', '2', '3', '4', '5'})
                 elseif slow_or_fast == "fast"

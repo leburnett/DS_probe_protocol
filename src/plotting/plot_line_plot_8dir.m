@@ -18,7 +18,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             values = [13, 21, 6, 17, 14, 22, 5, 18];
             av_col = [0.19, 0.19, 0.19];
             % av_col = [0.1, 0, 0.5]; 
-            xlim_val = 120000;
+            % xlim_val = 120000;
             xticks_vals = 0:1:5; %0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
             speed_str = '20dps-Dark-bar6';
@@ -27,7 +27,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             values = [15, 23, 8, 19, 16, 24, 7, 20];
             av_col = [0.65, 0.65, 0.65];
             % av_col = [0.1, 0, 0.5]; 
-            xlim_val = 30000;
+            % xlim_val = 30000;
             xticks_vals = 0:0.5:1.5; %0:10000:30000;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
             speed_str = '100dps-Dark-bar6';
@@ -37,7 +37,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             values = [108, 116, 101, 112, 109, 117, 100, 113];
             av_col = [0.32, 0.62, 0.36];
             % av_col = [0.905, 0.697, 0.175];
-            xlim_val = 120000;
+            % xlim_val = 120000;
             xticks_vals = 0:1:5; %0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
             speed_str = '20dps-Light-bar6';
@@ -46,7 +46,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             values = [110, 118,103, 114, 111, 119, 102, 115];
             av_col = [0.70, 0.86, 0.58];
             % av_col = [0.905, 0.697, 0.175];
-            xlim_val = 30000;
+            % xlim_val = 30000;
             xticks_vals = 0:0.5:1.5; %0:10000:30000;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
             speed_str = '100dps-Light-bar6';
@@ -142,7 +142,7 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
 
             % PLOT AVERAGE 
             plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
-            xlim([0 xlim_val])
+            % xlim([0 xlim_val])
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
             title(angls(j))
