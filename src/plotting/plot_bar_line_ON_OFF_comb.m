@@ -87,7 +87,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
             end 
 
             av_resp = mean(data_comb);
-            v_frame = mean(frame_comb);
+            av_frame = mean(frame_comb);
             time_comb = time_comb./1000000; % convert to seconds
             av_time = mean(time_comb);
 
@@ -98,10 +98,8 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
         
             % PLOT REPS
             for ii = 1:n_reps
-
                 % col = [0.8, 0.8, 0.8];
                 % plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.6); hold on
-                ylim(ylim_vals)
                 if slow_or_fast == "slow"
                     % xlim([0 114000])
                     % xticks(0:20000:114000);
@@ -119,7 +117,6 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
                 ax.TickLength = [0.02, 0.02];
                 ax.LineWidth = 1;
                 ax.FontSize = 8;
-                yticks([-60, -50, -40, -30])
             end 
     
             % PLOT AVERAGE 
@@ -128,16 +125,20 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
             % elseif plot_n == 3 || plot_n == 4
             %     av_col = 'r';
             % end 
-
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2); 
+            yyaxis left
+            plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2,  'LineStyle', '-', 'Marker', 'none'); 
             hold on
+            yticks([-60, -50, -40, -30])
+            ax.YAxis(1).Color = 'k';
+            ylim(ylim_vals)
 
             yyaxis right
-            plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
+            plot(av_time, av_frame, 'k', 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none')
             ax = gca;
             ax.YAxis(2).Color = 'k';
             ylabel('Frame position')
-            
+            ylim([0 max(av_frame)+1])
+
             title(angls(j))
         end
 
@@ -153,7 +154,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
 
         % PLOT AVERAGE 
         mean_rad_values = mean(rad_vals_reps2);
-        polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2); hold on
+        polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2, 'LineStyle', '-', 'Marker', 'none'); hold on
         rlim(rlim_vals)
         rticks([0 10, 20, 30])
         rticklabels({'', '', '', '30'})
