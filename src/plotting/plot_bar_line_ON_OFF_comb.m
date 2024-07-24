@@ -104,11 +104,13 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
                 ylim(ylim_vals)
                 if slow_or_fast == "slow"
                     % xlim([0 114000])
-                    xticks(0:20000:114000);
+                    % xticks(0:20000:114000);
+                    xticks(0:1:5)
                     xticklabels({'0', '1', '2', '3', '4', '5'})
                 elseif slow_or_fast == "fast"
-                    xlim([0 30000])
-                    xticks(0:10000:30000);
+                    % xlim([0 30000])
+                    % xticks(0:10000:30000);
+                    xticks(0:0.5:1.5)
                     xticklabels({'0', '0.5', '1', '1.5'})
                 end 
                 box off 
@@ -127,7 +129,15 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
             %     av_col = 'r';
             % end 
 
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2); hold on
+            plot(av_resp, 'Color', av_col, 'LineWidth', 2); 
+            hold on
+
+            yyaxis right
+            plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
+            ax = gca;
+            ax.YAxis(2).Color = 'k';
+            ylabel('Frame position')
+            
             title(angls(j))
         end
 
