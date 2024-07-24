@@ -58,7 +58,7 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
         end 
     
         xticks_vals = 0:1:3; %0:10000:70000;
-        xticklabel_vals = {'0', '0.5', '1', '1.5','2', '2.5', '3', '3.5'};
+        xticklabel_vals = {'0', '1', '2', '3'};
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));

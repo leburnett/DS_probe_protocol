@@ -46,8 +46,8 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
             title_str = '315 deg';
         end 
     
-        xticks_vals = 0:10000:70000;
-        xticklabel_vals = {'0', '0.5', '1', '1.5','2', '2.5', '3', '3.5'};
+        xticks_vals = 0:1:3; %0:10000:70000;
+        xticklabel_vals = {'0', '1', '2', '3'};
 
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
@@ -77,6 +77,9 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
            
             idx = values(j);
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
+            frame_data = squeeze(data_all_reps(idx, 2, 1:n_reps));
+            time_data = squeeze(data_all_reps(idx, 1, 1:n_reps));
+            
             % Find the shortest length of a rep. 
             min_len = 1000000; % use 1000000 as a baseline. 
             for k = 1:n_reps
@@ -89,12 +92,25 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
     
             % Collect voltage data from across the repetitions. 
             data_comb = zeros(n_reps, min_len);
+            frame_comb = zeros(n_reps, min_len);
+            time_comb = zeros(n_reps, min_len);
+
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
                 da = voltage_data{k};
+                fa = frame_data{k};
+                ta = (time_data{k});
+                ta = ta-ta(1); % start time from zero for each rep. 
+
                 data_comb(k, :) = da(1:min_len);
+                frame_comb(k, :) = fa(1:min_len);
+                time_comb(k, :) = ta(1:min_len);
             end 
+
             av_resp = mean(data_comb);
+            av_frame = mean(frame_comb);
+            time_comb = time_comb./1000000; % convert to seconds
+            av_time = mean(time_comb);
         
             % PLOT REPS
             for ii = 1:n_reps
@@ -115,9 +131,9 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
                     col = [0.8 0.8 0.8];
                 end 
 
-                plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
+                plot(time_comb(ii, :), data_comb(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
                 ylim(ylim_vals)
-                xlim([0 67500])
+                % xlim([0 67500])
                 box off 
                 ax = gca;
                 ax.TickDir = 'out';   
@@ -127,11 +143,17 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
             end 
     
             % PLOT AVERAGE 
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2)
+            plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
             title(speeds{j})
             ylabel('Voltage (mV)');
+
+            yyaxis right
+            plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
+            ax = gca;
+            ax.YAxis(2).Color = 'k';
+            ylabel('Frame position'); 
 
             if j == 7
                 xlabel('Time (s)');
