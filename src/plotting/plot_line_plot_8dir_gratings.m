@@ -74,6 +74,8 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
             idx = values(j);
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
             frame_data = squeeze(data_all_reps(idx, 2, 1:n_reps));
+            time_data = squeeze(data_all_reps(idx, 1, 1:n_reps));
+
             % Find the shortest length of a rep. 
             min_len = 1000000; % use 1000000 as a baseline. 
             for k = 1:n_reps
@@ -87,21 +89,29 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
             % Collect voltage data from across the repetitions. 
             data_comb = zeros(n_reps, min_len);
             frame_comb = zeros(n_reps, min_len);
+            time_comb = zeros(n_reps, min_len);
+
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
                 da = voltage_data{k};
                 fa = frame_data{k};
+                ta = (time_data{k});
+                ta = ta-ta(1); % start time from zero for each rep. 
 
                 data_comb(k, :) = da(1:min_len);
                 frame_comb(k, :) = fa(1:min_len);
+                time_comb(k, :) = ta(1:min_len);
 
                 % Find the maximum voltage value during the direction
                 max_val_rep = max(da(1:min_len));
                 rad_vals_reps(k, j) = max_val_rep;
 
             end 
+
             av_resp = mean(data_comb);
             av_frame = mean(frame_comb);
+            time_comb = time_comb./1000000; % convert to seconds
+            av_time = mean(time_comb);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
@@ -126,10 +136,10 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
                 elseif colour_reps == false
                     col = [0.8, 0.8, 0.8];
                 end 
-                plot(1:min_len, data_comb(ii, :), 'Color', col, 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none'); 
+                plot(time_comb(ii, :), data_comb(ii, :), 'Color', col, 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none'); 
                 hold on
                 ylim(ylim_vals)
-                xlim([0 67500])
+                % xlim([0 67500])
                 box off 
                 ax = gca;
                 ax.TickDir = 'out';   
@@ -139,13 +149,13 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
             end 
     
             % PLOT AVERAGE 
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2)
-            xticks(xticks_vals)
-            xticklabels(xticklabel_vals)
+            plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
+            % xticks(xticks_vals)
+            % xticklabels(xticklabel_vals)
             title(angls(j))
 
             yyaxis right
-            plot(av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
+            plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
             ax = gca;
             ax.YAxis(2).Color = 'k';
 
