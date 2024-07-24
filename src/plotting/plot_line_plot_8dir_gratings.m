@@ -158,6 +158,7 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
             plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
             ax = gca;
             ax.YAxis(2).Color = 'k';
+            ylabel('Frame position')
 
             if angls(j)==270
                 xlabel('Time (s)');
