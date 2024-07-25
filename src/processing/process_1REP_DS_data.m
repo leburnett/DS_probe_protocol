@@ -11,13 +11,13 @@ function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
 
     processed_data_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/ProcessedData20kHz';
     cell_type_processed_folder = fullfile(processed_data_path, cell_type);
+    
     % If this folder doesn't exist yet, make it. 
     if ~isfolder(cell_type_processed_folder)
         mkdir(cell_type_processed_folder)
     end 
 
     n_conditions = 127; % This is fixed for this protocol. FIXME - to be updated in the future. 
-
     n_data_types = 3; % times, frames, voltage
 
     % List the experiment folders for that day
@@ -37,12 +37,10 @@ function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
         load(fullfile(exp_folder_path, 'processed_data.mat'), 'timestamps', 'ts_avg_reps')
 
         for i = 1:n_conditions
-        
-            cond_time_data = timestamps;
             cond_frame_data = squeeze(ts_avg_reps(1, i, :));
             cond_volt_data = squeeze(ts_avg_reps(2, i, :))*10;
 
-            data_all_reps{i, 1, idx} = cond_time_data;
+            data_all_reps{i, 1, idx} = timestamps;
             data_all_reps{i, 2, idx} = cond_frame_data;
             data_all_reps{i, 3, idx} = cond_volt_data;
         end 
