@@ -22,10 +22,14 @@ function process_ds_probe_protocol_data(project_folder, date_folder, date_str, c
         exp_name  = exp_folders(idx).name;
         fly_folder_path = fullfile(date_folder_path, exp_name);
         cd(fly_folder_path)
-        % Process the data using Lisa's script. 
+        % Process the data using Lisa's script. This parses the data based
+        % on the start and stop time of each condition. 
         process_data(fly_folder_path, processing_path)
     end 
 
+    % This then combines the appropriate data of the voltage and the frame
+    % position for each condition and saves it as one variable
+    % 'data_all_reps'.
     process_1REP_DS_data(project_folder, date_folder, date_str, cell_type);
 
 end 
