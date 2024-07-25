@@ -30,8 +30,8 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             end 
             av_col = [0.19, 0.19, 0.19];
             % av_col = [0.1, 0, 0.5]; 
-            xlim_val = 120000;
-            xticks_vals = 0:20000:114000;
+            xlim_val = 5;
+            xticks_vals = 0:1:5;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
             speed_str = '20dps-Dark-';
         elseif plot_n == 2
@@ -43,8 +43,8 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             end 
             av_col = [0.65, 0.65, 0.65];
             % av_col = [0.1, 0, 0.5]; 
-            xlim_val = 30000;
-            xticks_vals = 0:10000:30000;
+            xlim_val = 1.5;
+            xticks_vals = 0:0.5:1.5;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
             speed_str = '100dps-Dark-';
         elseif plot_n == 3
@@ -57,8 +57,8 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             end 
             av_col = [0.32, 0.62, 0.36];
             % av_col = [0.905, 0.697, 0.175];
-            xlim_val = 120000;
-            xticks_vals = 0:20000:114000;
+            xlim_val = 5;
+            xticks_vals = 0:1:5; %0:20000:114000;
             xticklabel_vals = {'0', '1', '2', '3', '4', '5'};
             speed_str = '20dps-Bright-';
         elseif plot_n == 4
@@ -70,8 +70,8 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             end 
             av_col = [0.70, 0.86, 0.58];
             % av_col = [0.905, 0.697, 0.175];
-            xlim_val = 30000;
-            xticks_vals = 0:10000:30000;
+            xlim_val = 1.5;
+            xticks_vals = 0:0.5:1.5;
             xticklabel_vals = {'0', '0.5', '1', '1.5'};
             speed_str = '100dps-Bright-';
         end 
@@ -107,6 +107,9 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
     
             idx = values(j);
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
+            frame_data = squeeze(data_all_reps(idx, 2, 1:n_reps));
+            time_data = squeeze(data_all_reps(idx, 1, 1:n_reps));
+
             % Find the shortest length of a rep. 
             min_len = 1000000; % use 1000000 as a baseline. 
             for k = 1:n_reps
@@ -119,17 +122,30 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
 
             % Collect voltage data from across the repetitions. 
             data_comb = zeros(n_reps, min_len);
+            frame_comb = zeros(n_reps, min_len);
+            time_comb = zeros(n_reps, min_len);
+
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
                 da = voltage_data{k};
+                fa = frame_data{k};
+                ta = (time_data{k});
+                ta = ta-ta(1); % start time from zero for each rep.
+
                 data_comb(k, :) = da(1:min_len);
+                frame_comb(k, :) = fa(1:min_len);
+                time_comb(k, :) = ta(1:min_len);
 
                 % Find the maximum voltage value during the direction
                 max_val_rep = max(da(1:min_len));
                 rad_vals_reps(k, j) = max_val_rep;
 
-            end 
+            end
+
             av_resp = mean(data_comb);
+            av_frame = mean(frame_comb);
+            time_comb = time_comb./1000000; % convert to seconds
+            av_time = mean(time_comb);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
@@ -155,7 +171,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
                     col = [0.8 0.8 0.8];
                 end 
                     
-                plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.75); hold on
+                plot(time_comb(ii, :), data_comb(ii, :), 'Color', col, 'LineWidth', 0.75); hold on
                 ylim(ylim_vals)
                 box off 
                 ax = gca;
@@ -166,10 +182,18 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             end 
 
             % PLOT AVERAGE 
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2)
+            plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
             xlim([0 xlim_val])
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
+
+            yyaxis right
+            plot(av_time, av_frame, 'k', 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none')
+            ax = gca;
+            ax.YAxis(2).Color = 'k';
+            ylabel('Frame position')
+            ylim([0 max(av_frame)+1])
+
             % title(angls(j))
 
             if angls(j)==270
