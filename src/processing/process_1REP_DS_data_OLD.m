@@ -1,15 +1,13 @@
 function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
 % Process the data from the 1REP protocol, where each saved file is one
-% repetition of the DS Probe Protocol. Uses the output from Lisa's
-% 'process_data' script. 
-
-% Created by Burnett - 24 May 2024 - updated 25 July 2024
+% repetition of the DS Probe Protocol. 
+% Created by Burnett - 24 May 2024
 
     %% Run through experiment folders
     date_folder_path = fullfile(project_folder, date_folder); 
     cd(date_folder_path)
 
-    processed_data_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/ProcessedData20kHz';
+    processed_data_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/ProcessedData';
     cell_type_processed_folder = fullfile(processed_data_path, cell_type);
     % If this folder doesn't exist yet, make it. 
     if ~isfolder(cell_type_processed_folder)
@@ -34,13 +32,42 @@ function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
         cd(exp_folder_path)
 
         % Load the start times of the conditions. 
-        load(fullfile(exp_folder_path, 'processed_data.mat'), 'timestamps', 'ts_avg_reps')
+        load(fullfile(exp_folder_path, 'processed_data.mat'), 'cond_start_times')
+
+        % Load the log file
+        files_for_exp = dir();
+        files_for_exp(ismember( {files_for_exp.name}, {'.', '..'})) = []; 
+        dirFlags = [files_for_exp.isdir];
+        subFolders = files_for_exp(dirFlags);
+        logfile_name = strcat('G4_TDMS_Logs_', subFolders.name, '.mat');
+        load(logfile_name, 'Log')
+
+        % start times of each condition (us)
+        % cond_start_times = cond_start_times;
+        % x values
+        time_vals = Log.ADC.Time(1,:);
+        % y values
+        frame_position = Log.ADC.Volts(1,:);
+        % frame_position = (Log.ADC.Volts(1,:)/8)-60;
+        voltage_data = Log.ADC.Volts(2,:)*10;
 
         for i = 1:n_conditions
         
-            cond_time_data = timestamps;
-            cond_frame_data = squeeze(ts_avg_reps(1, i, :));
-            cond_volt_data = squeeze(ts_avg_reps(2, i, :))*10;
+            stim_start_us = cond_start_times(i); % added +500
+            if i<n_conditions
+                stim_stop_us = cond_start_times(i+1)-1;%cond_start_times(i+1)-1;
+            elseif i==n_conditions
+                stim_stop_us = time_vals(end);
+            end 
+        
+            idx_st = find(time_vals<stim_start_us);
+            idx_st = idx_st(end);
+            idx_stop = find(time_vals<stim_stop_us);
+            idx_stop = idx_stop(end);
+        
+            cond_time_data = time_vals(idx_st:idx_stop);
+            cond_frame_data = frame_position(idx_st:idx_stop);
+            cond_volt_data = voltage_data(idx_st:idx_stop);
 
             data_all_reps{i, 1, idx} = cond_time_data;
             data_all_reps{i, 2, idx} = cond_frame_data;
