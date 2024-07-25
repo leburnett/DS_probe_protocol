@@ -47,7 +47,7 @@ function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
 
     end 
 
-    % save local copy within experiment folder
+    % save local copy within date folder
     save(fullfile(date_folder_path, strcat('RES_all_reps_', date_str, '.mat')), 'data_all_reps');
     % save copy in 'processed_data' folder
     save(fullfile(cell_type_processed_folder, strcat('RES_all_reps_', date_str, '.mat')), 'data_all_reps');
