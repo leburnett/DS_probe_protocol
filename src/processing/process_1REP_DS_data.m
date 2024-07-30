@@ -9,7 +9,7 @@ function process_1REP_DS_data(project_folder, date_folder, date_str, cell_type)
     date_folder_path = fullfile(project_folder, date_folder); 
     cd(date_folder_path)
 
-    processed_data_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/ProcessedData20kHz';
+    processed_data_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/ProcessedData2';
     cell_type_processed_folder = fullfile(processed_data_path, cell_type);
     
     % If this folder doesn't exist yet, make it. 

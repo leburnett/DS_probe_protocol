@@ -79,8 +79,8 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
-        all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
-        exp_baseline = median(all_voltage_data);
+        all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
+        exp_baseline = nanmedian(all_voltage_data);
 
         % subplot_values = [15, 3, 11, 23];
 
@@ -137,14 +137,18 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
                 time_comb(k, :) = ta(1:min_len);
 
                 % Find the maximum voltage value during the direction
-                max_val_rep = max(da(1:min_len));
+                % OPTION 1 - use full length of condition
+                % max_val_rep = max(da(1:min_len));
+                % OPTION 2 - cut off beginning and end of condition
+                % max_val_rep = max(da(26:min_len-26));
+                max_val_rep = max(da(251:min_len-250));
                 rad_vals_reps(k, j) = max_val_rep;
 
             end
 
             av_resp = mean(data_comb);
             av_frame = mean(frame_comb);
-            time_comb = time_comb./1000000; % convert to seconds
+            % time_comb = time_comb./1000000; % convert to seconds
             av_time = mean(time_comb);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
@@ -171,7 +175,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
                     col = [0.8 0.8 0.8];
                 end 
                     
-                plot(time_comb(ii, :), data_comb(ii, :), 'Color', col, 'LineWidth', 0.75); hold on
+                plot(time_comb(ii, 2:end), data_comb(ii, 2:end), 'Color', col, 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none'); hold on
                 ylim(ylim_vals)
                 box off 
                 ax = gca;
@@ -182,13 +186,14 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             end 
 
             % PLOT AVERAGE 
-            plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
-            xlim([0 xlim_val])
+            plot(av_time(2:end), av_resp(2:end), 'Color', av_col, 'LineWidth', 2, 'LineStyle', '-', 'Marker', 'none')
+            notnanx = find(~isnan(av_resp));
+            xlim([0 av_time(max(notnanx))])
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
 
             yyaxis right
-            plot(av_time, av_frame, 'k', 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none')
+            plot(av_time(2:end), av_frame(2:end), 'k', 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none')
             ax = gca;
             ax.YAxis(2).Color = 'k';
             ylabel('Frame position')
@@ -199,8 +204,13 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             if angls(j)==270
                 xlabel('Time (s)');
             elseif angls(j)==180
+                yyaxis left
                 ylabel('Voltage (mV)');
             end 
+            
+            yyaxis left
+            rectangle('Position', [0, ylim_vals(1), av_time(250), diff(ylim_vals)], 'FaceColor', [0 0 0 0.25], 'EdgeColor', 'none');
+            rectangle('Position', [av_time(end-250), ylim_vals(1), av_time(250), diff(ylim_vals)], 'FaceColor', [0 0 0 0.25], 'EdgeColor', 'none')
 
         end
 

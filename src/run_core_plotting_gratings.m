@@ -8,7 +8,6 @@ clc
 cd('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');
 
 %% Read in log table with details of all of the experiments conducted. 
-
 log_table = readtable('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/exp_recording_log.xlsx');
 n_exps = height(log_table);
 

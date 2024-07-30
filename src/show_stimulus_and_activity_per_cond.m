@@ -75,7 +75,7 @@ patterns_folder = fullfile(project_folder, 'Patterns');
 close all 
 
 % for condition 1:
-cond_idx = 104; 
+cond_idx = 61; 
 
 pat_name = strcat(block_trials{cond_idx,2}, '.mat');
 load(fullfile(patterns_folder, pat_name), 'pattern')
