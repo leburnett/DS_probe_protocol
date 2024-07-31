@@ -1,4 +1,4 @@
-function pk_data = find_peak_freq_amp(data, data_rate, stim_freq)
+function [pk_data, amp_freq, loc_freq] = find_peak_freq_amp(data, data_rate, stim_freq, col)
     % Simple FFT analysis of patch data to flicker stimuli at different frequencies. 
     % Frequencies are 0.5, 1, 4, 8, 16, 32, 64 Hz. 
     % data_rate = 20000
@@ -8,13 +8,14 @@ function pk_data = find_peak_freq_amp(data, data_rate, stim_freq)
     dT = 1/data_rate; % Set sampling interval
     
     X1 = data(1:n_x-1); % Extract the data segment. Exlcude the last. 
+    X1 = X1(~isnan(X1));
     L1 = length(X1); % Length of data
     
     Y1 = fft(X1); % Perform FFT
     
     p2a = abs(Y1/L1); % Compute two-sided spectrum
     
-    p1a = p2a(1:L1/2+1); % Compute sinlge-sided spectrum
+    p1a = p2a(1:ceil(L1/2)+1); % Compute sinlge-sided spectrum
     
     p1a(2:end-1) = 2*p1a(2:end-1); % Adjust amplitude of single-sided spectrum
     
@@ -24,10 +25,10 @@ function pk_data = find_peak_freq_amp(data, data_rate, stim_freq)
     
     %% Plot the amplitude spectrum of the data
     figure
-    freq_data = f1(2:100);
-    pow_data = p1a(2:100);
-    plot(freq_data, pow_data) % Plot the spectrum. 
-    title(strcat('Amplitude Spectrum: ', string(stim_freq), 'Hz'))
+    freq_data = f1(2:200);
+    pow_data = p1a(2:200);
+    plot(freq_data, pow_data, 'Color', col, 'LineWidth', 1) % Plot the spectrum. 
+    title(strcat('Amplitude Spectrum: ', string(stim_freq)))
     xlabel('f (Hz)')
     ylabel('|p1(f)|')
     
@@ -40,9 +41,24 @@ function pk_data = find_peak_freq_amp(data, data_rate, stim_freq)
 
     hold on 
     % highlight the 3 highest peaks
-    plot(pk_data(1,2), pk_data(1,1), 'r.', 'MarkerSize', 15);
-    plot(pk_data(2,2), pk_data(2,1), 'r.', 'MarkerSize', 15);
-    plot(pk_data(3,2), pk_data(3,1), 'r.', 'MarkerSize', 15);
+
+    if length(pk_data)<5
+        n_dots = length(pk_data); 
+    else 
+        n_dots = 5;
+    end 
+
+    for i = 1:n_dots
+    plot(pk_data(i,2), pk_data(i,1), 'k.', 'MarkerSize', 15);
+    end 
+
+    stim_freq_val = str2double(stim_freq(1:end-2));
+    [~, idx] = min(abs(pk_data(:,2) - stim_freq_val));
+    % ampl_of_peak_closest_to_freq
+    amp_freq = pk_data(idx, 1);
+    % loc_of_peak_closest_to_freq
+    loc_freq = pk_data(idx, 2);
+
 end 
 
 

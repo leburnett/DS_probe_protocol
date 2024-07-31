@@ -18,7 +18,7 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = true;
+save_figs = false;
 
 for exp = 1:n_exps
 
@@ -32,6 +32,44 @@ for exp = 1:n_exps
     % Where the 'RES_all_reps...' file is found. 
     date_folder = fullfile(project_folder, date_str);
     cd(date_folder)
+
+    data_save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/data/flickers';
+    if ~isfolder(data_save_path)
+       mkdir(data_save_path)
+    end 
+
+    cell_type_save_path = strcat(data_save_path, '/', cell_type);
+    date_data_save_path = fullfile(cell_type_save_path, date_str);
+    if ~isfolder(date_data_save_path)
+       mkdir(date_data_save_path)
+    end 
+
+    % If subfolders exist
+    if numel(date_to_process) > 10 
+
+        % Make subfolder for saving:
+        subfolder_data_save_path = fullfile(date_data_save_path, date_to_process);
+
+        % If this folder doesn't exist yet, make it. 
+        if ~isfolder(subfolder_data_save_path)
+            mkdir(subfolder_data_save_path)
+        end 
+
+        % Move into the subfolder
+        subfolder = fullfile(date_folder, date_to_process);
+        cd(subfolder)
+
+        % Set the save path as the subfolder save path
+        data_save_path = subfolder_data_save_path;
+    else
+         % If subfolders exist
+        if numel(date_to_process) > 10 
+    
+            % Move into the subfolder
+            subfolder = fullfile(date_folder, date_to_process);
+            cd(subfolder)
+        end 
+    end 
 
     %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     
@@ -91,7 +129,7 @@ for exp = 1:n_exps
     
     %% Plot 
 
-    plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str)
+    % plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str)
 
     if save_figs == true
         f = gcf;
@@ -99,9 +137,11 @@ for exp = 1:n_exps
         savefig(fullfile(fig_save_path, strcat('Line_plot_flicker_', cell_type, '_', date_str, '.fig')))
         % save as PNG
         saveas(f, fullfile(fig_save_path, strcat('Line_plot_flicker_', cell_type, '_', date_str, '.png')), 'png')
-        close
+        close    
     end 
 
+    fft_analysis_flicker(n_reps, date_str, date_data_save_path)
+    close all
 
 end 
 
