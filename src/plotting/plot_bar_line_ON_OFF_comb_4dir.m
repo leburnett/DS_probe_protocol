@@ -70,8 +70,8 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
-        all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
-        exp_baseline = median(all_voltage_data);
+        all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
+        exp_baseline = nanmedian(all_voltage_data);
 
         % subplot_values = [15, 3, 11, 23];
         % subplot_values = {[9,10,14,15], [2,3,7,8], [11,12,16,17], [18, 19, 23, 24]};
@@ -98,7 +98,10 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
             subplot('Position', subplot_values{j});
             hold on
             idx = values(j);
+
             voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
+            time_data = squeeze(data_all_reps(idx, 1, 1:n_reps));
+
             % Find the shortest length of a rep. 
             min_len = 1000000; % use 1000000 as a baseline. 
             for k = 1:n_reps
@@ -111,17 +114,26 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
     
             % Collect voltage data from across the repetitions. 
             data_comb = zeros(n_reps, min_len);
+            time_comb = zeros(n_reps, min_len);
+
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
                 da = voltage_data{k};
+                ta = (time_data{k});
+                ta = ta-ta(1); % start time from zero for each rep.
+
                 data_comb(k, :) = da(1:min_len);
+                time_comb(k, :) = ta(1:min_len);
 
                 % Find the maximum voltage value during the direction
                 max_val_rep = max(da(1:min_len));
                 rad_vals_reps(k, j) = max_val_rep;
             end 
 
-            av_resp = mean(data_comb);
+            av_resp = nanmean(data_comb);
+            av_time = nanmean(time_comb);
+
+            notnanx = find(~isnan(av_resp));
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
@@ -135,13 +147,15 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
                 % plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.6); hold on
                 ylim(ylim_vals)
                 if slow_or_fast == "slow"
-                    xlim([0 114000])
-                    xticks(0:20000:114000);
-                    xticklabels({'0', '1', '2', '3', '4', '5'})
+                    % xlim([0 114000])
+                    xlim([0 av_time(notnanx(end))])
+                    % xticks(0:20000:114000);
+                    % xticklabels({'0', '1', '2', '3', '4', '5'})
                 elseif slow_or_fast == "fast"
-                    xlim([0 30000])
-                    xticks(0:10000:30000);
-                    xticklabels({'0', '0.5', '1', '1.5'})
+                    % xlim([0 30000])
+                    xlim([0 av_time(notnanx(end))])
+                    % xticks(0:10000:30000);
+                    % xticklabels({'0', '0.5', '1', '1.5'})
                 end 
                 box off 
                 ax = gca;
@@ -159,7 +173,7 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
             %     av_col = 'r';
             % end 
 
-            plot(av_resp, 'Color', av_col, 'LineWidth', 2); hold on
+            plot(av_time(2:end), av_resp(2:end), 'Color', av_col, 'LineWidth', 2); hold on
             % title(angls(j))
             if angls(j)==270
                 xlabel('Time (s)');
@@ -180,7 +194,7 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
         % end 
 
         % PLOT AVERAGE 
-        mean_rad_values = mean(rad_vals_reps2);
+        mean_rad_values = nanmean(rad_vals_reps2);
         polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2); hold on
         rlim(rlim_vals)
         rticks([0 10, 20, 30])

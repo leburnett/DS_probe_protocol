@@ -59,19 +59,20 @@ end
 if n_subfolders ==0 
     date_folder = date_str;
     process_ds_probe_protocol_data(project_folder, date_folder, date_str, cell_type)
+
 elseif n_subfolders > 0 
 
     for idx = 1:n_subfolders
         
         subfolder_str = subfolder_names{idx};
 
-        % Make subfolder for saving:
-        subfolder_fig_save_path = fullfile(date_fig_save_path, subfolder_str);
-        
-        % If this folder doesn't exist yet, make it. 
-        if ~isfolder(subfolder_fig_save_path)
-            mkdir(subfolder_fig_save_path)
-        end 
+        % % Make subfolder for saving:
+        % subfolder_fig_save_path = fullfile(date_fig_save_path, subfolder_str);
+        % 
+        % % If this folder doesn't exist yet, make it. 
+        % if ~isfolder(subfolder_fig_save_path)
+        %     mkdir(subfolder_fig_save_path)
+        % end 
 
         subfolder = strcat(date_str, '/', subfolder_str);
         process_ds_probe_protocol_data(project_folder, subfolder, subfolder_str, cell_type)

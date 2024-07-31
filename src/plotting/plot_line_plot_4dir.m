@@ -146,10 +146,10 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
 
             end
 
-            av_resp = mean(data_comb);
-            av_frame = mean(frame_comb);
+            av_resp = nanmean(data_comb);
+            av_frame = nanmean(frame_comb);
             % time_comb = time_comb./1000000; % convert to seconds
-            av_time = mean(time_comb);
+            av_time = nanmean(time_comb);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
@@ -188,7 +188,10 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             % PLOT AVERAGE 
             plot(av_time(2:end), av_resp(2:end), 'Color', av_col, 'LineWidth', 2, 'LineStyle', '-', 'Marker', 'none')
             notnanx = find(~isnan(av_resp));
-            xlim([0 av_time(max(notnanx))])
+            % if numel(notnanx)>2
+            %     notnanx= notnanx(1);
+            % end 
+            xlim([0 av_time(notnanx(end))])
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)
 
@@ -207,7 +210,7 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
                 yyaxis left
                 ylabel('Voltage (mV)');
             end 
-            
+
             yyaxis left
             rectangle('Position', [0, ylim_vals(1), av_time(250), diff(ylim_vals)], 'FaceColor', [0 0 0 0.25], 'EdgeColor', 'none');
             rectangle('Position', [av_time(end-250), ylim_vals(1), av_time(250), diff(ylim_vals)], 'FaceColor', [0 0 0 0.25], 'EdgeColor', 'none')

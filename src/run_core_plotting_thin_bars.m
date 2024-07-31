@@ -14,7 +14,7 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = true;
+save_figs = false;
 
 %% Read in log table with details of all of the experiments conducted. 
 
@@ -43,7 +43,7 @@ for exp = 1:n_exps
         
         %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
         
-        if save_figs == true
+        % if save_figs == true
             save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/';
             if edge_or_bar == "edge"
                 save_path = fullfile(save_path, edge_or_bar);
@@ -92,7 +92,7 @@ for exp = 1:n_exps
         % 
         %     end 
         
-        end 
+        % end 
         
         exp_folders = dir('SS*');
         % Number of runs of the protocol:
@@ -128,6 +128,7 @@ for exp = 1:n_exps
             saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
             close
             end 
+
         end 
         
         
@@ -160,6 +161,7 @@ for exp = 1:n_exps
             savefig(gcf, fullfile(fig_save_path, fig_str));
             saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
             close
+
         end 
 
     end 
