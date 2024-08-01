@@ -61,7 +61,7 @@ for j = 1:7 % 7 speeds
             av_resp = mean(data_comb);
 
         % FFT ampl analysis 
-        [pk_data, amp_freq, loc_freq] = find_peak_freq_amp(av_resp, data_rate, stim_freq, av_col);
+        [pk_data, amp_freq, loc_freq, freq_data, pow_data] = find_peak_freq_amp(av_resp, data_rate, stim_freq, av_col);
     
         if ~isempty(pk_data)
             pk_data_all(:, j*2-1:j*2) = pk_data(1:5, :);
@@ -73,7 +73,7 @@ for j = 1:7 % 7 speeds
        freq_ampl(2, j) = loc_freq;
        freq_ampl(3, j) = amp_freq;
 
-       save(fullfile(save_path, strcat(date_str, '_fft_freq_analysis.mat')), 'pk_data_all_tbl', 'freq_ampl');
+       save(fullfile(save_path, strcat(date_str, '_fft_freq_analysis.mat')), 'pk_data_all_tbl', 'freq_ampl', 'freq_data', 'pow_data');
 end 
 
 

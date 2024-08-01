@@ -1,4 +1,4 @@
-function [pk_data, amp_freq, loc_freq] = find_peak_freq_amp(data, data_rate, stim_freq, col)
+function [pk_data, amp_freq, loc_freq, freq_data, pow_data] = find_peak_freq_amp(data, data_rate, stim_freq, col)
     % Simple FFT analysis of patch data to flicker stimuli at different frequencies. 
     % Frequencies are 0.5, 1, 4, 8, 16, 32, 64 Hz. 
     % data_rate = 20000
