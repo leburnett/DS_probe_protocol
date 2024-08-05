@@ -41,8 +41,8 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
-        all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
-        exp_baseline = median(all_voltage_data);
+        all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
+        exp_baseline = nanmedian(all_voltage_data);
 
         subplot_values = [15, 9, 3, 7, 11, 17, 23, 19];
 

@@ -21,7 +21,7 @@ function plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
         all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
-        exp_baseline = median(all_voltage_data);
+        exp_baseline = nanmedian(all_voltage_data);
 
         for j = 1:7 % 7 speeds 
 
@@ -80,6 +80,8 @@ function plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str
             av_frame = mean(frame_comb);
             time_comb = time_comb./1000000; % convert to seconds
             av_time = mean(time_comb);
+
+            max_x = numel(av_resp(~isnan(av_resp)));
         
             % PLOT REPS
             for ii = 1:n_reps
@@ -102,7 +104,7 @@ function plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str
 
                 plot(time_comb(ii, :), data_comb(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
                 ylim(ylim_vals)
-                xlim([0 3.1])
+                xlim([0 av_time(max_x)])
                 box off 
                 ax = gca;
                 ax.TickDir = 'out';   

@@ -1,4 +1,4 @@
-function [pk_data, amp_freq, loc_freq, freq_data, pow_data] = find_peak_freq_amp(data, data_rate, stim_freq, col)
+function [pk_data, amp_freq, loc_freq, freq_data, pow_data, amp_sum] = find_peak_freq_amp(data, data_rate, stim_freq, col)
     % Simple FFT analysis of patch data to flicker stimuli at different frequencies. 
     % Frequencies are 0.5, 1, 4, 8, 16, 32, 64 Hz. 
     % data_rate = 20000
@@ -58,6 +58,13 @@ function [pk_data, amp_freq, loc_freq, freq_data, pow_data] = find_peak_freq_amp
     amp_freq = pk_data(idx, 1);
     % loc_of_peak_closest_to_freq
     loc_freq = pk_data(idx, 2);
+
+    % Calculate the sum of the power +/- 0.5Hz from the stimulus frequency
+    lower_b = stim_freq_val-0.5;
+    upper_b = stim_freq_val+0.5;
+    [~, idx2] = min(abs(freq_data - lower_b));
+    [~, idx3] = min(abs(freq_data - upper_b));
+    amp_sum = sum(pow_data(idx2:idx3));
 
 end 
 

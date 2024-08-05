@@ -20,7 +20,7 @@ colour_reps = false;
 % you just want to visualise them. 
 save_figs = false;
 
-for exp = 1:n_exps
+for exp = 26 %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -60,7 +60,7 @@ for exp = 1:n_exps
         cd(subfolder)
 
         % Set the save path as the subfolder save path
-        data_save_path = subfolder_data_save_path;
+        date_data_save_path = subfolder_data_save_path;
     else
          % If subfolders exist
         if numel(date_to_process) > 10 
@@ -129,7 +129,7 @@ for exp = 1:n_exps
     
     %% Plot 
 
-    % plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str)
+    plot_line_plot_7speeds_flicker(n_reps, colour_reps, ylim_vals, date_str)
 
     if save_figs == true
         f = gcf;
@@ -140,8 +140,8 @@ for exp = 1:n_exps
         close    
     end 
 
-    fft_analysis_flicker(n_reps, date_str, date_data_save_path)
-    close all
+    % fft_analysis_flicker(n_reps, date_str, date_data_save_path)
+    % close all
 
 end 
 
