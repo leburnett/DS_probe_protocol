@@ -17,15 +17,15 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
             % title_str = '0 deg - gratings';
             title_str = '0 deg';
         elseif plot_n == 2
-            values = [76, 78, 80, 82, 84, 86, 88];
+            values = [61, 63, 65, 67, 69, 71, 73];
             % title_str = '45 deg - gratings';
             title_str = '45 deg';
         elseif plot_n == 3
-            values = [48, 50, 52, 54, 56, 58, 60];
+            values = [47, 49, 51, 53, 55, 57, 59];
             % title_str = '90 deg - gratings';
             title_str = '90 deg';
         elseif plot_n == 4
-            values = [62, 64, 66, 68, 70, 72, 74];
+            values = [75, 77, 79, 81, 83, 85, 87];
             % title_str = '135 deg - gratings';
             title_str = '135 deg';
         elseif plot_n == 5
@@ -33,15 +33,15 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
             % title_str = '180 deg - gratings';
             title_str = '180 deg';
         elseif plot_n == 6
-            values = [75, 77, 79, 81, 83, 85, 87];
+            values = [62, 64, 66, 68, 70, 72, 74];
             % title_str = '225 deg - gratings';
             title_str = '225 deg';
         elseif plot_n == 7
-            values = [47, 49, 51, 53, 55, 57, 59];
+            values = [48, 50, 52, 54, 56, 58, 60];
             % title_str = '270 deg - gratings';
             title_str = '270 deg';
         elseif plot_n == 8 
-            values = [61, 63, 65, 67, 69, 71, 73];
+            values = [76, 78, 80, 82, 84, 86, 88];
             % title_str = '315 deg - gratings';
             title_str = '315 deg';
         end 

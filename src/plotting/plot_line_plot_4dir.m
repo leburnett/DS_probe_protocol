@@ -24,9 +24,9 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             % % % OFF
             % 20 dps
             if edge_or_bar == "bar"
-                values = [9, 1 ,10, 2];
+                values = [9, 2 ,10, 1];
             elseif edge_or_bar == "edge"
-                values = [25, 30, 26, 29];
+                values = [25, 29, 26, 30];
             end 
             av_col = [0.19, 0.19, 0.19];
             % av_col = [0.1, 0, 0.5]; 
@@ -37,9 +37,9 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
         elseif plot_n == 2
             % 100 dps
             if edge_or_bar == "bar"
-                values = [11, 3, 12, 4];
+                values = [11, 4, 12, 3];
             elseif edge_or_bar == "edge"
-                values = [27, 32, 28, 31];
+                values = [27, 31, 28, 32];
             end 
             av_col = [0.65, 0.65, 0.65];
             % av_col = [0.1, 0, 0.5]; 
@@ -51,9 +51,9 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             % % % ON
             % 20 dps
             if edge_or_bar == "bar"
-                values = [104, 96, 105, 97];
+                values = [104, 97, 105, 96];
             elseif edge_or_bar == "edge"
-                values = [120, 125, 121, 124];
+                values = [120, 124, 121, 125];
             end 
             av_col = [0.32, 0.62, 0.36];
             % av_col = [0.905, 0.697, 0.175];
@@ -64,9 +64,9 @@ function plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
         elseif plot_n == 4
             % 100 dps
             if edge_or_bar == "bar"
-                values = [106, 98, 107, 99];
+                values = [106, 99, 107, 98];
             elseif edge_or_bar == "edge"
-                values = [122, 127, 123, 126];
+                values = [122, 126, 123, 127];
             end 
             av_col = [0.70, 0.86, 0.58];
             % av_col = [0.905, 0.697, 0.175];

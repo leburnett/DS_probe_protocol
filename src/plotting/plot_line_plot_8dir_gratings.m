@@ -15,43 +15,43 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
         figure
         if plot_n == 1
             % 0.5Hz
-            values = [33, 76, 48, 62, 34, 75, 47, 61];
+            values = [33,61, 47, 75, 34, 62, 48, 76];
             % speed_str = '0.5Hz - gratings';
             speed_str = '0.5Hz';
             av_col = [0.6, 0.0, 0.5];
         elseif plot_n == 2
             % 1Hz
-            values = [35, 78, 50, 64, 36, 77, 49, 63];
+            values = [35, 63, 49, 77, 36, 64, 50, 78];
             % speed_str = '1Hz - gratings';
             speed_str = '1Hz';
             av_col = [0, 0, 0.5];
         elseif plot_n == 3
             % 4Hz
-            values = [37, 80, 52, 66, 38, 79, 51, 65];
+            values = [37, 65, 51, 79, 38, 66, 52, 80];
             % speed_str = '4Hz - gratings';
             speed_str = '4Hz';
             av_col = [0.58, 0.75, 0.8];
         elseif plot_n == 4
             % 8Hz
-            values = [39, 82, 54, 68, 40, 81, 53, 67];
+            values = [39, 67, 53, 81, 40, 68, 54, 82];
             % speed_str = '8Hz - gratings';
             speed_str = '8Hz';
             av_col = [0.13, 0.55, 0.13];
         elseif plot_n == 5
             % 16Hz
-            values = [41, 84, 56, 70, 42, 83, 55, 69];
+            values = [41,69, 55, 83, 42, 70, 56, 84];
             % speed_str = '16Hz - gratings';
             speed_str = '16Hz';
             av_col = [1, 0.65, 0.7];
         elseif plot_n == 6
             % 32Hz
-            values = [43, 86, 58, 72, 44, 85, 57, 71];
+            values = [43, 71, 57, 85, 44, 72, 58, 86];
             % speed_str = '32Hz - gratings';
             speed_str = '32Hz';
             av_col = [1, 0.65, 0];
         elseif plot_n == 7
             % 64Hz
-            values = [45, 88, 60, 74, 46, 87, 59, 73];
+            values = [45, 73, 59, 87, 46, 74, 60, 88];
             % speed_str = '64Hz - gratings';
             speed_str = '64Hz';
             av_col = [1, 0, 0];
