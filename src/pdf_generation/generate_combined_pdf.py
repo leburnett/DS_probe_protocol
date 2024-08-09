@@ -81,7 +81,7 @@ def generate_combined_pdf(
     elif stim_type == "gratings1":
         rows_cols = [2, 4]
         aspect_ratio = 1
-    elif stim_type == "gratings2":
+    elif stim_type in ["gratings2", "flickers"]:
         aspect_ratio = 0.3
         rows_cols = [1, 8]
 
@@ -103,7 +103,7 @@ def generate_combined_pdf(
         str2find = None
 
     pdf_files = find_images(path_to_pdfs, file_type, str2find)
-
+    print(pdf_files)
     # Sort the list to ensure they're in the correct order.
     pdf_files.sort()
 

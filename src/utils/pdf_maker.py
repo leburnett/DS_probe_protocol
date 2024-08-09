@@ -139,7 +139,7 @@ class PDFMaker(ABC):
             for idx, coord in enumerate(coords):
                 coords[idx] = [int(x) for x in coord]
 
-        elif stim_type in ['gratings1', 'gratings2']:
+        elif stim_type in ['gratings1', 'gratings2', 'flickers']:
 
             # Initialize lists to store coordinates
             coords = []
