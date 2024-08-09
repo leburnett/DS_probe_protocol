@@ -18,9 +18,9 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = false;
+save_figs = true;
 
-for exp = 26 %1:n_exps
+for exp = 1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';

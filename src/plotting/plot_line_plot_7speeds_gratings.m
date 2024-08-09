@@ -52,7 +52,7 @@ function plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_st
         % Find baseline voltage across all reps and all conditions of the bar
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
-        all_voltage_data = horzcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
+        all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
         exp_baseline = median(all_voltage_data);
 
         for j = 1:7 % 7 speeds 

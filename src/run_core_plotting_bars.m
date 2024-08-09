@@ -18,7 +18,7 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = false;
+save_figs = true;
 
 for exp = 1:n_exps
 

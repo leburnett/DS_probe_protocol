@@ -52,11 +52,16 @@ def generate_combined_pdf(
     date_str = plot_info["date_str"]
     date_to_process = plot_info["date_to_process"]
 
+    if stim_type == 'gratings1' or stim_type == "gratings2":
+        stim_type_path = 'gratings'
+    else:
+        stim_type_path = stim_type
+
     if len(date_to_process)>10:
         # paths to find the files
-        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str, date_to_process) # had it like this : stim_type[:-1] - for gratings? 
+        path_to_pdfs = os.path.join(results_folder, stim_type_path, cell_type, date_str, date_to_process) # had it like this : stim_type[:-1] - for gratings? 
     else:
-        path_to_pdfs = os.path.join(results_folder, stim_type, cell_type, date_str)
+        path_to_pdfs = os.path.join(results_folder, stim_type_path, cell_type, date_str)
 
     # output folder to save the PDFs
     output_folder = Path(results_folder) / 'output_pdfs' / cell_type / stim_type

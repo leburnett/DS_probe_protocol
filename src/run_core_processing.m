@@ -5,8 +5,8 @@ clc
 
 %% Initialise parameters that will changes
 
-date_to_process = '05_31_2024';
-cell_type = 'TmY3';
+date_to_process = '08_06_2024';
+cell_type = 'Cm10';
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
