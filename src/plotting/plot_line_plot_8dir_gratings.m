@@ -63,7 +63,7 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
         % stimulus. 
         all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
         all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
-        exp_baseline = median(all_voltage_data);
+        exp_baseline = nanmedian(all_voltage_data);
 
         subplot_values = [15, 9, 3, 7, 11, 17, 23, 19];
 
@@ -154,11 +154,13 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
             xticklabels(xticklabel_vals)
             title(angls(j))
 
-            yyaxis right
-            plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
-            ax = gca;
-            ax.YAxis(2).Color = 'k';
-            ylabel('Frame position')
+            if plot_n < 3
+                yyaxis right
+                plot(av_time, av_frame, 'k', 'LineWidth', 0.5, 'LineStyle', '-', 'Marker', 'none')
+                ax = gca;
+                ax.YAxis(2).Color = 'k';
+                ylabel('Frame position')
+            end 
 
             if angls(j)==270
                 xlabel('Time (s)');
@@ -191,7 +193,7 @@ function plot_line_plot_8dir_gratings(n_reps, colour_reps, ylim_vals, rlim_vals,
         end 
 
         % PLOT AVERAGE 
-        mean_rad_values = mean(rad_vals_reps2);
+        mean_rad_values = nanmean(rad_vals_reps2);
         polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2)
         rlim(rlim_vals)
         rticks([0 10, 20, 30])

@@ -126,39 +126,39 @@ for exp = 1:n_exps
     
     %% Plot per direction 
 
-    plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_to_process)
-
-    if save_figs == true
-    
-        for ii = 1:8
-
-            if ii == 8
-                bar_cond = 'gratings-000deg';
-            elseif ii == 7
-                bar_cond = 'gratings-045deg';
-            elseif ii == 6
-                bar_cond = 'gratings-090deg';
-            elseif ii == 5
-                bar_cond = 'gratings-135deg';
-            elseif ii == 4
-                bar_cond = 'gratings-180deg';
-            elseif ii == 3
-                bar_cond = 'gratings-225deg';
-            elseif ii == 2
-                bar_cond = 'gratings-270deg';
-            elseif ii == 1
-                bar_cond = 'gratings-315deg';
-            end 
-
-        f = gcf;
-        % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_per_orient_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-        % save as PNG
-        saveas(f, fullfile(fig_save_path, strcat('Line_plot_per_orient_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-        close
-        end 
-
-    end 
+    % plot_line_plot_7speeds_gratings(n_reps, colour_reps, ylim_vals, date_to_process)
+    % 
+    % if save_figs == true
+    % 
+    %     for ii = 1:8
+    % 
+    %         if ii == 8
+    %             bar_cond = 'gratings-000deg';
+    %         elseif ii == 7
+    %             bar_cond = 'gratings-045deg';
+    %         elseif ii == 6
+    %             bar_cond = 'gratings-090deg';
+    %         elseif ii == 5
+    %             bar_cond = 'gratings-135deg';
+    %         elseif ii == 4
+    %             bar_cond = 'gratings-180deg';
+    %         elseif ii == 3
+    %             bar_cond = 'gratings-225deg';
+    %         elseif ii == 2
+    %             bar_cond = 'gratings-270deg';
+    %         elseif ii == 1
+    %             bar_cond = 'gratings-315deg';
+    %         end 
+    % 
+    %     f = gcf;
+    %     % save as MATLAB fig
+    %     savefig(fullfile(fig_save_path, strcat('Line_plot_per_orient_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
+    %     % save as PNG
+    %     saveas(f, fullfile(fig_save_path, strcat('Line_plot_per_orient_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
+    %     close
+    %     end 
+    % 
+    % end 
 
 
 end 
