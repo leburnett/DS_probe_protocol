@@ -1,14 +1,9 @@
+function reconstruct_rf_2pix(edge_or_bar, cell_type, date_str)
 % Predict RF from 2 pixel bar stimulus 
 % Jin Yong's recordings - Summer 2024
 
-% OFF 
-%  9 = 0011_2pix_V_1bar_4bkg_G4 - pos fn = 0001
-%  2 = 0042_2pix_H_bar_1bar_4bkg)G4 - pos fn = 0188
-%  10 = 0011_2pix_V_1bar_4bkg_G4 - pos fn = 0002
-%  1 = 0042_2pix_H_bar_1bar_4bkg - pos fn = 0187
-
-
-%% use AVERAGED voltage data and find the average voltage
+% Load the protocol details:
+load('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Protocol_details.mat', 'block_trials');
 
 % Load the processed data 
 res_files = dir('RES_all_reps*');
@@ -24,44 +19,64 @@ pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Da
 % data and the patterns. 
 % idx = 1;
 % pat_shown = pattern.Pats(:, :, idx);
-
-pattern_names = {'0011_2pix_V_1bar_4bkg_G4.mat'...
-    , '0042_2pix_H_bar_1bar_4bkg_G4.mat'...
-    , '0013_2pix_V_12bar_4bkg_G4.mat'...
-    , '0044_2pix_H_bar_12bar_4bkg_G4.mat'};
+if edge_or_bar == "bar"
+    pattern_names = {'0011_2pix_V_1bar_4bkg_G4.mat'...
+        , '0042_2pix_H_bar_1bar_4bkg_G4.mat'...
+        , '0013_2pix_V_12bar_4bkg_G4.mat'...
+        , '0044_2pix_H_bar_12bar_4bkg_G4.mat'};
+elseif edge_or_bar == "edge"
+    pattern_names = {'0022_OFF_edge_V_1edge_4bkg_G4.mat'...
+        , '0038_OFF_edge_V_1edge_4bkg_Reverse_G4.mat'...
+        , '0013_2pix_V_12bar_4bkg_G4.mat'...
+        , '0044_2pix_H_bar_12bar_4bkg_G4.mat'};
+end 
 
 rf_data_all = zeros(48, 192);
 
 for plot_n = 1:4
 
     if plot_n == 1
-        % % % OFF
-        % 20 dps
-        values = [9, 2 ,10, 1];
-        title_str = '20 dps - OFF - 2 pixel bar';
+        % % % OFF 20 dps
+        if edge_or_bar == "bar"
+            values = [9, 2 ,10, 1];
+        elseif edge_or_bar == "edge"
+            values = [25, 29, 26, 30];
+        end
+        title_str = strcat('20 dps - OFF - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
     elseif plot_n == 2
-        % OFF
-        % 100 dps
-        values = [11, 4, 12, 3];
-        title_str = '100 dps - OFF - 2 pixel bar';
+        % OFF 100 dps
+        if edge_or_bar == "bar"
+                values = [11, 4, 12, 3];
+        elseif edge_or_bar == "edge"
+            values = [27, 31, 28, 32];
+        end
+        title_str = strcat('100 dps - OFF - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
     elseif plot_n == 3
-        % % % ON
-        % 20 dps
-        values = [104, 97, 105, 96];
-        title_str = '20 dps - ON - 2 pixel bar';
+        % % % ON 20 dps
+        if edge_or_bar == "bar"
+                values = [104, 97, 105, 96];
+        elseif edge_or_bar == "edge"
+            values = [120, 124, 121, 125];
+        end
+        title_str = strcat('20 dps - ON - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
     elseif plot_n == 4
-        % ON 
-        % 100 dps
-        values = [106, 99, 107, 98];
-        title_str = '100 dps - ON - 2 pixel bar';
+        % ON 100 dps
+        if edge_or_bar == "bar"
+            values = [106, 99, 107, 98];
+        elseif edge_or_bar == "edge"
+            values = [122, 126, 123, 127];
+        end 
+        title_str = strcat('100 dps - ON - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
     end 
     
-    if plot_n <= 2
-        pattern_1 = load(fullfile(pattern_path, pattern_names{1}), 'pattern'); % V bar
-        pattern_2 = load(fullfile(pattern_path, pattern_names{2}), 'pattern'); % H bar
-    elseif plot_n > 2
-        pattern_1 = load(fullfile(pattern_path, pattern_names{3}), 'pattern'); % V bar
-        pattern_2 = load(fullfile(pattern_path, pattern_names{4}), 'pattern'); % H bar
+    if edge_or_bar == "bar"
+        if plot_n <= 2
+            pattern_1 = load(fullfile(pattern_path, pattern_names{1}), 'pattern'); % V bar
+            pattern_2 = load(fullfile(pattern_path, pattern_names{2}), 'pattern'); % H bar
+        elseif plot_n > 2
+            pattern_1 = load(fullfile(pattern_path, pattern_names{3}), 'pattern'); % V bar
+            pattern_2 = load(fullfile(pattern_path, pattern_names{4}), 'pattern'); % H bar
+        end 
     end 
     
     % Exp baseline to then
@@ -77,11 +92,16 @@ for plot_n = 1:4
         % disp(strcat('Stim number: ', string(j)))
         idx = values(j);
     
-        if j == 1 || j == 3 % vertical bar - horizontal movement;
-            pattern = pattern_1.pattern;
-        else % horizontal bar - vertical movement;
-            pattern = pattern_2.pattern;
-        end
+        if edge_or_bar == "bar"
+            if j == 1 || j == 3 % vertical bar - horizontal movement;
+                pattern = pattern_1.pattern;
+            else % horizontal bar - vertical movement;
+                pattern = pattern_2.pattern;
+            end
+        elseif edge_or_bar == "edge"
+            pattern_1 = load(fullfile(pattern_path, pattern_names{j}), 'pattern'); % V bar
+            pattern = pattern1.pattern;
+        end 
     
         % Sort the voltage and the frame positon data
         voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));

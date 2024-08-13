@@ -164,6 +164,11 @@ for exp = 1:n_exps
 
         end 
 
+    % RF estimation:
+        % cell type 
+        % date str
+
+
     end 
 
 end 
