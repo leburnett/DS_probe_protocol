@@ -1,4 +1,4 @@
-function reconstruct_rf_2pix(edge_or_bar, cell_type, date_str)
+function reconstruct_rf_4dir(edge_or_bar, cell_type, date_str)
 % Predict RF from 2 pixel bar stimulus 
 % Jin Yong's recordings - Summer 2024
 
@@ -10,6 +10,7 @@ res_files = dir('RES_all_reps*');
 load(res_files(1).name, 'data_all_reps')
 
 n_reps = size(data_all_reps, 3);
+date_str = strrep(date_str, '_', '-');
 
 % Patterns
 pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Patterns';
@@ -153,7 +154,7 @@ for plot_n = 1:4
 end 
 
 figure; imagesc(flipud(rf_data_all))
-comb_title = strcat('Rf estimation ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
+comb_title = strcat('RF est - - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
 title(comb_title)
 
 end 

@@ -149,6 +149,13 @@ for exp = 1:n_exps
         close
     end 
 
+    %% Receptive field estimation
+    reconstruct_rf_8dir(cell_type, date_str)
+    fig_str = strcat('RF_estimate_', date_str, '.fig');
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+    end 
+
 end 
 
 cd('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');

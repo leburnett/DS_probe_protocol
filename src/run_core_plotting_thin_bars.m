@@ -165,8 +165,7 @@ for exp = 1:n_exps
         end 
 
     % RF estimation:
-        % cell type 
-        % date str
+       reconstruct_rf_4dir(edge_or_bar, cell_type, date_str)
 
 
     end 
