@@ -13,23 +13,6 @@ n_reps = size(data_all_reps, 3);
 
 % Patterns
 pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Patterns';
-% functions_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Functions';
-
-% Don't need the functions - just need the frame positon from the processed
-% data and the patterns. 
-% idx = 1;
-% pat_shown = pattern.Pats(:, :, idx);
-if edge_or_bar == "bar"
-    pattern_names = {'0011_2pix_V_1bar_4bkg_G4.mat'...
-        , '0042_2pix_H_bar_1bar_4bkg_G4.mat'...
-        , '0013_2pix_V_12bar_4bkg_G4.mat'...
-        , '0044_2pix_H_bar_12bar_4bkg_G4.mat'};
-elseif edge_or_bar == "edge"
-    pattern_names = {'0022_OFF_edge_V_1edge_4bkg_G4.mat'...
-        , '0038_OFF_edge_V_1edge_4bkg_Reverse_G4.mat'...
-        , '0013_2pix_V_12bar_4bkg_G4.mat'...
-        , '0044_2pix_H_bar_12bar_4bkg_G4.mat'};
-end 
 
 rf_data_all = zeros(48, 192);
 
@@ -69,16 +52,6 @@ for plot_n = 1:4
         title_str = strcat('100 dps - ON - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
     end 
     
-    if edge_or_bar == "bar"
-        if plot_n <= 2
-            pattern_1 = load(fullfile(pattern_path, pattern_names{1}), 'pattern'); % V bar
-            pattern_2 = load(fullfile(pattern_path, pattern_names{2}), 'pattern'); % H bar
-        elseif plot_n > 2
-            pattern_1 = load(fullfile(pattern_path, pattern_names{3}), 'pattern'); % V bar
-            pattern_2 = load(fullfile(pattern_path, pattern_names{4}), 'pattern'); % H bar
-        end 
-    end 
-    
     % Exp baseline to then
     all_voltage_data = squeeze(data_all_reps(values, 3, 1:n_reps));
     all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
@@ -92,16 +65,9 @@ for plot_n = 1:4
         % disp(strcat('Stim number: ', string(j)))
         idx = values(j);
     
-        if edge_or_bar == "bar"
-            if j == 1 || j == 3 % vertical bar - horizontal movement;
-                pattern = pattern_1.pattern;
-            else % horizontal bar - vertical movement;
-                pattern = pattern_2.pattern;
-            end
-        elseif edge_or_bar == "edge"
-            pattern_1 = load(fullfile(pattern_path, pattern_names{j}), 'pattern'); % V bar
-            pattern = pattern1.pattern;
-        end 
+        % Load the appropriate pattern. 
+        pat_file = block_trials{idx, 2};
+        load(fullfile(pattern_path, pat_file), 'pattern');
     
         % Sort the voltage and the frame positon data
         voltage_data = squeeze(data_all_reps(idx, 3, 1:n_reps));
@@ -187,7 +153,10 @@ for plot_n = 1:4
 end 
 
 figure; imagesc(flipud(rf_data_all))
-title(save_str)
+comb_title = strcat('Rf estimation ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
+title(comb_title)
+
+end 
 
 
 
