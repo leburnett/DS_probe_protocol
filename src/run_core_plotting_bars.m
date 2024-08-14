@@ -90,71 +90,72 @@ for exp = 1:n_exps
     rlim_vals = [0 30]; %[0 35];
     
     %% Line plot + polar plot in the middle
-    plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
+    % plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
+    % % 
     % 
-    
-    if save_figs == true
-    
-        for ii = 1:4
-
-            if ii == 1
-                bar_cond = 'ON_100dps';
-            elseif ii == 2
-                bar_cond = 'ON_20dps';
-            elseif ii == 3
-                bar_cond = 'OFF_100dps';
-            elseif ii == 4
-                bar_cond = 'OFF_20dps';
-            end 
-
-        f = gcf;
-        % save as MATLAB fig
-        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-        % save as PNG
-        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-        close
-        end 
-
-    end 
+    % if save_figs == true
+    % 
+    %     for ii = 1:4
+    % 
+    %         if ii == 1
+    %             bar_cond = 'ON_100dps';
+    %         elseif ii == 2
+    %             bar_cond = 'ON_20dps';
+    %         elseif ii == 3
+    %             bar_cond = 'OFF_100dps';
+    %         elseif ii == 4
+    %             bar_cond = 'OFF_20dps';
+    %         end 
+    % 
+    %     f = gcf;
+    %     % save as MATLAB fig
+    %     savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
+    %     % save as PNG
+    %     saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
+    %     close
+    %     end 
+    % 
+    % end 
     
     
     %% ON - OFF combined
     
-    % SLOW 
-    % n_reps = 5;
-    slow_or_fast = "slow";
-    speed_str = '20dps'; 
-    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-    
-    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    
-    if save_figs == true
-        savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-        close 
-    end 
-    
-    %% FAST 
-    
-    % n_reps = 5;
-    slow_or_fast = "fast";
-    speed_str = '100dps';
-    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-    
-    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    
-    if save_figs == true
-        savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-        close
-    end 
+    % % SLOW 
+    % % n_reps = 5;
+    % slow_or_fast = "slow";
+    % speed_str = '20dps'; 
+    % fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
+    % 
+    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+    % 
+    % if save_figs == true
+    %     savefig(gcf, fullfile(fig_save_path, fig_str));
+    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
+    %     close 
+    % end 
+    % 
+    % %% FAST 
+    % 
+    % % n_reps = 5;
+    % slow_or_fast = "fast";
+    % speed_str = '100dps';
+    % fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
+    % 
+    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+    % 
+    % if save_figs == true
+    %     savefig(gcf, fullfile(fig_save_path, fig_str));
+    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
+    %     close
+    % end 
 
     %% Receptive field estimation
     reconstruct_rf_8dir(cell_type, date_str)
-    fig_str = strcat('RF_estimate_', date_str, '.fig');
-    if save_figs == true
-        savefig(gcf, fullfile(fig_save_path, fig_str));
-    end 
+    % fig_str = strcat('RF_estimate_', date_str, '.fig');
+    % if save_figs == true
+    %     savefig(gcf, fullfile(fig_save_path, fig_str));
+    %     close
+    % end 
 
 end 
 

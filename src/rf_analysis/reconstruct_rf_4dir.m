@@ -156,6 +156,10 @@ end
 figure; imagesc(flipud(rf_data_all))
 comb_title = strcat('RF est - - ', edge_or_bar, ' - ', cell_type, ' - ', date_str);
 title(comb_title)
+box off
+colorbar
+ax = gca;
+ax.TickDir = 'out';
 
 end 
 

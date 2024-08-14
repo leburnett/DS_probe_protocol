@@ -92,6 +92,7 @@ for plot_n = 1:4
         % Could also remove 200ms at the end....
     
         % Can't have 'frame 0'... should check where this comes from and why. 
+        % Check to see if I should add 1 to each frame position. 
         av_frame(av_frame==0)=1;
     
         % Aim is to reduce the number of loops I have to compute for. 
@@ -99,16 +100,19 @@ for plot_n = 1:4
         % Find the frame being presented and find an average for the time over
         % which the frame is being presented. 
         frame_changes = find(abs(diff(av_frame))>0);
+        % frame delta t - see what the RF would be like if you used the
+        % next frame instead.
+        f_dt = -15;
     
         for fc = 1:numel(frame_changes)
     
             % voltage data
-            if fc == 1
+            if fc < abs(f_dt)+1
                 v_data = av_resp(1:frame_changes(1));
-            elseif fc == numel(frame_changes)
+            elseif fc >= numel(frame_changes)-f_dt
                 v_data = av_resp(frame_changes(fc):end);
             else
-                v_data = av_resp(frame_changes(fc):frame_changes(fc)+1);
+                v_data = av_resp(frame_changes(fc+f_dt):frame_changes(fc+f_dt)+1);
             end 
     
             % Find the average voltage over the time this frame was being
@@ -118,9 +122,9 @@ for plot_n = 1:4
             % What frame was being shown during this time? 
             f_data = pattern.Pats(:, :, av_frame(frame_changes(fc)));
             f_norm = mat2gray(f_data);
-            % if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
-            %     f_norm = f_norm*-1;
-            % end 
+            if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
+                f_norm = double(~f_norm);
+            end 
             f_norm(f_norm==0)=-1;
     
             rf_data = rf_data + (f_norm * v_mean);
@@ -138,7 +142,7 @@ for plot_n = 1:4
 end 
 
 figure; imagesc(flipud(rf_data_all))
-comb_title = strcat('RF est - - bar6 - ', cell_type, ' - ', date_str);
+comb_title = strcat('RF est - - bar6 - ', cell_type, ' - ', date_str, 'f-dt - ', string(f_dt));
 title(comb_title)
 box off
 colorbar
