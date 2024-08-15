@@ -41,8 +41,7 @@ for plot_n = 1:4
     all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
     exp_baseline = nanmedian(all_voltage_data);
     
-
-    %% Empty array to add frame data to, to get SPATIAL RF.
+    % Empty array to add frame data to, to get RF.
     rf_data = zeros(48, 192);
     
     % Loop through the 8 directions for this stimulus. 
@@ -132,27 +131,14 @@ for plot_n = 1:4
             end 
             f_norm(f_norm==0)=-1;
 
-            rf_data = rf_data + (f_norm * v_mean);
-            rf_data_all = rf_data_all  + (f_norm * v_mean); 
+            rf_data = rf_data + flipud(f_norm * v_mean); % image flipped to be from fly's view.
+            rf_data_all = rf_data_all  + flipud(f_norm * v_mean); 
         end 
 
-        % % Computed per 20kHz sampling frame. 
-        % for f = 1:numel(av_resp) % through all data points
-        %    v_val = av_resp(f);
-        %    f_data = pattern.Pats(:, :, av_frame(f));
-        %    f_norm = mat2gray(f_data);
-        %    f_norm(f_norm==0)=-1;
-        % 
-        %    rf_data = rf_data + (f_norm * v_val);
-        %    rf_data_all = rf_data_all  + (f_norm * v_val);
-        % end 
-    
     end 
-    
+   
     % % Plot figure for each type of stimulus.
-    % % Flip image to be seen as if from fly view. Arena mounted
-    % % upside down. 
-    figure; imagesc(flipud(rf_data))
+    figure; imagesc((rf_data))
     title(title_str)
     box off
     % colormap(redblue)
@@ -160,10 +146,12 @@ for plot_n = 1:4
     ax = gca;
     ax.TickDir = 'out';
 
+
 end 
 
-% figure; imagesc(flipud(rf_data_all))
-% comb_title = strcat('RF est - - bar6 - ', cell_type, ' - ', date_str, 'f-dt - ', string(f_dt));
+% Plot spatial receptive field over all 4 conditions:
+% figure; imagesc(rf_data_all)
+comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, '-dt - ', string(f_dt));
 % title(comb_title)
 % box off
 % colorbar
@@ -171,6 +159,45 @@ end
 % ax.TickDir = 'out';
 % colormap(redblue)
 
+% Estimate the centre of the RF. 
+max_value = max(rf_data_all(:));
+[peak_y, peak_x] = find(rf_data_all == max_value);
+
+figure; 
+subplot(1, 4, 1:3)
+% Plot the position of the centre of the RF wrt the whole screen.
+imagesc(rf_data_all); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
+box off
+set(gca, "TickDir", 'out');
+xlabel('Pixel - azimuth')
+ylabel('Pixel - elevation')
+
+subplot(1,4,4)
+% plot crop close up of the RF. 
+% +/- 16 pixels, +/-18 deg VA. 
+xcrp1 = peak_x - 16; 
+xcrp2 = peak_x + 16; 
+ycrp1 = peak_y - 16;
+ycrp2 = peak_y + 16;
+
+imagesc(rf_data_all)
+xlim([xcrp1 xcrp2])
+ylim([ycrp1 ycrp2])
+
+set(gca, "TickDir", 'out');
+xticks([xcrp1, peak_x, xcrp2])
+yticks([ycrp1, peak_y, ycrp2])
+xticklabels({'-16', '0', '16'})
+yticklabels({'-16', '0', '16'})
+xlabel('Degrees from centre')
+ylabel('Degrees from centre')
+
+yyaxis right 
+yticks([])
+ylabel(strcat('X:', string(peak_x), ', Y:', string(peak_y)))
+
+sgtitle(comb_title)
+set(gcf, "Position", [1   854   883   193])
 
 end 
 
