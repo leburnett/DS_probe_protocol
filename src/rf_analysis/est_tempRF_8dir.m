@@ -1,4 +1,11 @@
-function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str)
+
+% After having found out the centre of the RF after computing the 
+% spatial RF for all conditions, then plot the temporal RF for each of the
+% 8 directions separately. 
+
+% SPATIOTEMPORAL RF FOR EACH DIRECTION SEPARATELY. 
+
+function est_tempRF_8dir(cell_type, date_str)
 % Predict RF from 6 pixel bar stimulus 
 % Jin Yong's recordings - Summer 2024
 
@@ -14,9 +21,9 @@ date_str = strrep(date_str, '_', '-');
 % Patterns
 pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Patterns';
 
-rf_data_all = zeros(48, 192);
-
 for plot_n = 1:4
+
+    rf_data_t = []; 
 
     if plot_n == 1
         % % % OFF 20 dps
@@ -41,11 +48,13 @@ for plot_n = 1:4
     all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
     exp_baseline = nanmedian(all_voltage_data);
     
-    % Empty array to add frame data to, to get RF.
+
+    %% Empty array to add frame data to, to get SPATIAL RF.
     rf_data = zeros(48, 192);
     
     % Loop through the 8 directions for this stimulus. 
-    for j = 1:8
+    for j = 4%:8
+
         % disp(strcat('Stim number: ', string(j)))
         idx = values(j);
     
@@ -126,114 +135,85 @@ for plot_n = 1:4
             % What frame was being shown during this time? 
             f_data = pattern.Pats(:, :, av_frame(frame_changes(fc)));
             f_norm = mat2gray(f_data);
-            % if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
-            %     f_norm = double(~f_norm);
-            % end 
+            if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
+                f_norm = double(~f_norm);
+            end 
             f_norm(f_norm==0)=-1;
 
-            rf_data = rf_data + flipud(f_norm * v_mean); % image flipped to be from fly's view.
+            rf_data = rf_data + flipud(f_norm * v_mean);
             rf_data_all = rf_data_all  + flipud(f_norm * v_mean); 
+            rf_data_t(:, :, fc) = flipud((f_norm * v_mean));
         end 
-
     end 
-   
-    % % Plot figure for each type of stimulus.
-    % figure; imagesc((rf_data))
-    % title(title_str)
-    % box off
-    % % colormap(redblue)
-    % colorbar
-    % ax = gca;
-    % ax.TickDir = 'out';
 
+    if plot_n ==1 
+        a = rf_data_t;
+    elseif plot_n ==2 
+        b = rf_data_t;
+    elseif plot_n ==3
+        c = rf_data_t;
+    elseif plot_n == 4
+        d = rf_data_t;
+    end 
 
 end 
+  
+limm = numel(frame_changes);
 
-% Plot spatial receptive field over all 4 conditions:
-% figure; imagesc(rf_data_all)
-comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, '-dt - ', string(f_dt));
-% title(comb_title)
-% box off
-% colorbar
-% ax = gca;
-% ax.TickDir = 'out';
-% colormap(redblue)
-
-% Estimate the centre of the RF. 
-max_value = max(rf_data_all(:));
-[peak_y, peak_x] = find(rf_data_all == max_value);
+% Plotting the pixel in 'centre of RF' over time. 
+figure; 
+subplot(1,4,1)
+imagesc(squeeze(a(peak_y, peak_x, :)));
+title('OFF20')
+ylim([0 limm])
+ax = gca; ax.XAxis.Visible = 'off';
+subplot(1,4,2)
+imagesc(squeeze(b(peak_y, peak_x, :)));
+title('OFF100')
+ylim([0 limm])
+ax = gca; ax.XAxis.Visible = 'off';
+subplot(1,4,3)
+imagesc(squeeze(c(peak_y, peak_x, :)));
+title('ON20')
+ylim([0 limm])
+ax = gca; ax.XAxis.Visible = 'off';
+subplot(1, 4,4)
+imagesc(squeeze(d(peak_y, peak_x, :)));
+title('ON100')
+ylim([0 limm])
+ax = gca; ax.XAxis.Visible = 'off';
+set(gcf, "Position", [1 294 380 753])
+sgtitle( 'TmY3 - 05-23-2024 - j=4')
 
 figure; 
-subplot(1, 4, 1:3)
-% Plot the position of the centre of the RF wrt the whole screen.
-imagesc(rf_data_all); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
-box off
-set(gca, "TickDir", 'out');
-xlabel('Pixel - azimuth')
-ylabel('Pixel - elevation')
+subplot(4,1,1)
+plot(squeeze(a(peak_y, peak_x, :)));
+title('OFF20')
+xlim([0 limm])
+% ax = gca; ax.YAxis.Visible = 'off';
+xticklabels({''})
 
-subplot(1,4,4)
-% plot crop close up of the RF. 
-% +/- 16 pixels, +/-18 deg VA. 
+subplot(4,1,2)
+plot(squeeze(b(peak_y, peak_x, :)));
+title('OFF100')
+xlim([0 limm])
+% ax = gca; ax.YAxis.Visible = 'off';
+xticklabels({''})
 
-xcrp1 = peak_x - 16; 
-if xcrp1 <1
-    x1 = 1;
-else
-    x1 = xcrp1;
-end 
-xcrp2 = peak_x + 16; 
-if xcrp2 > 192
-    x2 = 192;
-else 
-    x2 = xcrp2;
-end 
-ycrp1 = peak_y - 16;
-if ycrp1 < 1
-    y1 = 1;
-else
-    y1 = ycrp1;
-end 
-ycrp2 = peak_y + 16;
-if ycrp2 > 48
-    y2 = 48;
-else
-    y2 = ycrp2;
-end 
-crop_im = rf_data_all(y1:y2, x1:x2);
-imagesc(crop_im)
-[ymax, xmax] = find(crop_im == max(crop_im(:)));
-xlim([xmax-16 xmax+16])
-ylim([ymax-16 ymax+16])
+subplot(4,1,3)
+plot(squeeze(c(peak_y, peak_x, :)));
+title('ON20')
+xlim([0 limm])
+% ax = gca; ax.YAxis.Visible = 'off';
+xticklabels({''})
 
-set(gca, "TickDir", 'out');
-xticks([xmax-16, xmax, xmax+16])
-yticks([ymax-16, ymax, ymax+16])
-xticklabels({'-16', '0', '16'})
-yticklabels({'-16', '0', '16'})
-xlabel('Degrees from centre')
-ylabel('Degrees from centre')
-
-yyaxis right 
-yticks([])
-ylabel(strcat('X:', string(peak_x), ', Y:', string(peak_y)))
-
-sgtitle(comb_title)
-set(gcf, "Position", [1 837 897 210])
-
-end 
-
-
-
-
-
-
-
-
-
-
-
-
+subplot(4,1,4)
+plot(squeeze(d(peak_y, peak_x, :)));
+title('ON100')
+xlim([0 limm])
+% ax = gca; ax.YAxis.Visible = 'off';
+set(gcf, "Position", [384 671 1036 376])
+sgtitle( 'TmY3 - 05-23-2024 - j=4')
 
 
 
