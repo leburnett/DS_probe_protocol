@@ -41,7 +41,8 @@ for plot_n = 1:4
     all_voltage_data = vertcat(all_voltage_data{:}); % reshape and unpack values in cell arrays. 
     exp_baseline = nanmedian(all_voltage_data);
     
-    % Empty array to add frame data to, to get RF.
+
+    %% Empty array to add frame data to, to get SPATIAL RF.
     rf_data = zeros(48, 192);
     
     % Loop through the 8 directions for this stimulus. 
@@ -85,15 +86,17 @@ for plot_n = 1:4
     
         av_frame = ceil(nanmean(frame_comb)); % Make sure there are no floating values
     
-        % Remove the first 250ms
+        % Remove the first 250ms and last 125ms.
         av_resp = av_resp(5000:end-2500);
         av_frame = av_frame(5000:end-2500);
     
+        av_resp = av_resp(~isnan(av_resp));
         % Could also remove 200ms at the end....
     
         % Can't have 'frame 0'... should check where this comes from and why. 
         % Check to see if I should add 1 to each frame position. 
         av_frame(av_frame==0)=1;
+        av_frame= av_frame(~isnan(av_frame));
     
         % Aim is to reduce the number of loops I have to compute for. 
         % The same frame is being presented for many timepoints.
@@ -102,10 +105,12 @@ for plot_n = 1:4
         frame_changes = find(abs(diff(av_frame))>0);
         % frame delta t - see what the RF would be like if you used the
         % next frame instead.
-        f_dt = -15;
+        f_dt = 0;
     
+        % Computed per FRAME CHANGE (group all frames with the same image
+        % being shown)
         for fc = 1:numel(frame_changes)
-    
+
             % voltage data
             if fc < abs(f_dt)+1
                 v_data = av_resp(1:frame_changes(1));
@@ -114,11 +119,11 @@ for plot_n = 1:4
             else
                 v_data = av_resp(frame_changes(fc+f_dt):frame_changes(fc+f_dt)+1);
             end 
-    
+
             % Find the average voltage over the time this frame was being
             % presented.
             v_mean = nanmean(v_data);
-    
+
             % What frame was being shown during this time? 
             f_data = pattern.Pats(:, :, av_frame(frame_changes(fc)));
             f_norm = mat2gray(f_data);
@@ -126,28 +131,46 @@ for plot_n = 1:4
                 f_norm = double(~f_norm);
             end 
             f_norm(f_norm==0)=-1;
-    
+
             rf_data = rf_data + (f_norm * v_mean);
-            rf_data_all = rf_data_all  + (f_norm * v_mean);
+            rf_data_all = rf_data_all  + (f_norm * v_mean); 
         end 
+
+        % % Computed per 20kHz sampling frame. 
+        % for f = 1:numel(av_resp) % through all data points
+        %    v_val = av_resp(f);
+        %    f_data = pattern.Pats(:, :, av_frame(f));
+        %    f_norm = mat2gray(f_data);
+        %    f_norm(f_norm==0)=-1;
+        % 
+        %    rf_data = rf_data + (f_norm * v_val);
+        %    rf_data_all = rf_data_all  + (f_norm * v_val);
+        % end 
     
     end 
     
-    % Plot figure for each type of stimulus.
-    % Flip image to be seen as if from fly view. Arena mounted
-    % upside down. 
-    % figure; imagesc(flipud(rf_data))
-    % title(title_str)
+    % % Plot figure for each type of stimulus.
+    % % Flip image to be seen as if from fly view. Arena mounted
+    % % upside down. 
+    figure; imagesc(flipud(rf_data))
+    title(title_str)
+    box off
+    % colormap(redblue)
+    colorbar
+    ax = gca;
+    ax.TickDir = 'out';
 
 end 
 
-figure; imagesc(flipud(rf_data_all))
-comb_title = strcat('RF est - - bar6 - ', cell_type, ' - ', date_str, 'f-dt - ', string(f_dt));
-title(comb_title)
-box off
-colorbar
-ax = gca;
-ax.TickDir = 'out';
+% figure; imagesc(flipud(rf_data_all))
+% comb_title = strcat('RF est - - bar6 - ', cell_type, ' - ', date_str, 'f-dt - ', string(f_dt));
+% title(comb_title)
+% box off
+% colorbar
+% ax = gca;
+% ax.TickDir = 'out';
+% colormap(redblue)
+
 
 end 
 
