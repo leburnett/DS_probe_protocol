@@ -112,20 +112,33 @@ for plot_n = [1,3] % Just use 20 dps conditions %1:4
         for fc = 1:numel(frame_changes)
 
             % voltage data
-            if fc < abs(f_dt)+1
-                v_data = av_resp(1:frame_changes(1));
-            elseif fc >= numel(frame_changes)-f_dt
-                v_data = av_resp(frame_changes(fc):end);
-            else
-                v_data = av_resp(frame_changes(fc+f_dt):frame_changes(fc+f_dt)+1);
-            end 
+            % if fc < abs(f_dt)+1
+            %     v_data = av_resp(1:frame_changes(1));
+            % elseif fc >= numel(frame_changes)-f_dt
+            %     v_data = av_resp(frame_changes(fc):end);
+            % else
+            %     v_data = av_resp(frame_changes(fc+f_dt):frame_changes(fc+f_dt)+1);
+            % end 
+            v_data = av_resp(frame_changes(fc):frame_changes(fc)+1);
+
 
             % Find the average voltage over the time this frame was being
             % presented.
             v_mean = nanmean(v_data);
 
             % What frame was being shown during this time? 
-            f_data = pattern.Pats(:, :, av_frame(frame_changes(fc)));
+            f_id = fc+f_dt;
+            if f_id<1
+                continue
+                % f_id = 1;
+            elseif f_id > numel(frame_changes)
+                continue
+                % f_id = numel(frame_changes);
+            end 
+            % Image that was shown. 
+            f_data = pattern.Pats(:, :, av_frame(frame_changes(f_id)));
+            % f_data = pattern.Pats(:, :, av_frame(frame_changes(fc)));
+
             f_norm = mat2gray(f_data);
             % if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
             %     f_norm = double(~f_norm);
