@@ -20,7 +20,7 @@ colour_reps = false;
 % you just want to visualise them. 
 save_figs = true;
 
-for exp = 29 %1:n_exps
+for exp = 4 %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -150,7 +150,20 @@ for exp = 29 %1:n_exps
     % end 
 
     %% Receptive field estimation
-    reconstruct_rf_8dir(cell_type, date_str)
+
+    f_dt = 0; % frame delta in time.
+
+    % on_off = "sum"; % both dark and light bars = +1
+    on_off = "diff"; % dark bar = -1, light bar = +1 
+    % If cell has depol response to both in same spatial location, will cancel each other out. 
+
+    [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
+
+    on_off = "sum";
+    [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
+
+    % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
+
     % fig_str = strcat('RF_estimate_', date_str, '.fig');
     % if save_figs == true
     %     savefig(gcf, fullfile(fig_save_path, fig_str));

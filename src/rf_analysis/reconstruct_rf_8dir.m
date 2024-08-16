@@ -1,4 +1,4 @@
-function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str)
+function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off)
 % Predict RF from 6 pixel bar stimulus 
 % Jin Yong's recordings - Summer 2024
 
@@ -15,8 +15,9 @@ date_str = strrep(date_str, '_', '-');
 pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Patterns';
 
 rf_data_all = zeros(48, 192);
+rf_data_all1 = zeros(48, 192);
 
-for plot_n = 1:4
+for plot_n = [1,3] % Just use 20 dps conditions %1:4
 
     if plot_n == 1
         % % % OFF 20 dps
@@ -104,7 +105,7 @@ for plot_n = 1:4
         frame_changes = find(abs(diff(av_frame))>0);
         % frame delta t - see what the RF would be like if you used the
         % next frame instead.
-        f_dt = 0;
+        % f_dt = 0;
     
         % Computed per FRAME CHANGE (group all frames with the same image
         % being shown)
@@ -131,8 +132,15 @@ for plot_n = 1:4
             % end 
             f_norm(f_norm==0)=-1;
 
+            f_norm1 = mat2gray(f_data);
+            if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
+                f_norm1 = double(~f_norm1);
+            end 
+            f_norm1(f_norm1==0)=-1;
+
             rf_data = rf_data + flipud(f_norm * v_mean); % image flipped to be from fly's view.
             rf_data_all = rf_data_all  + flipud(f_norm * v_mean); 
+            rf_data_all1 = rf_data_all1  + flipud(f_norm1 * v_mean); 
         end 
 
     end 
@@ -151,7 +159,7 @@ end
 
 % Plot spatial receptive field over all 4 conditions:
 % figure; imagesc(rf_data_all)
-comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, '-dt - ', string(f_dt));
+comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, ' - ', on_off, '-dt: ', string(f_dt));
 % title(comb_title)
 % box off
 % colorbar
@@ -159,14 +167,31 @@ comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, '-dt - ', st
 % ax.TickDir = 'out';
 % colormap(redblue)
 
-% Estimate the centre of the RF. 
-max_value = max(rf_data_all(:));
-[peak_y, peak_x] = find(rf_data_all == max_value);
+if on_off == "sum"
+    % Estimate the centre of the RF using the +1 +1 version. 
+    max_value = max(rf_data_all1(:));
+    [peak_y, peak_x] = find(rf_data_all1 == max_value);
+    val_centre = rf_data_all1(peak_y, peak_x);
+elseif on_off == "diff"
+    % Estimate the centre of the RF using the +1 +1 version. 
+    max_value = max(rf_data_all(:));
+    [peak_y, peak_x] = find(rf_data_all == max_value);
+    % Find out what the value of this pixel is in +1 -1 version
+    val_centre = rf_data_all(peak_y, peak_x);
+end 
+
+% [peak_y, peak_x] = find(rf_data_all1 == max_value);
 
 figure; 
 subplot(1, 4, 1:3)
 % Plot the position of the centre of the RF wrt the whole screen.
-imagesc(rf_data_all); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
+
+if on_off == "sum" % use +1 for both on and off bar
+    imagesc(rf_data_all1); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
+elseif on_off == "diff" % Use +1 for on and -1 for off
+    imagesc(rf_data_all); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
+end 
+
 box off
 set(gca, "TickDir", 'out');
 xlabel('Pixel - azimuth')
@@ -201,8 +226,15 @@ else
     y2 = ycrp2;
 end 
 crop_im = rf_data_all(y1:y2, x1:x2);
-imagesc(crop_im)
-[ymax, xmax] = find(crop_im == max(crop_im(:)));
+crop_im2 = rf_data_all1(y1:y2, x1:x2);
+if on_off == "sum"
+    imagesc(crop_im2)
+    [ymax, xmax] = find(crop_im2 == max(crop_im2(:)));
+elseif on_off == "diff"
+    imagesc(crop_im)
+    [ymax, xmax] = find(crop_im == max(crop_im(:)));
+end 
+
 xlim([xmax-16 xmax+16])
 ylim([ymax-16 ymax+16])
 
@@ -216,8 +248,7 @@ ylabel('Degrees from centre')
 
 yyaxis right 
 yticks([])
-ylabel(strcat('X:', string(peak_x), ', Y:', string(peak_y)))
-
+ylabel(strcat('X:', string(peak_x), ', Y:', string(peak_y), ', C:', string(val_centre)))
 sgtitle(comb_title)
 set(gcf, "Position", [1 837 897 210])
 
