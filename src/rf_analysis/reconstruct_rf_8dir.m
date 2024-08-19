@@ -1,6 +1,7 @@
-function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off)
+function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use)
 % Predict RF from 6 pixel bar stimulus 
 % Jin Yong's recordings - Summer 2024
+addpath '/Users/burnettl/Documents/GitHub/DS_probe_protocol/src/external_functions'
 
 % Load the protocol details:
 load('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Protocol_details.mat', 'block_trials');
@@ -17,24 +18,22 @@ pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Da
 rf_data_all = zeros(48, 192);
 rf_data_all1 = zeros(48, 192);
 
-for plot_n = [1,3] % Just use 20 dps conditions %1:4
+% cond_to_use = [1,3];
+
+for plot_n = cond_to_use
 
     if plot_n == 1
         % % % OFF 20 dps
         values = [13, 21, 6, 17, 14, 22, 5, 18];
-        title_str = strcat('20 dps - OFF - bar6 - ', cell_type, ' - ', date_str);
     elseif plot_n == 2
         % OFF 100 dps
         values = [15, 23, 8, 19, 16, 24, 7, 20];
-        title_str = strcat('100 dps - OFF - bar6 - ', cell_type, ' - ', date_str);
     elseif plot_n == 3
         % % % ON 20 dps
         values = [108, 116, 101, 112, 109, 117, 100, 113];
-        title_str = strcat('20 dps - ON - bar6 - ', cell_type, ' - ', date_str);
     elseif plot_n == 4
         % ON 100 dps
         values = [110, 118,103, 114, 111, 119, 102, 115];
-        title_str = strcat('100 dps - ON - bar6 - ', cell_type, ' - ', date_str);
     end 
     
     % Exp baseline to then
@@ -110,17 +109,11 @@ for plot_n = [1,3] % Just use 20 dps conditions %1:4
         % Computed per FRAME CHANGE (group all frames with the same image
         % being shown)
         for fc = 1:numel(frame_changes)
-
-            % voltage data
-            % if fc < abs(f_dt)+1
-            %     v_data = av_resp(1:frame_changes(1));
-            % elseif fc >= numel(frame_changes)-f_dt
-            %     v_data = av_resp(frame_changes(fc):end);
-            % else
-            %     v_data = av_resp(frame_changes(fc+f_dt):frame_changes(fc+f_dt)+1);
-            % end 
-            v_data = av_resp(frame_changes(fc):frame_changes(fc)+1);
-
+            if fc == 1
+                v_data = av_resp(1:frame_changes(fc));
+            else
+                v_data = av_resp(frame_changes(fc-1)+1:frame_changes(fc));
+            end 
 
             % Find the average voltage over the time this frame was being
             % presented.
@@ -130,74 +123,82 @@ for plot_n = [1,3] % Just use 20 dps conditions %1:4
             f_id = fc+f_dt;
             if f_id<1
                 continue
-                % f_id = 1;
             elseif f_id > numel(frame_changes)
                 continue
-                % f_id = numel(frame_changes);
             end 
+
             % Image that was shown. 
             f_data = pattern.Pats(:, :, av_frame(frame_changes(f_id)));
-            % f_data = pattern.Pats(:, :, av_frame(frame_changes(fc)));
 
-            f_norm = mat2gray(f_data);
-            % if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
-            %     f_norm = double(~f_norm);
-            % end 
-            f_norm(f_norm==0)=-1;
-
-            f_norm1 = mat2gray(f_data);
-            if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
-                f_norm1 = double(~f_norm1);
+            f_norm = mat2gray(f_data); % Normalises image so that peak value = 1 and min value = 0
+            if plot_n <= 2 
+                % when dark bar, flip so that bar = 1 and bkg = 0; 
+                f_norm = double(~f_norm);
+                % also make dark bar = -1 
+                f_norm=f_norm*-1;
             end 
-            f_norm1(f_norm1==0)=-1;
+
+            % f_norm1 = mat2gray(f_data);
+            % if plot_n <= 2 % OFF BAR - flip so that plots are bright for positive responses. 
+            %     f_norm1 = double(~f_norm1);
+            % end 
+            % f_norm1(f_norm1==0)=-1;
 
             rf_data = rf_data + flipud(f_norm * v_mean); % image flipped to be from fly's view.
             rf_data_all = rf_data_all  + flipud(f_norm * v_mean); 
-            rf_data_all1 = rf_data_all1  + flipud(f_norm1 * v_mean); 
+            % rf_data_all1 = rf_data_all1  + flipud(f_norm1 * v_mean); 
         end 
 
     end 
    
-    % % Plot figure for each type of stimulus.
-    % figure; imagesc((rf_data))
-    % title(title_str)
-    % box off
-    % % colormap(redblue)
-    % colorbar
-    % ax = gca;
-    % ax.TickDir = 'out';
-
-
 end 
+
+n_frames = numel(frame_changes)*8*numel(cond_to_use);
+rf_data_all = rf_data_all/n_frames;
+% rf_data_all1 = rf_data_all1/numel(frame_changes)*8*numel(cond_to_use);
 
 % Plot spatial receptive field over all 4 conditions:
-% figure; imagesc(rf_data_all)
 comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, ' - ', on_off, '-dt: ', string(f_dt));
-% title(comb_title)
-% box off
-% colorbar
-% ax = gca;
-% ax.TickDir = 'out';
-% colormap(redblue)
+% % comb_title = strcat('RF est - bar6 - ', cell_type, ' - ', date_str, ' - ', on_off, '- ', string(cond_to_use));
 
-if on_off == "sum"
-    % Estimate the centre of the RF using the +1 +1 version. 
-    max_value = max(rf_data_all1(:));
-    [peak_y, peak_x] = find(rf_data_all1 == max_value);
-    val_centre = rf_data_all1(peak_y, peak_x);
-elseif on_off == "diff"
-    % Estimate the centre of the RF using the +1 +1 version. 
-    max_value = max(rf_data_all(:));
+% if on_off == "sum"
+%     % Estimate the centre of the RF using the +1 +1 version. 
+%     max_value = max(rf_data_all1(:));
+%     [peak_y, peak_x] = find(rf_data_all1 == max_value);
+%     val_centre = rf_data_all1(peak_y, peak_x);
+% elseif on_off == "diff"
+%     % Estimate the centre of the RF using the +1 +1 version.
+%     if plot_n<3
+%         min_value = min(rf_data_all(:));
+%         [peak_y, peak_x] = find(rf_data_all == min_value);
+%     else
+%         max_value = max(rf_data_all(:));
+%         [peak_y, peak_x] = find(rf_data_all == max_value);
+%     end 
+%     % Find out what the value of this pixel is in +1 -1 version
+%     val_centre = rf_data_all(peak_y, peak_x);
+% end 
+
+min_value = min(rf_data_all(:));
+max_value = max(rf_data_all(:));
+if abs(min_value)>max_value
+    [peak_y, peak_x] = find(rf_data_all == min_value);
+    mm='min';
+    min_val = min_value;
+    max_val = min_value*-1;
+else
     [peak_y, peak_x] = find(rf_data_all == max_value);
-    % Find out what the value of this pixel is in +1 -1 version
-    val_centre = rf_data_all(peak_y, peak_x);
+    mm='max';
+    min_val = max_value*-1;
+    max_val = max_value;
 end 
+val_centre = rf_data_all(peak_y, peak_x);
 
-% [peak_y, peak_x] = find(rf_data_all1 == max_value);
-
+% Generate figure:
 figure; 
-subplot(1, 4, 1:3)
+
 % Plot the position of the centre of the RF wrt the whole screen.
+subplot(1, 4, 1:3)
 
 if on_off == "sum" % use +1 for both on and off bar
     imagesc(rf_data_all1); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
@@ -205,6 +206,14 @@ elseif on_off == "diff" % Use +1 for on and -1 for off
     imagesc(rf_data_all); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
 end 
 
+inferno = inferno();
+colormap(inferno)
+% colormap(redblue)
+% min_val = min(min(rf_data_all));
+% max_val = max(max(rf_data_all));
+clim([min_val max_val])
+
+colorbar
 box off
 set(gca, "TickDir", 'out');
 xlabel('Pixel - azimuth')
@@ -238,15 +247,20 @@ if ycrp2 > 48
 else
     y2 = ycrp2;
 end 
+
 crop_im = rf_data_all(y1:y2, x1:x2);
-crop_im2 = rf_data_all1(y1:y2, x1:x2);
-if on_off == "sum"
-    imagesc(crop_im2)
-    [ymax, xmax] = find(crop_im2 == max(crop_im2(:)));
-elseif on_off == "diff"
-    imagesc(crop_im)
+% % crop_im2 = rf_data_all1(y1:y2, x1:x2);
+% if on_off == "sum"
+%     imagesc(crop_im2)
+%     [ymax, xmax] = find(crop_im2 == max(crop_im2(:)));
+% elseif on_off == "diff"
+imagesc(crop_im)
+if mm == "min"
+    [ymax, xmax] = find(crop_im == min(crop_im(:)));
+elseif mm == "max" 
     [ymax, xmax] = find(crop_im == max(crop_im(:)));
 end 
+% end 
 
 xlim([xmax-16 xmax+16])
 ylim([ymax-16 ymax+16])
@@ -258,6 +272,7 @@ xticklabels({'-16', '0', '16'})
 yticklabels({'-16', '0', '16'})
 xlabel('Degrees from centre')
 ylabel('Degrees from centre')
+clim([min_val max_val])
 
 yyaxis right 
 yticks([])
