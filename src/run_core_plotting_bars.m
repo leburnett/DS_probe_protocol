@@ -22,7 +22,7 @@ save_figs = true;
 
 sample_cells = [1,3,4,12,13,15,25,27,29];
 
-for exp = 1 %sample_cells %1:n_exps
+for exp = [19] %sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -123,37 +123,57 @@ for exp = 1 %sample_cells %1:n_exps
     %% ON - OFF combined
     
     % % SLOW 
-    % n_reps = 5;
-    slow_or_fast = "slow";
-    speed_str = '20dps'; 
-    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-
-    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+    % % n_reps = 5;
+    % slow_or_fast = "slow";
+    % speed_str = '20dps'; 
+    % fig_str = strcat('Bar6_ON-OFF_line_', date_str,'_', speed_str, '.fig');
+    % 
+    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+    % % 
+    % if save_figs == true
+    %     savefig(gcf, fullfile(fig_save_path, fig_str));
+    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
+    %     close 
+    % end 
+    % 
+    % fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
+    % % Plot just the polar plot.
+    % plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
+    % 
+    % if save_figs == true
+    %     savefig(gcf, fullfile(fig_save_path, fig_str2));
+    %     saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
+    %     close 
+    % end 
+    % 
+    % %% FAST 
+    % 
+    % % n_reps = 5;
+    % slow_or_fast = "fast";
+    % speed_str = '100dps';
+    % fig_str = strcat('Bar6_ON-OFF_line_', date_str,'_', speed_str, '.fig');
+    % 
+    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
     % 
     % if save_figs == true
     %     savefig(gcf, fullfile(fig_save_path, fig_str));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-    %     close 
-    % end 
-
-    %% FAST 
-
-    % n_reps = 5;
-    slow_or_fast = "fast";
-    speed_str = '100dps';
-    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-
-    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
+    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
     %     close
+    % end 
+    % 
+    % fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
+    % % Plot just the polar plot.
+    % plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
+    % 
+    % if save_figs == true
+    %     savefig(gcf, fullfile(fig_save_path, fig_str2));
+    %     saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
+    %     close 
     % end 
 
     %% Receptive field estimation
 
-    % f_dt = -2; % frame delta in time.
+    % f_dt = 0; % frame delta in time.
     % 
     % % on_off = "sum"; % both dark and light bars = +1
     % % on_off = "diff"; % dark bar = -1, light bar = +1 
