@@ -1,7 +1,6 @@
 function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use)
 % Predict RF from 6 pixel bar stimulus 
 % Jin Yong's recordings - Summer 2024
-addpath '/Users/burnettl/Documents/GitHub/DS_probe_protocol/src/external_functions'
 
 % Load the protocol details:
 load('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Protocol_details.mat', 'block_trials');
@@ -206,8 +205,9 @@ elseif on_off == "diff" % Use +1 for on and -1 for off
     imagesc(rf_data_all); hold on; plot(peak_x, peak_y, 'k.', 'MarkerSize', 15)
 end 
 
-inferno = inferno();
-colormap(inferno)
+magma = cmap_magma();
+colormap(magma)
+set(gca, "TickDir", 'out', "TickLength", [0.01 0.01], "FontSize", 12, "LineWidth", 1.2);
 % colormap(redblue)
 % min_val = min(min(rf_data_all));
 % max_val = max(max(rf_data_all));
@@ -265,7 +265,7 @@ end
 xlim([xmax-16 xmax+16])
 ylim([ymax-16 ymax+16])
 
-set(gca, "TickDir", 'out');
+set(gca, "TickDir", 'out', "TickLength", [0.03 0.03], "FontSize", 12, "LineWidth", 1.2);
 xticks([xmax-16, xmax, xmax+16])
 yticks([ymax-16, ymax, ymax+16])
 xticklabels({'-16', '0', '16'})

@@ -1,4 +1,4 @@
-function cm_data=plasma(m)
+function cm_data=cmap_plasma(m)
 
 cm = [[  5.03832136e-02,   2.98028976e-02,   5.27974883e-01],
        [  6.35363639e-02,   2.84259729e-02,   5.33123681e-01],

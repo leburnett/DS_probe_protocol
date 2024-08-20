@@ -79,24 +79,29 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
                 end 
             end 
 
+            start_from = 500; % remove 25ms at the beginning.Show 250ms static
+            remove_end = 2500; % remove 125ms at end.
+            min_len2 = min_len - (start_from+remove_end)+1; 
+
             % Collect voltage data from across the repetitions. 
-            data_comb = zeros(n_reps, min_len);
-            frame_comb = zeros(n_reps, min_len);
-            time_comb = zeros(n_reps, min_len);
+            data_comb = zeros(n_reps, min_len2);
+            frame_comb = zeros(n_reps, min_len2);
+            time_comb = zeros(n_reps, min_len2);
 
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
                 da = voltage_data{k};
                 fa = frame_data{k};
-                ta = (time_data{k});
+                ta = time_data{k};
                 ta = ta-ta(1); % start time from zero for each rep. 
 
-                data_comb(k, :) = da(1:min_len);
-                frame_comb(k, :) = fa(1:min_len);
-                time_comb(k, :) = ta(1:min_len);
+                data_comb(k, :) = da(start_from:min_len-remove_end);
+                frame_comb(k, :) = fa(start_from:min_len-remove_end);
+                time_comb(k, :) = ta(start_from:min_len-remove_end);
 
-                % Find the maximum voltage value during the direction
-                max_val_rep = max(da(1:min_len));
+                % Find the maximum voltage value during the direction. Do
+                % not include the 250ms static at the beginning.
+                max_val_rep = max(da(start_from+4500:min_len-remove_end));
                 rad_vals_reps(k, j) = max_val_rep;
 
             end
@@ -105,12 +110,17 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
             av_frame = mean(frame_comb);
             time_comb = time_comb./1000000; % convert to seconds
             av_time = mean(time_comb);
+            av_time = av_time-av_time(1);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
             % when plotting. 
             rad_vals_reps2(:, 9) = rad_vals_reps2(:, 1);
-        
+
+            % [x y w h]
+            % rectangle('Position', [0, ylim_vals(1), av_time(4500), diff(ylim_vals)], 'FaceColor', [0 0 0 0.2])
+            % hold on 
+
             % PLOT REPS
             for ii = 1:n_reps
 
@@ -142,6 +152,9 @@ function plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_str
 
             % PLOT AVERAGE 
             plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2)
+            % hold on 
+            % plot([av_time(start_from+4500), av_time(start_from+4500)], [-80 0], 'r')
+            % plot([av_time(min_len-(remove_end+2250)), av_time(min_len-(remove_end+2250))], [-80 0], 'r')
             % xlim([0 xlim_val])
             xticks(xticks_vals)
             xticklabels(xticklabel_vals)

@@ -64,11 +64,15 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
                     min_len = len_dd;
                 end 
             end 
+
+            start_from = 500; % remove 25ms at the beginning.Show 250ms static
+            remove_end = 2750; % remove 125ms at end.
+            min_len2 = min_len - (start_from+remove_end)+1; 
     
             % Collect voltage data from across the repetitions. 
-            data_comb = zeros(n_reps, min_len);
-            frame_comb = zeros(n_reps, min_len);
-            time_comb = zeros(n_reps, min_len);
+            data_comb = zeros(n_reps, min_len2);
+            frame_comb = zeros(n_reps, min_len2);
+            time_comb = zeros(n_reps, min_len2);
 
             % For each rep, extract the relevant voltage data.
             for k = 1:n_reps
@@ -77,40 +81,35 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
                 ta = (time_data{k});
                 ta = ta-ta(1); % start time from zero for each rep. 
 
-                data_comb(k, :) = da(1:min_len);
-                frame_comb(k, :) = fa(1:min_len);
-                time_comb(k, :) = ta(1:min_len);
+                data_comb(k, :) = da(start_from:min_len-remove_end);
+                frame_comb(k, :) = fa(start_from:min_len-remove_end);
+                time_comb(k, :) = ta(start_from:min_len-remove_end);
 
-                % Find the maximum voltage value during the direction
-                max_val_rep = max(da(1:min_len));
+                % Find the maximum voltage value during the direction. Do
+                % not include the 250ms static at the beginning.
+                max_val_rep = max(da(start_from+4500:min_len-remove_end));
                 rad_vals_reps(k, j) = max_val_rep;
             end 
 
             av_resp = mean(data_comb);
             av_frame = mean(frame_comb);
-            time_comb = time_comb./1000000; % convert to seconds
+            % time_comb = time_comb./1000000; % convert to seconds
             av_time = mean(time_comb);
+            av_time = av_time-av_time(1);
 
             rad_vals_reps2 = abs(exp_baseline - rad_vals_reps);
             % repeat the first value as the 9th value to form a complete circle
             % when plotting. 
             rad_vals_reps2(:, 9) = rad_vals_reps2(:, 1);
+
+            rectangle('Position', [0, ylim_vals(1), av_time(4500), diff(ylim_vals)], 'FaceColor', [0 0 0 0.1], 'EdgeColor', 'none')
+            hold on 
         
             % PLOT REPS
             for ii = 1:n_reps
-                % col = [0.8, 0.8, 0.8];
-                % plot(data_comb(ii, :), 'Color', col, 'LineWidth', 0.6); hold on
-                if slow_or_fast == "slow"
-                    % xlim([0 114000])
-                    % xticks(0:20000:114000);
-                    xticks(0:1:5)
-                    xticklabels({'0', '1', '2', '3', '4', '5'})
-                elseif slow_or_fast == "fast"
-                    % xlim([0 30000])
-                    % xticks(0:10000:30000);
-                    xticks(0:0.5:1.5)
-                    xticklabels({'0', '0.5', '1', '1.5'})
-                end 
+                plot(time_comb(ii, :), data_comb(ii, :), 'Color', [0.85 0.85 0.85], 'LineWidth', 0.65);
+                hold on
+                ylim(ylim_vals)
                 box off 
                 ax = gca;
                 ax.TickDir = 'out';  
@@ -118,28 +117,37 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
                 ax.LineWidth = 1;
                 ax.FontSize = 8;
             end 
+
+            if slow_or_fast == "slow"
+                % xlim([0 114000])
+                % xticks(0:20000:114000);
+                xticks(0:1:5)
+                xticklabels({'0', '1', '2', '3', '4', '5'})
+                xlim([0 av_time(end)])
+            elseif slow_or_fast == "fast"
+                % xlim([0 30000])
+                % xticks(0:10000:30000);
+                xticks(0:0.5:1.5)
+                xticklabels({'0', '0.5', '1', '1.5'})
+                xlim([0 (av_time(end)/4)])
+            end 
     
             % PLOT AVERAGE 
-            % if plot_n == 1 || plot_n == 2
-            %     av_col = 'b';
-            % elseif plot_n == 3 || plot_n == 4
-            %     av_col = 'r';
-            % end 
-            yyaxis left
+            % yyaxis left
             plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2,  'LineStyle', '-', 'Marker', 'none'); 
             hold on
             yticks([-60, -50, -40, -30])
             ax.YAxis(1).Color = 'k';
             ylim(ylim_vals)
 
-            yyaxis right
-            plot(av_time, av_frame, 'k', 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none')
-            ax = gca;
-            ax.YAxis(2).Color = 'k';
-            ylabel('Frame position')
-            ylim([0 max(av_frame)+1])
+            % yyaxis right
+            % plot(av_time, av_frame, 'k', 'LineWidth', 0.75, 'LineStyle', '-', 'Marker', 'none')
+            % ax = gca;
+            % ax.YAxis(2).Color = 'k';
+            % ylabel('Frame position')
+            % ylim([0 max(av_frame)+1])
 
-            title(angls(j))
+            % title(angls(j))
         end
 
         % Add polar plot in the middle: 
@@ -147,19 +155,22 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
         subplot(5, 5, 13)
         % subplot(7,7,[17, 18, 19, 24, 25, 26, 31, 32, 33])
         % plot polar plot in the centre of the subplot: 
-        % for ii = 1:n_reps
-            % col = [0.8 0.8 0.8];
-            % polarplot(angls_rad, rad_vals_reps2(ii, :), 'Color', col, 'LineWidth', 0.65); hold on
-        % end 
+        for jj = 1:n_reps
+            col = [0.85 0.85 0.85];
+            polarplot(angls_rad, rad_vals_reps2(jj, :), 'Color', col, 'LineWidth', 0.6);
+            hold on
+        end 
 
         % PLOT AVERAGE 
         mean_rad_values = mean(rad_vals_reps2);
         polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2, 'LineStyle', '-', 'Marker', 'none'); hold on
         rlim(rlim_vals)
-        rticks([0 10, 20, 30])
-        rticklabels({'', '', '', '30'})
-        thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
-        % thetaticks([])
+        % rticks([0 10, 20, 30])
+        % rticklabels({'', '', '', '30'})
+        rticks([0, rlim_vals(2)])
+        rticklabels({'', string(rlim_vals(2))})
+        % thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
+        thetaticks([])
 
         if slow_or_fast == "slow"
             speed_str = '20dps-bar6';
@@ -173,7 +184,8 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
     
         f = gcf;
         % f.Position = [236 74 1124 973];
-        f.Position = [236   548   577   499]; %[236   477   694   570]; %small for PDFs
+        f.Position = [10 141 1255 906];
+        % f.Position = [236   548   577   499]; %[236   477   694   570]; %small for PDFs
     end 
 
 end

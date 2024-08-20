@@ -22,7 +22,7 @@ save_figs = true;
 
 sample_cells = [1,3,4,12,13,15,25,27,29];
 
-for exp = 12 %sample_cells %1:n_exps
+for exp = 1 %sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -38,7 +38,7 @@ for exp = 12 %sample_cells %1:n_exps
     %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     
     if save_figs == true
-        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/bar6';
+        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/rf_estimate';
     
         % Initialise path to save figures 
         cell_type_fig_save_path = strcat(save_path, '/', cell_type);
@@ -88,8 +88,8 @@ for exp = 12 %sample_cells %1:n_exps
     n_reps = length(exp_folders);
     
     %% 
-    ylim_vals = [-65 -30]; %[-65 -27];
-    rlim_vals = [0 30]; %[0 35];
+    ylim_vals = [-65 -25]; %[-65 -27];
+    rlim_vals = [0 35]; %[0 35];
     
     %% Line plot + polar plot in the middle
     % plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
@@ -123,28 +123,28 @@ for exp = 12 %sample_cells %1:n_exps
     %% ON - OFF combined
     
     % % SLOW 
-    % % n_reps = 5;
-    % slow_or_fast = "slow";
-    % speed_str = '20dps'; 
-    % fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-    % 
-    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+    % n_reps = 5;
+    slow_or_fast = "slow";
+    speed_str = '20dps'; 
+    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
+
+    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
     % 
     % if save_figs == true
     %     savefig(gcf, fullfile(fig_save_path, fig_str));
     %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
     %     close 
     % end 
-    % 
-    % %% FAST 
-    % 
-    % % n_reps = 5;
-    % slow_or_fast = "fast";
-    % speed_str = '100dps';
-    % fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-    % 
-    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    % 
+
+    %% FAST 
+
+    % n_reps = 5;
+    slow_or_fast = "fast";
+    speed_str = '100dps';
+    fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
+
+    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+
     % if save_figs == true
     %     savefig(gcf, fullfile(fig_save_path, fig_str));
     %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
@@ -153,24 +153,26 @@ for exp = 12 %sample_cells %1:n_exps
 
     %% Receptive field estimation
 
-    f_dt = 0; % frame delta in time.
-
-    % on_off = "sum"; % both dark and light bars = +1
-    % on_off = "diff"; % dark bar = -1, light bar = +1 
-    % % If cell has depol response to both in same spatial location, will cancel each other out. 
+    % f_dt = -2; % frame delta in time.
     % 
-    % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
-
-    on_off = "diff";
-    for cond_to_use = [1,3]
-        reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use);
-    end 
-    [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
-    % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
-
-    % fig_str = strcat('RF_estimate_', date_str, '.fig');
+    % % on_off = "sum"; % both dark and light bars = +1
+    % % on_off = "diff"; % dark bar = -1, light bar = +1 
+    % % % If cell has depol response to both in same spatial location, will cancel each other out. 
+    % % 
+    % % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
+    % 
+    % on_off = "diff";
+    % % for cond_to_use = [1,3]
+    % %     reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use);
+    % % end 
+    % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
+    % % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
+    % 
+    % fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_magma.fig');
+    % % fig_str2 = strcat('RF_estimate_', date_str, '_redblue.pdf');
     % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str));
+    %     savefig(gcf, fullfile(fig_save_path, fig_str1));
+    %     % saveas(gcf, fullfile(fig_save_path, fig_str2), 'pdf')
     %     close
     % end 
 
