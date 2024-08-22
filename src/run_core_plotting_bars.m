@@ -20,9 +20,9 @@ colour_reps = false;
 % you just want to visualise them. 
 save_figs = true;
 
-sample_cells = [1,3,4,12,13,15,25,27,29];
+sample_cells = [3,4,13,15,19,21,25,29];
 
-for exp = [19] %sample_cells %1:n_exps
+for exp = sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -173,28 +173,28 @@ for exp = [19] %sample_cells %1:n_exps
 
     %% Receptive field estimation
 
-    % f_dt = 0; % frame delta in time.
+    f_dt = 0; % frame delta in time.
+
+    % on_off = "sum"; % both dark and light bars = +1
+    % on_off = "diff"; % dark bar = -1, light bar = +1 
+    % % If cell has depol response to both in same spatial location, will cancel each other out. 
     % 
-    % % on_off = "sum"; % both dark and light bars = +1
-    % % on_off = "diff"; % dark bar = -1, light bar = +1 
-    % % % If cell has depol response to both in same spatial location, will cancel each other out. 
-    % % 
-    % % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
-    % 
-    % on_off = "diff";
-    % % for cond_to_use = [1,3]
-    % %     reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use);
-    % % end 
-    % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
-    % % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
-    % 
-    % fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_magma.fig');
-    % % fig_str2 = strcat('RF_estimate_', date_str, '_redblue.pdf');
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str1));
-    %     % saveas(gcf, fullfile(fig_save_path, fig_str2), 'pdf')
-    %     close
+    % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
+
+    on_off = "diff";
+    % for cond_to_use = [1,3]
+    %     reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use);
     % end 
+    [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
+    % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
+
+    fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_redblue');
+    % fig_str2 = strcat('RF_estimate_', date_str, '_redblue.pdf');
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str1));
+        saveas(gcf, fullfile(fig_save_path, fig_str1), 'svg')
+        close
+    end 
 
 end 
 
