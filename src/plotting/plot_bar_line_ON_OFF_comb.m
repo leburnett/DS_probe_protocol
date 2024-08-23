@@ -137,31 +137,31 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
         end
 
         % Add polar plot in the middle: 
-        % subplot(5, 5, 13)
-        % % plot polar plot in the centre of the subplot: 
-        % for jj = 1:n_reps
-        %     col = [0.85 0.85 0.85];
-        %     polarplot(angls_rad, rad_vals_reps2(jj, :), 'Color', col, 'LineWidth', 0.6);
-        %     hold on
-        % end 
-        % 
-        % % PLOT AVERAGE 
-        % mean_rad_values = mean(rad_vals_reps2);
-        % polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2.5, 'LineStyle', '-', 'Marker', 'none'); hold on
-        % rlim(rlim_vals)
-        % rticks([0, rlim_vals(2)])
-        % rticklabels({'', string(rlim_vals(2))})
-        % thetaticks([])
-        % set(gca, "FontSize", 15)
+        subplot(5, 5, 13)
+        % plot polar plot in the centre of the subplot: 
+        for jj = 1:n_reps
+            col = [0.85 0.85 0.85];
+            polarplot(angls_rad, rad_vals_reps2(jj, :), 'Color', col, 'LineWidth', 0.6);
+            hold on
+        end 
 
-        % if slow_or_fast == "slow"
-        %     speed_str = '20dps-bar6';
-        % elseif slow_or_fast == "fast"
-        %     speed_str = '100dps-bar6';
-        % end 
+        % PLOT AVERAGE 
+        mean_rad_values = mean(rad_vals_reps2);
+        polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2.5, 'LineStyle', '-', 'Marker', 'none'); hold on
+        rlim(rlim_vals)
+        rticks([0, rlim_vals(2)])
+        rticklabels({'', string(rlim_vals(2))})
+        thetaticks([])
+        set(gca, "FontSize", 15)
 
-        % annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 25);
-        % annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 20);
+        if slow_or_fast == "slow"
+            speed_str = '20dps-bar6';
+        elseif slow_or_fast == "fast"
+            speed_str = '100dps-bar6';
+        end 
+
+        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 25);
+        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 20);
 
         f = gcf;
         f.Position = [10 296 1062 751];
