@@ -1,4 +1,4 @@
-function calc_directional_tuning(n_reps)
+function calc_directional_tuning(n_reps, cell_type, date_str)
     
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
@@ -119,10 +119,52 @@ function calc_directional_tuning(n_reps)
         disp(date_str)
         disp(['Plot_n = ', num2str(plot_n)])
         disp(['Directional Tuning: ', num2str(directional_tuning)]);
+
+
+        %% DS by Seelig and Gruntman method (diff / sum) 
+
+        pd_idx = find(mean_rad_values == max(mean_rad_values));
+        
+        if numel(pd_idx)>1
+            pd_idx = pd_idx(1);
+        end 
+
+        % for DS - null direction = 180 deg from PD
+        if pd_idx <= 4
+            nd_idx = pd_idx +4 ;
+        elseif pd_idx > 4 
+            nd_idx = pd_idx - 4;
+        end 
+
+        pd = mean_rad_values(pd_idx);
+        nd = mean_rad_values(nd_idx);
+
+        dsi = (pd - nd)/(pd +nd);
+        disp(['DSI: ', num2str(dsi)]);
+
+        % for OS 
+        if pd_idx <= 6 
+            ortho_idx = pd_idx + 2;
+        else 
+            ortho_idx = pd_idx - 2;
+        end 
+
+        if ortho_idx <= 4 
+            o2_idx = ortho_idx + 4;
+        else
+            o2_idx = ortho_idx - 4;
+        end 
+
+        pd_orient = mean(mean_rad_values(pd_idx)+mean_rad_values(nd_idx));
+        ortho_orient = mean(mean_rad_values(ortho_idx)+mean_rad_values(o2_idx));
+
+        osi = (pd_orient - ortho_orient)/(pd_orient + ortho_orient);
+        disp(['OSI: ', num2str(osi)]);
+        
     
     end 
 
-    
+
 end 
 
 
