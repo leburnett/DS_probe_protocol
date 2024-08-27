@@ -206,7 +206,7 @@ elseif on_off == "diff" % Use +1 for on and -1 for off
 end 
 
 magma = cmap_magma();
-colormap(redblue)
+colormap(magma)
 set(gca, "TickDir", 'out', "TickLength", [0.01 0.01], "FontSize", 12, "LineWidth", 1.2);
 % colormap(redblue)
 % min_val = min(min(rf_data_all));

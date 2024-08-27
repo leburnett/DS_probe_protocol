@@ -18,11 +18,11 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = true;
+save_figs = false;
 
 sample_cells = [3,4,13,15,19,21,25,29];
 
-for exp = sample_cells %1:n_exps
+for exp = 32 %sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -88,11 +88,11 @@ for exp = sample_cells %1:n_exps
     n_reps = length(exp_folders);
     
     %% 
-    ylim_vals = [-65 -25]; %[-65 -27];
-    rlim_vals = [0 35]; %[0 35];
+    ylim_vals = [-65 -35]; %[-65 -27];
+    rlim_vals = [0 25]; %[0 35];
     
     %% Line plot + polar plot in the middle
-    % plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
+    plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
     % % 
     % 
     % if save_figs == true
@@ -123,82 +123,82 @@ for exp = sample_cells %1:n_exps
     %% ON - OFF combined
     
     % % SLOW 
-    % % n_reps = 5;
-    % slow_or_fast = "slow";
-    % speed_str = '20dps'; 
-    % fig_str = strcat('Bar6_ON-OFF_line_', date_str,'_', speed_str, '.fig');
+    % n_reps = 5;
+    slow_or_fast = "slow";
+    speed_str = '20dps'; 
+    fig_str = strcat('Bar6_ON-OFF_line_', date_str,'_', speed_str, '.fig');
+
+    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
     % 
-    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    % % 
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
-    %     close 
-    % end 
-    % 
-    % fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
-    % % Plot just the polar plot.
-    % plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
-    % 
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str2));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
-    %     close 
-    % end 
-    % 
-    % %% FAST 
-    % 
-    % % n_reps = 5;
-    % slow_or_fast = "fast";
-    % speed_str = '100dps';
-    % fig_str = strcat('Bar6_ON-OFF_line_', date_str,'_', speed_str, '.fig');
-    % 
-    % plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
-    % 
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
-    %     close
-    % end 
-    % 
-    % fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
-    % % Plot just the polar plot.
-    % plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
-    % 
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str2));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
-    %     close 
-    % end 
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
+        close 
+    end 
+
+    fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
+    % Plot just the polar plot.
+    plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
+
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str2));
+        saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
+        close 
+    end 
+
+    %% FAST 
+
+    % n_reps = 5;
+    slow_or_fast = "fast";
+    speed_str = '100dps';
+    fig_str = strcat('Bar6_ON-OFF_line_', date_str,'_', speed_str, '.fig');
+
+    plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process)
+
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str));
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
+        close
+    end 
+
+    fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
+    % Plot just the polar plot.
+    plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
+
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str2));
+        saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
+        close 
+    end 
 
     %% Receptive field estimation
 
-    % f_dt = 0; % frame delta in time.
+    f_dt = 0; % frame delta in time.
+
+    % on_off = "sum"; % both dark and light bars = +1
+    % on_off = "diff"; % dark bar = -1, light bar = +1 
+    % % If cell has depol response to both in same spatial location, will cancel each other out. 
     % 
-    % % on_off = "sum"; % both dark and light bars = +1
-    % % on_off = "diff"; % dark bar = -1, light bar = +1 
-    % % % If cell has depol response to both in same spatial location, will cancel each other out. 
-    % % 
-    % % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
-    % 
-    % on_off = "diff";
-    % % for cond_to_use = [1,3]
-    % %     reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use);
-    % % end 
-    % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
-    % % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
-    % 
-    % fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_redblue');
-    % % fig_str2 = strcat('RF_estimate_', date_str, '_redblue.pdf');
-    % if save_figs == true
-    %     savefig(gcf, fullfile(fig_save_path, fig_str1));
-    %     saveas(gcf, fullfile(fig_save_path, fig_str1), 'svg')
-    %     close
+    % [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off);
+
+    on_off = "diff";
+    % for cond_to_use = [1,3]
+    %     reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, cond_to_use);
     % end 
-    % 
+    [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
+    % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
+
+    fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_redblue');
+    % fig_str2 = strcat('RF_estimate_', date_str, '_redblue.pdf');
+    if save_figs == true
+        savefig(gcf, fullfile(fig_save_path, fig_str1));
+        saveas(gcf, fullfile(fig_save_path, fig_str1), 'svg')
+        close
+    end 
+
 
     %% Calculate directional tuning:
-    calc_directional_tuning(n_reps, cell_type, date_str)
+    % calc_directional_tuning(n_reps, cell_type, date_str)
 
 end 
 
