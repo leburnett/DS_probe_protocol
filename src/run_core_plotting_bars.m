@@ -18,11 +18,11 @@ colour_reps = false;
 
 % set save_figs to true if you would like to save the figures, or true if
 % you just want to visualise them. 
-save_figs = false;
+save_figs = true;
 
 sample_cells = [3,4,13,15,19,21,25,29];
 
-for exp = 32 %sample_cells %1:n_exps
+for exp = 32:39 %sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -38,7 +38,7 @@ for exp = 32 %sample_cells %1:n_exps
     %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     
     if save_figs == true
-        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/rf_estimate';
+        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/bar6';
     
         % Initialise path to save figures 
         cell_type_fig_save_path = strcat(save_path, '/', cell_type);
@@ -88,36 +88,36 @@ for exp = 32 %sample_cells %1:n_exps
     n_reps = length(exp_folders);
     
     %% 
-    ylim_vals = [-65 -35]; %[-65 -27];
-    rlim_vals = [0 25]; %[0 35];
+    ylim_vals = [-65 -50]; %[-65 -27];
+    rlim_vals = [0 12]; %[0 35];
     
     %% Line plot + polar plot in the middle
     plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
     % % 
     % 
-    % if save_figs == true
-    % 
-    %     for ii = 1:4
-    % 
-    %         if ii == 1
-    %             bar_cond = 'ON_100dps';
-    %         elseif ii == 2
-    %             bar_cond = 'ON_20dps';
-    %         elseif ii == 3
-    %             bar_cond = 'OFF_100dps';
-    %         elseif ii == 4
-    %             bar_cond = 'OFF_20dps';
-    %         end 
-    % 
-    %     f = gcf;
-    %     % save as MATLAB fig
-    %     savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-    %     % save as PNG
-    %     saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-    %     close
-    %     end 
-    % 
-    % end 
+    if save_figs == true
+
+        for ii = 1:4
+
+            if ii == 1
+                bar_cond = 'ON_100dps';
+            elseif ii == 2
+                bar_cond = 'ON_20dps';
+            elseif ii == 3
+                bar_cond = 'OFF_100dps';
+            elseif ii == 4
+                bar_cond = 'OFF_20dps';
+            end 
+
+        f = gcf;
+        % save as MATLAB fig
+        savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
+        % save as PNG
+        saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
+        close
+        end 
+
+    end 
     
     
     %% ON - OFF combined
@@ -132,7 +132,7 @@ for exp = 32 %sample_cells %1:n_exps
     % 
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
         close 
     end 
 
@@ -142,7 +142,7 @@ for exp = 32 %sample_cells %1:n_exps
 
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str2));
-        saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
+        saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'png')
         close 
     end 
 
@@ -157,7 +157,7 @@ for exp = 32 %sample_cells %1:n_exps
 
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str));
-        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'svg')
+        saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
         close
     end 
 
@@ -167,12 +167,12 @@ for exp = 32 %sample_cells %1:n_exps
 
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str2));
-        saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'svg')
+        saveas(gcf, fullfile(fig_save_path, fig_str2(1:end-4)), 'png')
         close 
     end 
-
-    %% Receptive field estimation
-
+    % 
+    % %% Receptive field estimation
+    % 
     f_dt = 0; % frame delta in time.
 
     % on_off = "sum"; % both dark and light bars = +1
@@ -188,11 +188,11 @@ for exp = 32 %sample_cells %1:n_exps
     [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_off, [3,1]);
     % est_tempRF_8dir(cell_type, date_str, peak_x, peak_y)
 
-    fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_redblue');
+    fig_str1 = strcat('RF_estimate_', date_str,'_f_dt_', string(f_dt), '_magma');
     % fig_str2 = strcat('RF_estimate_', date_str, '_redblue.pdf');
     if save_figs == true
         savefig(gcf, fullfile(fig_save_path, fig_str1));
-        saveas(gcf, fullfile(fig_save_path, fig_str1), 'svg')
+        saveas(gcf, fullfile(fig_save_path, fig_str1), 'png')
         close
     end 
 

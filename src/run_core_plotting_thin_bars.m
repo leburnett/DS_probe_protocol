@@ -21,7 +21,7 @@ save_figs = true;
 log_table = readtable('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/exp_recording_log.xlsx');
 n_exps = height(log_table);
 
-for exp = 1:n_exps
+for exp = 32:39 %1:n_exps
     
     stim = ["edge", "bar"];
 
@@ -100,70 +100,69 @@ for exp = 1:n_exps
         n_reps = length(exp_folders);
         
         %% 
-        ylim_vals = [-65 -30]; %[-65 -27];
-        rlim_vals = [0 30]; %[0 35];
+        ylim_vals = [-65 -50]; %[-65 -27];
+        rlim_vals = [0 12]; %[0 35];
         
         %% Generate the plots
         
-        % % Line plot + polar plot in the middle
-        % plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
-        % 
-        % if save_figs == true
-        % 
-        %     for ii = 1:4
-        % 
-        %         if ii == 1
-        %             bar_cond = 'ON_100dps';
-        %         elseif ii == 2
-        %             bar_cond = 'ON_20dps';
-        %         elseif ii == 3
-        %             bar_cond = 'OFF_100dps';
-        %         elseif ii == 4
-        %             bar_cond = 'OFF_20dps';
-        %         end 
-        % 
-        %     f = gcf;
-        %     % save as MATLAB fig
-        %     savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
-        %     % save as PNG
-        %     saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
-        %     close
-        %     end 
-        % 
-        % end 
+        % Line plot + polar plot in the middle
+        plot_line_plot_4dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
+
+        if save_figs == true
+
+            for ii = 1:4
+
+                if ii == 1
+                    bar_cond = 'ON_100dps';
+                elseif ii == 2
+                    bar_cond = 'ON_20dps';
+                elseif ii == 3
+                    bar_cond = 'OFF_100dps';
+                elseif ii == 4
+                    bar_cond = 'OFF_20dps';
+                end 
+
+            f = gcf;
+            % save as MATLAB fig
+            savefig(fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.fig')))
+            % save as PNG
+            saveas(f, fullfile(fig_save_path, strcat('Line_plot_', bar_cond,'_', cell_type, '_', date_str, '.png')), 'png')
+            close
+            end 
+
+        end 
         
         
         %% ON - OFF combined
         
-        % % SLOW 
-        % % n_reps = 5;
-        % slow_or_fast = "slow";
-        % speed_str = '20dps'; 
-        % fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-        % 
-        % plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
-        % 
-        % if save_figs == true
-        %     savefig(gcf, fullfile(fig_save_path, fig_str));
-        %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-        %     close 
-        % end 
+        % SLOW 
+        % n_reps = 5;
+        slow_or_fast = "slow";
+        speed_str = '20dps'; 
+        fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
+
+        plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
+
+        if save_figs == true
+            savefig(gcf, fullfile(fig_save_path, fig_str));
+            saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
+            close 
+        end 
         
         %% FAST 
         
-        % % n_reps = 5;
-        % slow_or_fast = "fast";
-        % speed_str = '100dps';
-        % fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
-        % 
-        % plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
-        % 
-        % if save_figs == true
-        %     savefig(gcf, fullfile(fig_save_path, fig_str));
-        %     saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
-        %     close
-        % 
-        % end 
+        % n_reps = 5;
+        slow_or_fast = "fast";
+        speed_str = '100dps';
+        fig_str = strcat('ON-OFF-comb_', date_str,'_', speed_str, '_noREPS.fig');
+
+        plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_to_process, edge_or_bar)
+
+        if save_figs == true
+            savefig(gcf, fullfile(fig_save_path, fig_str));
+            saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
+            close
+        end 
 
     % RF estimation:
        reconstruct_rf_4dir(edge_or_bar, cell_type, date_str)
@@ -171,6 +170,7 @@ for exp = 1:n_exps
        fig_str = strcat('RF_estimate_', edge_or_bar,'_', date_str, '.fig');
         if save_figs == true
             savefig(gcf, fullfile(fig_save_path, fig_str));
+            close
         end 
 
 

@@ -182,11 +182,15 @@ min_value = min(rf_data_all(:));
 max_value = max(rf_data_all(:));
 if abs(min_value)>max_value
     [peak_y, peak_x] = find(rf_data_all == min_value);
+    peak_x = peak_x(1);
+    peak_y = peak_y(1);
     mm='min';
     min_val = min_value;
     max_val = min_value*-1;
 else
     [peak_y, peak_x] = find(rf_data_all == max_value);
+    peak_x = peak_x(1);
+    peak_y = peak_y(1);
     mm='max';
     min_val = max_value*-1;
     max_val = max_value;
@@ -257,8 +261,20 @@ crop_im = rf_data_all(y1:y2, x1:x2);
 imagesc(crop_im)
 if mm == "min"
     [ymax, xmax] = find(crop_im == min(crop_im(:)));
+    if numel(xmax)>1
+        xmax = xmax(1);
+    end 
+    if numel(ymax)>1
+        ymax = ymax(1);
+    end 
 elseif mm == "max" 
     [ymax, xmax] = find(crop_im == max(crop_im(:)));
+    if numel(xmax)>1
+        xmax = xmax(1);
+    end 
+    if numel(ymax)>1
+        ymax = ymax(1);
+    end 
 end 
 % end 
 

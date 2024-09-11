@@ -20,7 +20,7 @@ colour_reps = false;
 % you just want to visualise them. 
 save_figs = true;
 
-for exp = 1:n_exps
+for exp = 32:39 %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -124,8 +124,8 @@ for exp = 1:n_exps
     n_reps = length(exp_folders);
     
     %% 
-    ylim_vals = [-65 -30]; 
-    rlim_vals = [0 30];
+    ylim_vals = [-65 -45]; 
+    rlim_vals = [0 15];
     
     %% Plot 
 

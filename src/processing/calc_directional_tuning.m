@@ -90,7 +90,7 @@ function calc_directional_tuning(n_reps, cell_type, date_str)
         
          mean_rad_values = mean(rad_vals_reps2);
         
-        %% Compute the directional tuning as per Grochner et al. 2022
+        %% Compute the directional tuning as per Groschner et al. 2022
         
         
          % Example Data: Vectors defined by their angles (in radians) and magnitudes
