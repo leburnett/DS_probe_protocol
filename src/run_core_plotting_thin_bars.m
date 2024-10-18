@@ -21,7 +21,7 @@ save_figs = true;
 log_table = readtable('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/exp_recording_log.xlsx');
 n_exps = height(log_table);
 
-for exp = 32:39 %1:n_exps
+for exp = 40:43 %1:n_exps
     
     stim = ["edge", "bar"];
 
@@ -100,8 +100,8 @@ for exp = 32:39 %1:n_exps
         n_reps = length(exp_folders);
         
         %% 
-        ylim_vals = [-65 -50]; %[-65 -27];
-        rlim_vals = [0 12]; %[0 35];
+        ylim_vals = [-65 -40]; %[-65 -27];
+        rlim_vals = [0 15]; %[0 35];
         
         %% Generate the plots
         

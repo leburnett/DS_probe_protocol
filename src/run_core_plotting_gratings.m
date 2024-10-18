@@ -19,7 +19,7 @@ colour_reps = false;
 % you just want to visualise them. 
 save_figs = true; 
 
-for exp = 32:39 %1:n_exps
+for exp = 40:43 %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
@@ -86,7 +86,7 @@ for exp = 32:39 %1:n_exps
     
     %% 
     ylim_vals = [-65 -45]; 
-    rlim_vals = [0 15 ];
+    rlim_vals = [0 15];
     
     %% Plot per speed
     % Line plot + polar plot in the middle

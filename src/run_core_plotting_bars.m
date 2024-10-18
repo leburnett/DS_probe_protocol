@@ -5,30 +5,31 @@ clear
 close all
 clc
 
-cd('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');
+% cd('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');
+cd('/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09');
 
 %% Read in log table with details of all of the experiments conducted. 
 
-log_table = readtable('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/exp_recording_log.xlsx');
+log_table = readtable('/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/exp_recording_log.xlsx');
 n_exps = height(log_table);
 
 % Set this as true if you would like each repetition to be coloured in a
 % different colour, or false if you would like them to all be grey. 
 colour_reps = false;
 
-% set save_figs to true if you would like to save the figures, or true if
+% set save_figs to true if you would like to save the figures, or false if
 % you just want to visualise them. 
-save_figs = true;
+save_figs = false;
 
 sample_cells = [3,4,13,15,19,21,25,29];
 
-for exp = 32:39 %sample_cells %1:n_exps
+for exp = 44 %40:43 %sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';
     date_to_process = log_table.date_to_process{exp}; %'05_28_2024_2'; % when there are subfolders set this to '06_18_2024_1' etc.
     cell_type = log_table.cell_type{exp}; %'TmY3';
-    project_folder = strcat('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
+    project_folder = strcat('/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/', cell_type);
 
     % RUN THIS SCRIPT WITHIN THE DATE FOLDER. 
     % Where the 'RES_all_reps...' file is found. 
@@ -38,7 +39,7 @@ for exp = 32:39 %sample_cells %1:n_exps
     %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     
     if save_figs == true
-        save_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Results/Figures/bar6';
+        save_path = '/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Results/Figures/bar6';
     
         % Initialise path to save figures 
         cell_type_fig_save_path = strcat(save_path, '/', cell_type);
@@ -83,13 +84,13 @@ for exp = 32:39 %sample_cells %1:n_exps
     
     end 
     
-    exp_folders = dir('SS*');
+    exp_folders = dir('42*');  %dir('SS*'); 
     % Number of runs of the protocol:
     n_reps = length(exp_folders);
     
     %% 
-    ylim_vals = [-65 -50]; %[-65 -27];
-    rlim_vals = [0 12]; %[0 35];
+    ylim_vals = [-65 -45]; %[-65 -27];
+    rlim_vals = [0 15]; %[0 35];
     
     %% Line plot + polar plot in the middle
     plot_line_plot_8dir(n_reps, colour_reps, ylim_vals, rlim_vals, date_to_process)
@@ -160,7 +161,7 @@ for exp = 32:39 %sample_cells %1:n_exps
         saveas(gcf, fullfile(fig_save_path, fig_str(1:end-4)), 'png')
         close
     end 
-
+    % 
     fig_str2 = strcat('Bar6_ON-OFF_polar_', date_str,'_', speed_str, '.fig');
     % Plot just the polar plot.
     plot_polar_ON_OFF_comb(n_reps, slow_or_fast, rlim_vals)
@@ -171,8 +172,8 @@ for exp = 32:39 %sample_cells %1:n_exps
         close 
     end 
     % 
-    % %% Receptive field estimation
-    % 
+    %% Receptive field estimation
+
     f_dt = 0; % frame delta in time.
 
     % on_off = "sum"; % both dark and light bars = +1

@@ -5,13 +5,14 @@ clc
 
 %% Initialise parameters that will changes
 
-date_to_process = '09_05_2024';
-cell_type = 'Tm24';
+date_to_process = '10_03_2024';
+cell_type = 'T4T5';
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 %% Path to cell type folder
-protocol_folder = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/';
+% protocol_folder = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/';
+protocol_folder = '/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/';
 project_folder = strcat(protocol_folder, cell_type);
 cd(project_folder)
 
@@ -38,13 +39,13 @@ cd(fullfile(project_folder, date_str))
 
 n_subfolders = 0; % set as 0 to begin with. 
 
-experiment_folder_dir = dir('SS*');
+experiment_folder_dir = dir('42*'); %dir('SS*');
 
 if isempty(experiment_folder_dir)
     % means that there is a subfolder structure where there is >1 cell or
     % 2 recording sessions in one day. 
     sub_folder_dir = dir();
-    sub_folder_dir(1:3, :) = []; 
+    sub_folder_dir(1:2, :) = []; 
 
     n_subfolders = length(sub_folder_dir);
     subfolder_names = '';

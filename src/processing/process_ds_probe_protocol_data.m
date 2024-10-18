@@ -8,14 +8,14 @@ function process_ds_probe_protocol_data(project_folder, date_folder, date_str, c
     %% Paths to data and processing settings. 
 
     % These paths are hard-coded in this instance. Assuming they will stay the same. 
-    processing_folder = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09';
+    processing_folder = '/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09';
     processing_path = fullfile(processing_folder, 'processing_settings.mat');
 
     date_folder_path = fullfile(project_folder, date_folder); 
     cd(date_folder_path)
 
     % List the experiment folders for that day
-    exp_folders = dir('SS*');
+    exp_folders = dir('42*'); %dir('SS*');
     n_exps = height(exp_folders);
 
     for idx = 1:n_exps
