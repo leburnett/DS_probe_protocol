@@ -23,7 +23,7 @@ save_figs = false;
 
 sample_cells = [3,4,13,15,19,21,25,29];
 
-for exp = 44 %40:43 %sample_cells %1:n_exps
+for exp = 47 %40:43 %sample_cells %1:n_exps
 
     % Initialise parameters that will change
     date_str = log_table.date_str{exp}; %'05_28_2024';

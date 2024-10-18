@@ -3,7 +3,7 @@ function [peak_x, peak_y] = reconstruct_rf_8dir(cell_type, date_str, f_dt, on_of
 % Jin Yong's recordings - Summer 2024
 
 % Load the protocol details:
-load('/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Protocol_details.mat', 'block_trials');
+load('/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Protocol_details.mat', 'block_trials');
 
 % Load the processed data 
 res_files = dir('RES_all_reps*');
@@ -12,7 +12,7 @@ n_reps = size(data_all_reps, 3);
 date_str = strrep(date_str, '_', '-');
 
 % Patterns
-pattern_path = '/Users/burnettl/Documents/Janelia/G4/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Patterns';
+pattern_path = '/Users/burnettl/Documents/Projects/2405_Jinyong_Experiments/Data/DS_probe_protocol_1REP_RightHemi_20Hz_05-22-24_09-09-09/Patterns';
 
 rf_data_all = zeros(48, 192);
 rf_data_all1 = zeros(48, 192);
