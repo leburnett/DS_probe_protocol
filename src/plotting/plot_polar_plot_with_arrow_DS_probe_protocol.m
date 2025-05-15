@@ -1,10 +1,7 @@
-function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, date_str)
-% Used to create 2 x line plots of responses to thick bar stimuli. 
-% One plot for 20 dps stimuli and the other for 100 dps stimuli. 
+function plot_polar_plot_with_arrow_DS_probe_protocol()
 
     res_files = dir('RES_all_reps*');
     load(res_files(1).name, 'data_all_reps')
-    date_str = strrep(date_str, '_', '-');
 
     angls = 0:45:315;
     angls(9) = angls(1);
@@ -46,7 +43,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
         subplot_values = [15, 9, 3, 7, 11, 17, 23, 19];
 
         for j = 1:8
-            subplot(5, 5, subplot_values(j))
+            % subplot(5, 5, subplot_values(j))
     
             idx = values(j);
 
@@ -100,51 +97,7 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
             % when plotting. 
             rad_vals_reps2(:, 9) = rad_vals_reps2(:, 1);
 
-            % rectangle('Position', [0, ylim_vals(1), av_time(4500), diff(ylim_vals)], 'FaceColor', [0 0 0 0.03], 'EdgeColor', 'none')
-            hold on 
-
-            % PLOT REPS
-            for ii = 1:n_reps
-                plot(time_comb(ii, :), data_comb(ii, :), 'Color', [0.85 0.85 0.85], 'LineWidth', 0.65);
-                hold on
-                ylim(ylim_vals)
-                box off 
-                ax = gca;
-                ax.TickDir = 'out';  
-                ax.TickLength = [0.02, 0.02];
-                ax.LineWidth = 1;
-            end 
-
-            if slow_or_fast == "slow"
-                xticks(0:1:5)
-                xticklabels({'0', '1', '2', '3', '4', '5'})
-                xlim([0 av_time(end)])
-            elseif slow_or_fast == "fast"
-                xticks(0:0.5:1.5)
-                xticklabels({'0', '0.5', '1', '1.5'})
-                xlim([0 (av_time(end)/4)])
-            end 
-
-            % PLOT AVERAGE 
-            % yyaxis left
-            plot(av_time, av_resp, 'Color', av_col, 'LineWidth', 2.5,  'LineStyle', '-', 'Marker', 'none'); 
-            hold on
-            yticks([-60, -50, -40, -30])
-            ax.YAxis(1).Color = 'k';
-            set(gca, "FontSize", 15, "TickLength", [0.025 0.025])
-            ylim(ylim_vals)
-
         end
-
-        % Add polar plot in the middle: 
-        subplot(5, 5, 13)
-
-        % plot polar plot in the centre of the subplot: 
-        for jj = 1:n_reps
-            col = [0.85 0.85 0.85];
-            polarplot(angls_rad, rad_vals_reps2(jj, :), 'Color', col, 'LineWidth', 0.6);
-            hold on
-        end 
 
         % PLOT AVERAGE 
         mean_rad_values = mean(rad_vals_reps2);
@@ -152,38 +105,28 @@ function plot_bar_line_ON_OFF_comb(n_reps, slow_or_fast, ylim_vals, rlim_vals, d
         hold on
 
         rlim(rlim_vals)
-        % rticks([0, rlim_vals(2)])
-        rticks([0,10, 20])
+        rticks([0, 10, 20])
         rticklabels({'0', '10', '20'})
-        % rticklabels({'', string(rlim_vals(2))})
         thetaticks(angls(1:8))
-        set(gca, "FontSize", 15)
 
-        if slow_or_fast == "slow"
-            speed_str = '20dps-bar6';
-        elseif slow_or_fast == "fast"
-            speed_str = '100dps-bar6';
-        end 
+        ax = gca;
+        ax.LineWidth = 1.2;
+        ax.FontSize = 15;
+        ax.ThetaTick = rad2deg(theta);
+        ax.ThetaTickLabel = {};
+        hold on
 
-        % annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', speed_str, 'EdgeColor', 'none', 'FontSize', 25);
-        % annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 20);
+        angles = [0, pi/4, pi/2, 3*pi/4, pi, 5*pi/4, 3*pi/2, 7*pi/4];
+        magnitudes = [9.1337, 8.2808, 9.4188, 14.6325, 7.2827, 7.3278, 12.2076, 10.6435];
 
-        f = gcf;
-        f.Position = [10 296 1062 751];
+        x = sum(magnitudes .* cos(angles));
+        y = sum(magnitudes .* sin(angles));
 
+        resultant_angle = atan2(y, x);
+        resultant_angle = mod(resultant_angle, 2*pi); % ensure it's in [0, 2pi]
+        resultant_magnitude = sqrt(x^2 + y^2);
+        
+        add_arrow_to_polarplot(resultant_magnitude, resultant_angle, col)
     end 
 
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
+end 
