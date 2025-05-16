@@ -162,7 +162,7 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
                 ax.TickDir = 'out';  
                 ax.TickLength = [0.02, 0.02];
                 ax.LineWidth = 1;
-                ax.FontSize = 10;
+                ax.FontSize = 12;
                 yticks([-60, -50, -40, -30])
             end 
     
@@ -198,21 +198,22 @@ function plot_bar_line_ON_OFF_comb_4dir(n_reps, slow_or_fast, ylim_vals, rlim_va
         polarplot(angls_rad, mean_rad_values, 'Color', av_col, 'LineWidth', 2); hold on
         rlim(rlim_vals)
         rticks([0 10, 20, 30])
-        rticklabels({'', '', '', '30'})
-        thetaticks([0, 45, 90, 135, 180, 225, 270, 315])
+
+        rticklabels({'', '', '20', ''})
+        thetaticks([0, 90, 180, 270])
         % thetaticks([])
     
 
-        if slow_or_fast == "slow"
-            speed_str = '20dps-';
-        elseif slow_or_fast == "fast"
-            speed_str = '100dps-';
-        end 
+        % if slow_or_fast == "slow"
+        %     speed_str = '20dps-';
+        % elseif slow_or_fast == "fast"
+        %     speed_str = '100dps-';
+        % end 
 
-        str_to_add = strcat(speed_str, edge_or_bar);
-        % Add text:
-        annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', str_to_add, 'EdgeColor', 'none', 'FontSize', 15);
-        annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 12);
+        % str_to_add = strcat(speed_str, edge_or_bar);
+        % % Add text:
+        % annotation('textbox', [0.03, 0.88, 0.2, 0.1], 'String', str_to_add, 'EdgeColor', 'none', 'FontSize', 15);
+        % annotation('textbox', [0.03, 0.82, 0.2, 0.1], 'String', date_str, 'EdgeColor', 'none', 'FontSize', 12);
 
         f = gcf;
         % f.Position = [236 74 1124 973];
